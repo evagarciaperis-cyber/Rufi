@@ -16,6 +16,7 @@ Repositorio fuente de **Rufi**: identidad, especificación técnica, pipeline 3D
 | Contrato | No lo cumple aún: esqueleto Mixamo, sin shape keys, sin clips propios |
 | Visor | `examples/visor-rufi/` |
 | Siguiente paso | Re-rig con pesos limpios + shape keys + clips del contrato |
+| **Candidato A-pose** | `models/candidatos/apose/` (Meshy, A-pose): **mucho mejor** en brazos, hombros y cabeza; algo peor en piernas; **manos con dedos** (pendiente de decisión). No sustituye aún al vigente. Ver [`docs/11-validacion-modelo-apose.md`](docs/11-validacion-modelo-apose.md) y `examples/visor-rig/` |
 
 **Fase 1 — análisis y preparación del personaje: completada.**
 

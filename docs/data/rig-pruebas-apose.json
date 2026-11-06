@@ -1,0 +1,1392 @@
+{
+ "fecha": "2026-11-06",
+ "herramienta": "tools/rig-bench/index.html",
+ "unidades": {
+  "estiramiento": "longitud de arista posada / reposo (1 = sin cambio)",
+  "desplaz_pct_altura": "desplazamiento máximo de la región en % de la altura del modelo"
+ },
+ "resultados": {
+  "nuevo_apose_original": {
+   "altura": 1.61,
+   "vertices": 122790,
+   "triangulos": 225406,
+   "simetria": {
+    "Shoulder": {
+     "L": [
+      0.029,
+      0.635,
+      -0.031
+     ],
+     "R": [
+      -0.057,
+      0.645,
+      -0.036
+     ],
+     "error_espejo_m": 0.024
+    },
+    "Arm": {
+     "L": [
+      0.201,
+      0.635,
+      0.007
+     ],
+     "R": [
+      -0.229,
+      0.645,
+      0.01
+     ],
+     "error_espejo_m": 0.023
+    },
+    "ForeArm": {
+     "L": [
+      0.298,
+      0.545,
+      0.002
+     ],
+     "R": [
+      -0.327,
+      0.548,
+      0.001
+     ],
+     "error_espejo_m": 0.021
+    },
+    "Hand": {
+     "L": [
+      0.389,
+      0.451,
+      -0.002
+     ],
+     "R": [
+      -0.427,
+      0.454,
+      0.007
+     ],
+     "error_espejo_m": 0.033
+    },
+    "UpLeg": {
+     "L": [
+      0.078,
+      0.269,
+      0.055
+     ],
+     "R": [
+      -0.085,
+      0.269,
+      0.055
+     ],
+     "error_espejo_m": 0.001
+    },
+    "Leg": {
+     "L": [
+      0.163,
+      0.145,
+      0.09
+     ],
+     "R": [
+      -0.167,
+      0.145,
+      0.094
+     ],
+     "error_espejo_m": 0.006
+    },
+    "Foot": {
+     "L": [
+      0.173,
+      0.065,
+      0.042
+     ],
+     "R": [
+      -0.167,
+      0.072,
+      0.06
+     ],
+     "error_espejo_m": 0.024
+    },
+    "ToeBase": {
+     "L": [
+      0.171,
+      0.012,
+      0.127
+     ],
+     "R": [
+      -0.197,
+      0.009,
+      0.106
+     ],
+     "error_espejo_m": 0.028
+    }
+   },
+   "huesos_centrales": {
+    "Hips": [
+     -0.004,
+     0.3,
+     0.055
+    ],
+    "Spine": [
+     -0.006,
+     0.397,
+     0.03
+    ],
+    "Spine1": [
+     -0.008,
+     0.494,
+     0.004
+    ],
+    "Spine2": [
+     -0.011,
+     0.594,
+     -0.021
+    ],
+    "Neck": [
+     -0.014,
+     0.656,
+     -0.037
+    ],
+    "Head": [
+     -0.018,
+     0.72,
+     -0.054
+    ]
+   },
+   "pesos": {
+    "cabeza_con_peso_de_brazos": {
+     "vertices_region": 53765,
+     "con_peso_ajeno": 20567,
+     "pct": 38.25,
+     "peso_max": 0.343,
+     "huesos": {
+      "RightShoulder": 21252,
+      "RightArm": 3539,
+      "LeftShoulder": 19808,
+      "LeftArm": 4648
+     }
+    },
+    "cabeza_con_peso_de_piernas": {
+     "vertices_region": 53765,
+     "con_peso_ajeno": 0,
+     "pct": 0,
+     "peso_max": 0,
+     "huesos": {}
+    },
+    "barriga_con_peso_de_piernas": {
+     "vertices_region": 5021,
+     "con_peso_ajeno": 1530,
+     "pct": 30.47,
+     "peso_max": 0.869,
+     "huesos": {
+      "RightUpLeg": 274,
+      "RightLeg": 7,
+      "LeftUpLeg": 1469
+     }
+    },
+    "barriga_con_peso_de_brazos": {
+     "vertices_region": 5021,
+     "con_peso_ajeno": 4736,
+     "pct": 94.32,
+     "peso_max": 0.792,
+     "huesos": {
+      "RightShoulder": 1416,
+      "LeftShoulder": 3367,
+      "LeftArm": 194
+     }
+    }
+   },
+   "pruebas": {
+    "brazo_izq_bajar_40": {
+     "global": {
+      "max": 4.58,
+      "p999": 1.216,
+      "p001": 0.689,
+      "min": 0.457
+     },
+     "barriga_estiramiento": {
+      "max": 1.29,
+      "p999": 1.132,
+      "p001": 0.758,
+      "min": 0.575
+     },
+     "barriga_desplaz_pct_altura": 0.378,
+     "cabeza_desplaz_pct_altura": 0.103
+    },
+    "brazo_izq_subir_40": {
+     "global": {
+      "max": 3.93,
+      "p999": 1.336,
+      "p001": 0.914,
+      "min": 0.582
+     },
+     "barriga_estiramiento": {
+      "max": 1.51,
+      "p999": 1.351,
+      "p001": 0.966,
+      "min": 0.847
+     },
+     "barriga_desplaz_pct_altura": 0.378,
+     "cabeza_desplaz_pct_altura": 0.103
+    },
+    "brazo_izq_adelante_40": {
+     "global": {
+      "max": 2.28,
+      "p999": 1.218,
+      "p001": 0.731,
+      "min": 0.412
+     },
+     "barriga_estiramiento": {
+      "max": 1.34,
+      "p999": 1.146,
+      "p001": 0.706,
+      "min": 0.636
+     },
+     "barriga_desplaz_pct_altura": 0.618,
+     "cabeza_desplaz_pct_altura": 0.103
+    },
+    "brazo_der_bajar_40": {
+     "global": {
+      "max": 13.41,
+      "p999": 1.458,
+      "p001": 0.719,
+      "min": 0.41
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0.09
+    },
+    "brazo_der_subir_40": {
+     "global": {
+      "max": 13.45,
+      "p999": 1.946,
+      "p001": 0.912,
+      "min": 0.601
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0.09
+    },
+    "brazo_der_adelante_40": {
+     "global": {
+      "max": 7.57,
+      "p999": 1.317,
+      "p001": 0.896,
+      "min": 0.533
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0.077
+    },
+    "antebrazo_izq_45": {
+     "global": {
+      "max": 1.68,
+      "p999": 1.133,
+      "p001": 0.901,
+      "min": 0.29
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "antebrazo_der_45": {
+     "global": {
+      "max": 3.3,
+      "p999": 1.15,
+      "p001": 0.889,
+      "min": 0.358
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "hombro_izq_subir_15": {
+     "global": {
+      "max": 3.63,
+      "p999": 1.274,
+      "p001": 0.661,
+      "min": 0.172
+     },
+     "barriga_estiramiento": {
+      "max": 1.36,
+      "p999": 1.31,
+      "p001": 0.946,
+      "min": 0.906
+     },
+     "barriga_desplaz_pct_altura": 1.226,
+     "cabeza_desplaz_pct_altura": 0.914
+    },
+    "hombro_der_subir_15": {
+     "global": {
+      "max": 7.49,
+      "p999": 1.511,
+      "p001": 0.678,
+      "min": 0.143
+     },
+     "barriga_estiramiento": {
+      "max": 1.35,
+      "p999": 1.282,
+      "p001": 0.979,
+      "min": 0.915
+     },
+     "barriga_desplaz_pct_altura": 0.921,
+     "cabeza_desplaz_pct_altura": 1.045
+    },
+    "cabeza_giro_30": {
+     "global": {
+      "max": 9.44,
+      "p999": 2.713,
+      "p001": 0.388,
+      "min": 0.086
+     },
+     "barriga_estiramiento": {
+      "max": 3.18,
+      "p999": 2.793,
+      "p001": 0.215,
+      "min": 0.086
+     },
+     "barriga_desplaz_pct_altura": 8.466,
+     "cabeza_desplaz_pct_altura": null
+    },
+    "cabeza_asentir_20": {
+     "global": {
+      "max": 3.44,
+      "p999": 1.517,
+      "p001": 0.304,
+      "min": 0.072
+     },
+     "barriga_estiramiento": {
+      "max": 1.9,
+      "p999": 1.689,
+      "p001": 0.153,
+      "min": 0.09
+     },
+     "barriga_desplaz_pct_altura": 6.291,
+     "cabeza_desplaz_pct_altura": null
+    },
+    "cabeza_inclinar_20": {
+     "global": {
+      "max": 6.61,
+      "p999": 2.044,
+      "p001": 0.49,
+      "min": 0.141
+     },
+     "barriga_estiramiento": {
+      "max": 2.34,
+      "p999": 2.084,
+      "p001": 0.488,
+      "min": 0.388
+     },
+     "barriga_desplaz_pct_altura": 2.74,
+     "cabeza_desplaz_pct_altura": null
+    },
+    "pierna_izq_adelante_30": {
+     "global": {
+      "max": 6.73,
+      "p999": 3.066,
+      "p001": 0.531,
+      "min": 0.143
+     },
+     "barriga_estiramiento": {
+      "max": 3.66,
+      "p999": 2.921,
+      "p001": 0.389,
+      "min": 0.23
+     },
+     "barriga_desplaz_pct_altura": 5.336,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "pierna_der_adelante_30": {
+     "global": {
+      "max": 6.76,
+      "p999": 3.109,
+      "p001": 0.527,
+      "min": 0.088
+     },
+     "barriga_estiramiento": {
+      "max": 3.51,
+      "p999": 3.024,
+      "p001": 0.53,
+      "min": 0.347
+     },
+     "barriga_desplaz_pct_altura": 5.72,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "pierna_izq_lateral_20": {
+     "global": {
+      "max": 3.46,
+      "p999": 2.326,
+      "p001": 0.672,
+      "min": 0.126
+     },
+     "barriga_estiramiento": {
+      "max": 2.27,
+      "p999": 1.871,
+      "p001": 0.535,
+      "min": 0.366
+     },
+     "barriga_desplaz_pct_altura": 1.938,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "pierna_der_lateral_20": {
+     "global": {
+      "max": 9.24,
+      "p999": 2.364,
+      "p001": 0.623,
+      "min": 0.232
+     },
+     "barriga_estiramiento": {
+      "max": 1.52,
+      "p999": 1.305,
+      "p001": 0.444,
+      "min": 0.232
+     },
+     "barriga_desplaz_pct_altura": 2.209,
+     "cabeza_desplaz_pct_altura": 0
+    }
+   }
+  },
+  "anterior_original": {
+   "altura": 1.65,
+   "vertices": 146758,
+   "triangulos": 270410,
+   "simetria": {
+    "Shoulder": {
+     "L": [
+      0.05,
+      0.682,
+      0.065
+     ],
+     "R": [
+      -0.04,
+      0.645,
+      0.079
+     ],
+     "error_espejo_m": 0.085
+    },
+    "Arm": {
+     "L": [
+      0.184,
+      0.682,
+      0.007
+     ],
+     "R": [
+      -0.264,
+      0.645,
+      0.039
+     ],
+     "error_espejo_m": 0.051
+    },
+    "ForeArm": {
+     "L": [
+      0.337,
+      0.684,
+      0.01
+     ],
+     "R": [
+      -0.329,
+      0.516,
+      0.114
+     ],
+     "error_espejo_m": 0.211
+    },
+    "Hand": {
+     "L": [
+      0.443,
+      0.759,
+      0.012
+     ],
+     "R": [
+      -0.389,
+      0.413,
+      0.155
+     ],
+     "error_espejo_m": 0.393
+    },
+    "UpLeg": {
+     "L": [
+      0.05,
+      0.294,
+      0.074
+     ],
+     "R": [
+      -0.14,
+      0.297,
+      0.074
+     ],
+     "error_espejo_m": 0.025
+    },
+    "Leg": {
+     "L": [
+      0.105,
+      0.129,
+      0.072
+     ],
+     "R": [
+      -0.262,
+      0.14,
+      0.042
+     ],
+     "error_espejo_m": 0.096
+    },
+    "Foot": {
+     "L": [
+      0.129,
+      0.068,
+      0.036
+     ],
+     "R": [
+      -0.294,
+      0.07,
+      -0.021
+     ],
+     "error_espejo_m": 0.115
+    },
+    "ToeBase": {
+     "L": [
+      0.151,
+      0.01,
+      0.098
+     ],
+     "R": [
+      -0.314,
+      0.015,
+      0.074
+     ],
+     "error_espejo_m": 0.1
+    }
+   },
+   "huesos_centrales": {
+    "Hips": [
+     -0.033,
+     0.336,
+     0.074
+    ],
+    "Spine": [
+     -0.021,
+     0.445,
+     0.074
+    ],
+    "Spine1": [
+     -0.009,
+     0.553,
+     0.073
+    ],
+    "Spine2": [
+     0.003,
+     0.665,
+     0.072
+    ],
+    "Neck": [
+     0.016,
+     0.722,
+     0.071
+    ],
+    "Head": [
+     0.039,
+     0.823,
+     0.069
+    ]
+   },
+   "pesos": {
+    "cabeza_con_peso_de_brazos": {
+     "vertices_region": 61065,
+     "con_peso_ajeno": 42029,
+     "pct": 68.83,
+     "peso_max": 1,
+     "huesos": {
+      "RightShoulder": 43921,
+      "RightArm": 35060,
+      "LeftShoulder": 3784,
+      "LeftArm": 4341,
+      "LeftForeArm": 4192,
+      "LeftHand": 4878
+     }
+    },
+    "cabeza_con_peso_de_piernas": {
+     "vertices_region": 61065,
+     "con_peso_ajeno": 0,
+     "pct": 0,
+     "peso_max": 0,
+     "huesos": {}
+    },
+    "barriga_con_peso_de_piernas": {
+     "vertices_region": 6367,
+     "con_peso_ajeno": 947,
+     "pct": 14.87,
+     "peso_max": 0.885,
+     "huesos": {
+      "RightUpLeg": 137,
+      "LeftUpLeg": 910
+     }
+    },
+    "barriga_con_peso_de_brazos": {
+     "vertices_region": 6367,
+     "con_peso_ajeno": 6274,
+     "pct": 98.54,
+     "peso_max": 0.947,
+     "huesos": {
+      "RightShoulder": 5565,
+      "RightArm": 803,
+      "RightForeArm": 1,
+      "LeftShoulder": 4530
+     }
+    }
+   },
+   "pruebas": {
+    "brazo_izq_bajar_40": {
+     "global": {
+      "max": 33.57,
+      "p999": 3.934,
+      "p001": 0.713,
+      "min": 0.417
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 16.73
+    },
+    "brazo_izq_subir_40": {
+     "global": {
+      "max": 31.87,
+      "p999": 3.271,
+      "p001": 0.612,
+      "min": 0.152
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 16.73
+    },
+    "brazo_izq_adelante_40": {
+     "global": {
+      "max": 30.92,
+      "p999": 3.212,
+      "p001": 0.703,
+      "min": 0.13
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 15.686
+    },
+    "brazo_der_bajar_40": {
+     "global": {
+      "max": 32.02,
+      "p999": 2.016,
+      "p001": 0.404,
+      "min": 0.046
+     },
+     "barriga_estiramiento": {
+      "max": 1.9,
+      "p999": 1.212,
+      "p001": 0.645,
+      "min": 0.538
+     },
+     "barriga_desplaz_pct_altura": 0.535,
+     "cabeza_desplaz_pct_altura": 0.334
+    },
+    "brazo_der_subir_40": {
+     "global": {
+      "max": 30.7,
+      "p999": 3.015,
+      "p001": 0.859,
+      "min": 0.142
+     },
+     "barriga_estiramiento": {
+      "max": 1.56,
+      "p999": 1.32,
+      "p001": 0.858,
+      "min": 0.829
+     },
+     "barriga_desplaz_pct_altura": 0.535,
+     "cabeza_desplaz_pct_altura": 0.334
+    },
+    "brazo_der_adelante_40": {
+     "global": {
+      "max": 19.63,
+      "p999": 1.895,
+      "p001": 0.699,
+      "min": 0.285
+     },
+     "barriga_estiramiento": {
+      "max": 1.67,
+      "p999": 1.358,
+      "p001": 0.828,
+      "min": 0.496
+     },
+     "barriga_desplaz_pct_altura": 0.717,
+     "cabeza_desplaz_pct_altura": 0.273
+    },
+    "antebrazo_izq_45": {
+     "global": {
+      "max": 16.68,
+      "p999": 1.71,
+      "p001": 0.786,
+      "min": 0.361
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 10.433
+    },
+    "antebrazo_der_45": {
+     "global": {
+      "max": 12.56,
+      "p999": 1.562,
+      "p001": 0.728,
+      "min": 0.354
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 0.999
+     },
+     "barriga_desplaz_pct_altura": 0.018,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "hombro_izq_subir_15": {
+     "global": {
+      "max": 17.11,
+      "p999": 2.169,
+      "p001": 0.645,
+      "min": 0.074
+     },
+     "barriga_estiramiento": {
+      "max": 1.25,
+      "p999": 1.19,
+      "p001": 0.953,
+      "min": 0.931
+     },
+     "barriga_desplaz_pct_altura": 0.517,
+     "cabeza_desplaz_pct_altura": 8.389
+    },
+    "hombro_der_subir_15": {
+     "global": {
+      "max": 16.17,
+      "p999": 2.053,
+      "p001": 0.686,
+      "min": 0.105
+     },
+     "barriga_estiramiento": {
+      "max": 1.29,
+      "p999": 1.238,
+      "p001": 0.81,
+      "min": 0.499
+     },
+     "barriga_desplaz_pct_altura": 1.728,
+     "cabeza_desplaz_pct_altura": 1.98
+    },
+    "cabeza_giro_30": {
+     "global": {
+      "max": 36.87,
+      "p999": 4.468,
+      "p001": 0.47,
+      "min": 0.032
+     },
+     "barriga_estiramiento": {
+      "max": 1.94,
+      "p999": 1.349,
+      "p001": 0.624,
+      "min": 0.387
+     },
+     "barriga_desplaz_pct_altura": 1.898,
+     "cabeza_desplaz_pct_altura": null
+    },
+    "cabeza_asentir_20": {
+     "global": {
+      "max": 8.94,
+      "p999": 1.898,
+      "p001": 0.464,
+      "min": 0.095
+     },
+     "barriga_estiramiento": {
+      "max": 1.67,
+      "p999": 1.288,
+      "p001": 0.664,
+      "min": 0.619
+     },
+     "barriga_desplaz_pct_altura": 1.135,
+     "cabeza_desplaz_pct_altura": null
+    },
+    "cabeza_inclinar_20": {
+     "global": {
+      "max": 24.3,
+      "p999": 3.266,
+      "p001": 0.529,
+      "min": 0.057
+     },
+     "barriga_estiramiento": {
+      "max": 1.53,
+      "p999": 1.434,
+      "p001": 0.568,
+      "min": 0.213
+     },
+     "barriga_desplaz_pct_altura": 1.314,
+     "cabeza_desplaz_pct_altura": null
+    },
+    "pierna_izq_adelante_30": {
+     "global": {
+      "max": 3.74,
+      "p999": 1.961,
+      "p001": 0.608,
+      "min": 0.296
+     },
+     "barriga_estiramiento": {
+      "max": 3.43,
+      "p999": 1.791,
+      "p001": 0.424,
+      "min": 0.296
+     },
+     "barriga_desplaz_pct_altura": 5.118,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "pierna_der_adelante_30": {
+     "global": {
+      "max": 7.16,
+      "p999": 2.015,
+      "p001": 0.616,
+      "min": 0.147
+     },
+     "barriga_estiramiento": {
+      "max": 2.67,
+      "p999": 1.714,
+      "p001": 0.601,
+      "min": 0.313
+     },
+     "barriga_desplaz_pct_altura": 5.268,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "pierna_izq_lateral_20": {
+     "global": {
+      "max": 2.2,
+      "p999": 1.63,
+      "p001": 0.661,
+      "min": 0.312
+     },
+     "barriga_estiramiento": {
+      "max": 1.71,
+      "p999": 1.339,
+      "p001": 0.644,
+      "min": 0.272
+     },
+     "barriga_desplaz_pct_altura": 2.202,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "pierna_der_lateral_20": {
+     "global": {
+      "max": 13.24,
+      "p999": 1.714,
+      "p001": 0.616,
+      "min": 0.28
+     },
+     "barriga_estiramiento": {
+      "max": 1.89,
+      "p999": 1.178,
+      "p001": 0.76,
+      "min": 0.158
+     },
+     "barriga_desplaz_pct_altura": 2.256,
+     "cabeza_desplaz_pct_altura": 0
+    }
+   }
+  },
+  "nuevo_apose_optimizado": {
+   "altura": 1.61,
+   "vertices": 19047,
+   "triangulos": 27048,
+   "simetria": {
+    "Shoulder": {
+     "L": [
+      0.029,
+      0.635,
+      -0.031
+     ],
+     "R": [
+      -0.057,
+      0.645,
+      -0.036
+     ],
+     "error_espejo_m": 0.024
+    },
+    "Arm": {
+     "L": [
+      0.201,
+      0.635,
+      0.007
+     ],
+     "R": [
+      -0.229,
+      0.645,
+      0.01
+     ],
+     "error_espejo_m": 0.023
+    },
+    "ForeArm": {
+     "L": [
+      0.298,
+      0.545,
+      0.002
+     ],
+     "R": [
+      -0.327,
+      0.548,
+      0.001
+     ],
+     "error_espejo_m": 0.021
+    },
+    "Hand": {
+     "L": [
+      0.389,
+      0.451,
+      -0.002
+     ],
+     "R": [
+      -0.427,
+      0.454,
+      0.007
+     ],
+     "error_espejo_m": 0.033
+    },
+    "UpLeg": {
+     "L": [
+      0.078,
+      0.269,
+      0.055
+     ],
+     "R": [
+      -0.085,
+      0.269,
+      0.055
+     ],
+     "error_espejo_m": 0.001
+    },
+    "Leg": {
+     "L": [
+      0.163,
+      0.145,
+      0.09
+     ],
+     "R": [
+      -0.167,
+      0.145,
+      0.094
+     ],
+     "error_espejo_m": 0.006
+    },
+    "Foot": {
+     "L": [
+      0.173,
+      0.065,
+      0.042
+     ],
+     "R": [
+      -0.167,
+      0.072,
+      0.06
+     ],
+     "error_espejo_m": 0.024
+    },
+    "ToeBase": {
+     "L": [
+      0.171,
+      0.012,
+      0.127
+     ],
+     "R": [
+      -0.197,
+      0.009,
+      0.106
+     ],
+     "error_espejo_m": 0.028
+    }
+   },
+   "huesos_centrales": {
+    "Hips": [
+     -0.004,
+     0.3,
+     0.055
+    ],
+    "Spine": [
+     -0.006,
+     0.397,
+     0.03
+    ],
+    "Spine1": [
+     -0.008,
+     0.494,
+     0.004
+    ],
+    "Spine2": [
+     -0.011,
+     0.594,
+     -0.021
+    ],
+    "Neck": [
+     -0.014,
+     0.656,
+     -0.037
+    ],
+    "Head": [
+     -0.018,
+     0.72,
+     -0.054
+    ]
+   },
+   "pesos": {
+    "cabeza_con_peso_de_brazos": {
+     "vertices_region": 8598,
+     "con_peso_ajeno": 3678,
+     "pct": 42.78,
+     "peso_max": 0.343,
+     "huesos": {
+      "RightShoulder": 3611,
+      "RightArm": 763,
+      "LeftShoulder": 3575,
+      "LeftArm": 1006
+     }
+    },
+    "cabeza_con_peso_de_piernas": {
+     "vertices_region": 8598,
+     "con_peso_ajeno": 0,
+     "pct": 0,
+     "peso_max": 0,
+     "huesos": {}
+    },
+    "barriga_con_peso_de_piernas": {
+     "vertices_region": 783,
+     "con_peso_ajeno": 300,
+     "pct": 38.31,
+     "peso_max": 0.848,
+     "huesos": {
+      "RightUpLeg": 103,
+      "RightLeg": 2,
+      "LeftUpLeg": 251
+     }
+    },
+    "barriga_con_peso_de_brazos": {
+     "vertices_region": 783,
+     "con_peso_ajeno": 688,
+     "pct": 87.87,
+     "peso_max": 0.779,
+     "huesos": {
+      "RightShoulder": 190,
+      "LeftShoulder": 503,
+      "LeftArm": 42
+     }
+    }
+   },
+   "pruebas": {
+    "brazo_izq_bajar_40": {
+     "global": {
+      "max": 1.87,
+      "p999": 1.275,
+      "p001": 0.699,
+      "min": 0.393
+     },
+     "barriga_estiramiento": {
+      "max": 1.13,
+      "p999": 1.129,
+      "p001": 0.759,
+      "min": 0.74
+     },
+     "barriga_desplaz_pct_altura": 0.374,
+     "cabeza_desplaz_pct_altura": 0.103
+    },
+    "brazo_izq_subir_40": {
+     "global": {
+      "max": 2.43,
+      "p999": 1.505,
+      "p001": 0.893,
+      "min": 0.626
+     },
+     "barriga_estiramiento": {
+      "max": 1.41,
+      "p999": 1.337,
+      "p001": 0.944,
+      "min": 0.941
+     },
+     "barriga_desplaz_pct_altura": 0.374,
+     "cabeza_desplaz_pct_altura": 0.103
+    },
+    "brazo_izq_adelante_40": {
+     "global": {
+      "max": 1.59,
+      "p999": 1.273,
+      "p001": 0.742,
+      "min": 0.486
+     },
+     "barriga_estiramiento": {
+      "max": 1.11,
+      "p999": 1.101,
+      "p001": 0.721,
+      "min": 0.688
+     },
+     "barriga_desplaz_pct_altura": 0.593,
+     "cabeza_desplaz_pct_altura": 0.1
+    },
+    "brazo_der_bajar_40": {
+     "global": {
+      "max": 3.77,
+      "p999": 1.363,
+      "p001": 0.708,
+      "min": 0.278
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0.09
+    },
+    "brazo_der_subir_40": {
+     "global": {
+      "max": 5.03,
+      "p999": 1.864,
+      "p001": 0.897,
+      "min": 0.812
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0.09
+    },
+    "brazo_der_adelante_40": {
+     "global": {
+      "max": 2.47,
+      "p999": 1.313,
+      "p001": 0.88,
+      "min": 0.629
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0.077
+    },
+    "antebrazo_izq_45": {
+     "global": {
+      "max": 1.35,
+      "p999": 1.173,
+      "p001": 0.843,
+      "min": 0.551
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "antebrazo_der_45": {
+     "global": {
+      "max": 1.44,
+      "p999": 1.24,
+      "p001": 0.809,
+      "min": 0.423
+     },
+     "barriga_estiramiento": {
+      "max": 1,
+      "p999": 1,
+      "p001": 1,
+      "min": 1
+     },
+     "barriga_desplaz_pct_altura": 0,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "hombro_izq_subir_15": {
+     "global": {
+      "max": 1.62,
+      "p999": 1.276,
+      "p001": 0.71,
+      "min": 0.469
+     },
+     "barriga_estiramiento": {
+      "max": 1.36,
+      "p999": 1.299,
+      "p001": 0.966,
+      "min": 0.965
+     },
+     "barriga_desplaz_pct_altura": 1.171,
+     "cabeza_desplaz_pct_altura": 0.859
+    },
+    "hombro_der_subir_15": {
+     "global": {
+      "max": 3.16,
+      "p999": 1.433,
+      "p001": 0.734,
+      "min": 0.169
+     },
+     "barriga_estiramiento": {
+      "max": 1.32,
+      "p999": 1.241,
+      "p001": 0.982,
+      "min": 0.979
+     },
+     "barriga_desplaz_pct_altura": 0.88,
+     "cabeza_desplaz_pct_altura": 1.045
+    },
+    "cabeza_giro_30": {
+     "global": {
+      "max": 4.69,
+      "p999": 2.464,
+      "p001": 0.44,
+      "min": 0.227
+     },
+     "barriga_estiramiento": {
+      "max": 2.65,
+      "p999": 2.604,
+      "p001": 0.238,
+      "min": 0.227
+     },
+     "barriga_desplaz_pct_altura": 7.73,
+     "cabeza_desplaz_pct_altura": null
+    },
+    "cabeza_asentir_20": {
+     "global": {
+      "max": 1.85,
+      "p999": 1.409,
+      "p001": 0.347,
+      "min": 0.195
+     },
+     "barriga_estiramiento": {
+      "max": 1.69,
+      "p999": 1.657,
+      "p001": 0.22,
+      "min": 0.195
+     },
+     "barriga_desplaz_pct_altura": 5.704,
+     "cabeza_desplaz_pct_altura": null
+    },
+    "cabeza_inclinar_20": {
+     "global": {
+      "max": 3.2,
+      "p999": 1.868,
+      "p001": 0.587,
+      "min": 0.238
+     },
+     "barriga_estiramiento": {
+      "max": 2.02,
+      "p999": 1.868,
+      "p001": 0.565,
+      "min": 0.546
+     },
+     "barriga_desplaz_pct_altura": 2.441,
+     "cabeza_desplaz_pct_altura": null
+    },
+    "pierna_izq_adelante_30": {
+     "global": {
+      "max": 3.86,
+      "p999": 2.937,
+      "p001": 0.496,
+      "min": 0.291
+     },
+     "barriga_estiramiento": {
+      "max": 2.78,
+      "p999": 2.717,
+      "p001": 0.46,
+      "min": 0.291
+     },
+     "barriga_desplaz_pct_altura": 5.295,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "pierna_der_adelante_30": {
+     "global": {
+      "max": 4.03,
+      "p999": 3.019,
+      "p001": 0.502,
+      "min": 0.088
+     },
+     "barriga_estiramiento": {
+      "max": 3.08,
+      "p999": 2.896,
+      "p001": 0.448,
+      "min": 0.403
+     },
+     "barriga_desplaz_pct_altura": 5.7,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "pierna_izq_lateral_20": {
+     "global": {
+      "max": 3.15,
+      "p999": 2.22,
+      "p001": 0.619,
+      "min": 0.378
+     },
+     "barriga_estiramiento": {
+      "max": 1.98,
+      "p999": 1.849,
+      "p001": 0.456,
+      "min": 0.378
+     },
+     "barriga_desplaz_pct_altura": 1.938,
+     "cabeza_desplaz_pct_altura": 0
+    },
+    "pierna_der_lateral_20": {
+     "global": {
+      "max": 3.25,
+      "p999": 2.198,
+      "p001": 0.519,
+      "min": 0.265
+     },
+     "barriga_estiramiento": {
+      "max": 1.41,
+      "p999": 1.335,
+      "p001": 0.424,
+      "min": 0.265
+     },
+     "barriga_desplaz_pct_altura": 2.111,
+     "cabeza_desplaz_pct_altura": 0
+    }
+   }
+  }
+ }
+}

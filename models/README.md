@@ -12,6 +12,10 @@
 
 **Importante:** las 4 animaciones incluidas (Idle_11, Idle_15, Walking, Running) deforman la malla. No usar en producción hasta re-riggear.
 
+## Candidatos
+
+`candidatos/apose/`: modelo regenerado en A-pose (original en LFS + `rufi-apose.web.glb`, 609,9 KB). Validado en `docs/11-validacion-modelo-apose.md`. **No sustituye** a `rufi.web.glb` hasta que Reference Home lo apruebe.
+
 ## Clonar sin descargar el original
 
 El original solo hace falta para volver a optimizar. Para clonar sin él (ahorra 33 MB y cuota de LFS):

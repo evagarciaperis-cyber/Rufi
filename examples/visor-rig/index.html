@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rufi · Prueba de rig</title>
+<!--
+  Demostración con controles independientes para validar el esqueleto de Rufi.
+  Mueve cada hueso por separado (ángulos alrededor de ejes del mundo, como en el
+  banco de pruebas tools/rig-bench/) y colorea en rojo el estiramiento de la malla.
+  Uso local: `python3 -m http.server 8000` en la raíz y abrir /examples/visor-rig/
+  Herramienta interna; no es el componente de las landings.
+-->
+<style>
+  :root{--granate:#A11F48;--tinta:#2B2B2B;--gris:#5E5A56;--linea:#D9CEC3;--papel:#FFFDF9;--fondo:#F6ECE2;--aviso:#8a5a00;--aviso-bg:#fff4dc;--ok:#2f6b3f;--ok-bg:#e3f1e6}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--tinta:#EEE;--gris:#B5ADA6;--linea:#4a4440;--papel:#1d1a19;--fondo:#151312;--aviso:#f3c76b;--aviso-bg:#2e2615;--ok:#9fd8ad;--ok-bg:#1b2a1f;color-scheme:dark}}
+  :root[data-theme="dark"]{--tinta:#EEE;--gris:#B5ADA6;--linea:#4a4440;--papel:#1d1a19;--fondo:#151312;--aviso:#f3c76b;--aviso-bg:#2e2615;--ok:#9fd8ad;--ok-bg:#1b2a1f;color-scheme:dark}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tinta);background:var(--fondo);display:grid;grid-template-columns:minmax(0,1fr) 360px;min-height:100vh}
+  @media (max-width:860px){body{grid-template-columns:1fr}#stage{min-height:60vh}aside{max-height:none}}
+  #stage{position:relative;min-height:100vh}
+  #stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  #loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--gris)}
+  #loading[hidden],#legend[hidden]{display:none}
+  #legend{position:absolute;left:12px;bottom:12px;font-size:12px;color:var(--gris);background:var(--papel);border:1px solid var(--linea);border-radius:8px;padding:6px 9px}
+  aside{background:var(--papel);border-left:1px solid var(--linea);padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow:auto;max-height:100vh}
+  h1{font-size:17px;margin:0 0 2px} h2{font-size:12px;margin:18px 0 8px;color:var(--granate);text-transform:uppercase;letter-spacing:.05em}
+  p{margin:0 0 8px} .muted{color:var(--gris);font-size:12px}
+  .seg{display:flex;border:1px solid var(--linea);border-radius:10px;overflow:hidden}
+  .seg button{flex:1;border:0;border-radius:0}
+  button{font:inherit;border:1px solid var(--linea);background:transparent;color:inherit;border-radius:9px;padding:7px 10px;cursor:pointer}
+  button:hover{border-color:var(--granate)}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--granate);outline-offset:2px}
+  button[aria-pressed="true"]{background:var(--granate);color:#fff;border-color:var(--granate)}
+  .ctl{display:grid;grid-template-columns:132px minmax(0,1fr) 44px;gap:8px;align-items:center;font-size:13px;margin:4px 0}
+  .ctl output{font-variant-numeric:tabular-nums;text-align:right;color:var(--gris)}
+  input[type=range]{width:100%;accent-color:var(--granate)}
+  .row{display:flex;gap:6px;flex-wrap:wrap}
+  label.chk{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:6px}
+  #meter{border-radius:10px;padding:9px 11px;font-size:12.5px;margin-top:8px;background:var(--ok-bg);color:var(--ok)}
+  #meter.warn{background:var(--aviso-bg);color:var(--aviso)}
+  #meter dl{display:grid;grid-template-columns:auto auto;gap:2px 10px;margin:4px 0 0} #meter dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="stage"><canvas id="c" role="img" aria-label="Rufi en 3D con el esqueleto controlado por los deslizadores"></canvas><div id="loading">Cargando…</div><div id="legend" hidden>Rojo = malla estirada o comprimida (≥ 2× en rojo intenso)</div></div>
+<aside>
+  <h1>Rufi · Prueba de rig</h1>
+  <p class="muted">Mueve cada articulación por separado y comprueba si la malla se deforma. Mismos ejes y ángulos que el banco de pruebas del repositorio.</p>
+  <h2>Modelo</h2>
+  <div class="seg" id="models"></div>
+  <h2>Medición en vivo</h2>
+  <label class="chk"><input id="heat" type="checkbox"> Mapa de estiramiento</label>
+  <div id="meter">Mueve un control para medir.</div>
+  <h2>Brazos</h2><div id="g-arms"></div>
+  <h2>Cabeza</h2><div id="g-head"></div>
+  <h2>Piernas</h2><div id="g-legs"></div>
+  <div class="row" style="margin-top:12px"><button id="reset" type="button">Volver a reposo</button></div>
+  <h2>Animaciones incluidas por Meshy</h2>
+  <div class="row" id="clips"></div>
+  <p class="muted" style="margin-top:6px">Al reproducir una animación se desactivan los deslizadores.</p>
+</aside>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+const $ = (id) => document.getElementById(id);
+const MODELS = window.RUFI_RIG_MODELS || [
+  { id: 'apose', label: 'Nuevo (A-pose)', src: '../../models/candidatos/apose/rufi-apose.web.glb' },
+  { id: 'anterior', label: 'Anterior', src: '../../models/rufi.web.glb' },
+];
+// [id, grupo, etiqueta, hueso Mixamo, eje del mundo, min, max]. Modelo mirando a +Z; izquierda del personaje = +X.
+const CONTROLS = [
+  ['lArmUp', 'g-arms', 'Brazo izq. ↑↓', 'LeftArm', 'Z', -60, 60], ['lArmFw', 'g-arms', 'Brazo izq. adelante', 'LeftArm', 'Y', -60, 60],
+  ['lFore', 'g-arms', 'Antebrazo izq.', 'LeftForeArm', 'Y', -70, 70], ['lSh', 'g-arms', 'Hombro izq.', 'LeftShoulder', 'Z', -20, 20],
+  ['rArmUp', 'g-arms', 'Brazo der. ↑↓', 'RightArm', 'Z', -60, 60, -1], ['rArmFw', 'g-arms', 'Brazo der. adelante', 'RightArm', 'Y', -60, 60, -1],
+  ['rFore', 'g-arms', 'Antebrazo der.', 'RightForeArm', 'Y', -70, 70, -1], ['rSh', 'g-arms', 'Hombro der.', 'RightShoulder', 'Z', -20, 20, -1],
+  ['hYaw', 'g-head', 'Girar', 'Head', 'Y', -40, 40], ['hPitch', 'g-head', 'Asentir', 'Head', 'X', -30, 30], ['hRoll', 'g-head', 'Inclinar', 'Head', 'Z', -30, 30],
+  ['lLegFw', 'g-legs', 'Pierna izq. adelante', 'LeftUpLeg', 'X', -45, 45, -1], ['lLegSd', 'g-legs', 'Pierna izq. lateral', 'LeftUpLeg', 'Z', -30, 30],
+  ['rLegFw', 'g-legs', 'Pierna der. adelante', 'RightUpLeg', 'X', -45, 45, -1], ['rLegSd', 'g-legs', 'Pierna der. lateral', 'RightUpLeg', 'Z', -30, 30, -1],
+];
+const AX = { X: new THREE.Vector3(1, 0, 0), Y: new THREE.Vector3(0, 1, 0), Z: new THREE.Vector3(0, 0, 1) };
+const values = Object.fromEntries(CONTROLS.map((c) => [c[0], 0]));
+
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x9a8f88, 2.0));
+const key = new THREE.DirectionalLight(0xffffff, 1.7); key.position.set(-1.2, 2.4, 2.6); scene.add(key);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 50);
+const orbit = new OrbitControls(camera, canvas); orbit.enableDamping = true;
+const clock = new THREE.Clock();
+
+let current = null; // { root, mesh, bones, restQ, rest, mixer, clips, material, heatMaterial }
+let action = null;
+const cache = new Map();
+
+function resize() {
+  const r = canvas.parentElement.getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false);
+  camera.aspect = r.width / Math.max(1, r.height); camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(canvas.parentElement);
+
+function skinnedPositions(m) {
+  m.root.updateMatrixWorld(true); m.mesh.skeleton.update();
+  const n = m.mesh.geometry.attributes.position.count, a = new Float32Array(n * 3), v = new THREE.Vector3();
+  for (let i = 0; i < n; i++) { m.mesh.getVertexPosition(i, v); a[i * 3] = v.x; a[i * 3 + 1] = v.y; a[i * 3 + 2] = v.z; }
+  return a;
+}
+
+function applyPose() {
+  if (!current || action) return;
+  const m = current;
+  for (const [b, q] of m.restQ) b.quaternion.copy(q);
+  m.root.updateMatrixWorld(true);
+  for (const [id, , , bone, axis, , , sign = 1] of CONTROLS) {
+    const deg = values[id] * sign; if (!deg) continue;
+    const b = m.bones[bone]; if (!b) continue;
+    const pq = b.parent.getWorldQuaternion(new THREE.Quaternion());
+    const qw = new THREE.Quaternion().setFromAxisAngle(AX[axis], THREE.MathUtils.degToRad(deg));
+    b.quaternion.premultiply(pq.clone().invert().multiply(qw).multiply(pq));
+    b.updateMatrixWorld(true);
+  }
+  measure();
+}
+
+let measureQueued = false;
+function measure() {
+  if (measureQueued) return; measureQueued = true;
+  requestAnimationFrame(() => {
+    measureQueued = false;
+    const m = current; const p = skinnedPositions(m); const idx = m.mesh.geometry.index.array; const rest = m.rest; const n = rest.length / 3;
+    const L = (a, i, j) => Math.hypot(a[i * 3] - a[j * 3], a[i * 3 + 1] - a[j * 3 + 1], a[i * 3 + 2] - a[j * 3 + 2]);
+    const sv = new Float32Array(n); const ratios = [];
+    for (let t = 0; t < idx.length; t += 3) for (const [i, j] of [[idx[t], idx[t + 1]], [idx[t + 1], idx[t + 2]], [idx[t + 2], idx[t]]]) {
+      const l0 = L(rest, i, j); if (l0 < 1e-7) continue; const r = L(p, i, j) / l0; ratios.push(r);
+      const e = Math.abs(Math.log(r)); if (e > sv[i]) sv[i] = e; if (e > sv[j]) sv[j] = e;
+    }
+    ratios.sort((a, b) => a - b);
+    const p999 = ratios[Math.floor(ratios.length * 0.999)], max = ratios[ratios.length - 1];
+    const bad = ratios.filter((r) => r > 2 || r < 0.5).length;
+    const warn = p999 > 1.6 || bad > ratios.length * 0.0005;
+    $('meter').className = warn ? 'warn' : '';
+    $('meter').innerHTML = `<strong>${warn ? 'Deformación apreciable' : 'Sin deformación apreciable'}</strong><dl><dt>Estiramiento p99,9</dt><dd>${p999.toFixed(2)}×</dd><dt>Máximo</dt><dd>${max.toFixed(1)}×</dd><dt>Aristas &gt; 2× o &lt; 0,5×</dt><dd>${bad.toLocaleString('es-ES')}</dd></dl>`;
+    if ($('heat').checked) {
+      const col = m.mesh.geometry.attributes.color;
+      for (let i = 0; i < n; i++) { const k = Math.min(1, sv[i] / Math.LN2); col.setXYZ(i, 0.92, 0.88 * (1 - k), 0.84 * (1 - k)); }
+      col.needsUpdate = true;
+    }
+  });
+}
+
+function buildControls() {
+  for (const [id, group, label, , , min, max] of CONTROLS) {
+    const row = document.createElement('div'); row.className = 'ctl';
+    const lab = document.createElement('label'); lab.htmlFor = id; lab.textContent = label;
+    const input = Object.assign(document.createElement('input'), { type: 'range', id, min, max, step: 1, value: 0 });
+    const out = document.createElement('output'); out.htmlFor = id; out.textContent = '0°';
+    input.oninput = () => { values[id] = Number(input.value); out.textContent = `${input.value}°`; if (action) stopClip(); applyPose(); };
+    row.append(lab, input, out); $(group).appendChild(row);
+  }
+}
+
+function stopClip() {
+  if (action) { action.stop(); action = null; }
+  document.querySelectorAll('#clips button').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+}
+
+function setHeat(on) {
+  if (!current) return;
+  current.mesh.material = on ? current.heatMaterial : current.material;
+  $('legend').hidden = !on;
+  if (on) measure();
+}
+
+async function loadModel(def) {
+  if (cache.has(def.id)) return cache.get(def.id);
+  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+  const gltf = def.b64
+    ? await new Promise((res, rej) => loader.parse(Uint8Array.from(atob(def.b64), (c) => c.charCodeAt(0)).buffer, '', res, rej))
+    : await loader.loadAsync(def.src);
+  const root = gltf.scene; let mesh; root.traverse((o) => { if (o.isSkinnedMesh) mesh = o; });
+  const bones = Object.fromEntries(mesh.skeleton.bones.map((b) => [b.name.replace('mixamorig', ''), b]));
+  const restQ = new Map(mesh.skeleton.bones.map((b) => [b, b.quaternion.clone()]));
+  const n = mesh.geometry.attributes.position.count;
+  mesh.geometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3).fill(0.9), 3));
+  const m = { root, mesh, bones, restQ, clips: gltf.animations, mixer: new THREE.AnimationMixer(root), material: mesh.material,
+    heatMaterial: new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide }) };
+  m.rest = skinnedPositions(m);
+  const box = new THREE.Box3().setFromObject(root, true); m.size = box.getSize(new THREE.Vector3()); m.center = box.getCenter(new THREE.Vector3());
+  cache.set(def.id, m); return m;
+}
+
+async function show(def) {
+  $('loading').hidden = false; $('loading').textContent = 'Cargando…';
+  stopClip();
+  if (current) scene.remove(current.root);
+  current = await loadModel(def);
+  scene.add(current.root);
+  camera.position.set(current.center.x, current.center.y + current.size.y * 0.05, current.center.z + current.size.y * 2.4);
+  orbit.target.copy(current.center); orbit.update();
+  $('clips').textContent = '';
+  for (const clip of current.clips) {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = clip.name; b.setAttribute('aria-pressed', 'false');
+    b.onclick = () => { stopClip(); action = current.mixer.clipAction(clip); action.reset().play(); b.setAttribute('aria-pressed', 'true'); };
+    $('clips').appendChild(b);
+  }
+  if (!current.clips.length) $('clips').textContent = 'Este modelo no incluye animaciones.';
+  setHeat($('heat').checked);
+  applyPose();
+  document.querySelectorAll('#models button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === def.id)));
+  $('loading').hidden = true;
+  window.RUFI_RIG = { model: def.id, bones: Object.keys(current.bones).length, clips: current.clips.map((c) => c.name) };
+}
+
+for (const def of MODELS) {
+  const b = document.createElement('button'); b.type = 'button'; b.textContent = def.label; b.dataset.id = def.id;
+  b.onclick = () => show(def).catch((e) => { $('loading').textContent = 'No se pudo cargar: ' + e.message; });
+  $('models').appendChild(b);
+}
+buildControls();
+$('heat').onchange = (e) => setHeat(e.target.checked);
+$('reset').onclick = () => { for (const c of CONTROLS) { values[c[0]] = 0; $(c[0]).value = 0; $(c[0]).nextElementSibling.textContent = '0°'; } stopClip(); applyPose(); };
+window.RUFI_SET = (id, v) => { const el = $(id); el.value = v; el.dispatchEvent(new Event('input')); };
+show(MODELS[0]).catch((e) => { $('loading').textContent = 'No se pudo cargar: ' + e.message; });
+
+resize();
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta();
+  if (action && current) current.mixer.update(dt);
+  orbit.update(); renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Rufi · Banco de pruebas del rig</title>
+<!--
+  Banco de pruebas controladas del esqueleto (Mixamo) de un GLB de Rufi.
+  Uso: python3 -m http.server en la raíz y abrir /tools/rig-bench/?f=../../models/candidatos/apose/rufi-apose.web.glb
+  Parámetros opcionales: viz=regions | viz=<prueba>&posed=1 (mapa de estiramiento), shot=<prueba>, yaw=<grados>.
+  Resultado: JSON en la página y en window.RESULT. Ver docs/11-validacion-modelo-apose.md.
+-->
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+} }
+</script>
+</head>
+<body style="margin:0;background:#fff;font:13px system-ui,sans-serif">
+<canvas id="c" width="900" height="900" style="max-width:100%"></canvas>
+<pre id="out" style="white-space:pre-wrap;padding:12px">Ejecutando pruebas…</pre>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+// Banco de pruebas controladas: mismas pruebas sobre cualquier GLB con esqueleto Mixamo.
+const q = new URLSearchParams(location.search);
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.setClearColor(0xffffff, 0);
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x9a8f88, 2.2));
+const dl = new THREE.DirectionalLight(0xffffff, 1.6); dl.position.set(-1, 2, 3); scene.add(dl);
+const cam = new THREE.PerspectiveCamera(28, 1, 0.01, 100);
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const AX = { X: V(1, 0, 0), Y: V(0, 1, 0), Z: V(0, 0, 1) };
+
+// Pruebas: [nombre, hueso, eje del mundo, grados]. Modelo mirando a +Z, izquierda del personaje = +X.
+const TESTS = [
+  ['brazo_izq_bajar_40', 'LeftArm', 'Z', -40], ['brazo_izq_subir_40', 'LeftArm', 'Z', 40], ['brazo_izq_adelante_40', 'LeftArm', 'Y', -40],
+  ['brazo_der_bajar_40', 'RightArm', 'Z', 40], ['brazo_der_subir_40', 'RightArm', 'Z', -40], ['brazo_der_adelante_40', 'RightArm', 'Y', 40],
+  ['antebrazo_izq_45', 'LeftForeArm', 'Y', -45], ['antebrazo_der_45', 'RightForeArm', 'Y', 45],
+  ['hombro_izq_subir_15', 'LeftShoulder', 'Z', 15], ['hombro_der_subir_15', 'RightShoulder', 'Z', -15],
+  ['cabeza_giro_30', 'Head', 'Y', 30], ['cabeza_asentir_20', 'Head', 'X', 20], ['cabeza_inclinar_20', 'Head', 'Z', 20],
+  ['pierna_izq_adelante_30', 'LeftUpLeg', 'X', -30], ['pierna_der_adelante_30', 'RightUpLeg', 'X', -30],
+  ['pierna_izq_lateral_20', 'LeftUpLeg', 'Z', 20], ['pierna_der_lateral_20', 'RightUpLeg', 'Z', -20],
+];
+
+new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(q.get('f'), (g) => {
+  const root = g.scene; scene.add(root);
+  let mesh; root.traverse((o) => { if (o.isSkinnedMesh) mesh = o; });
+  const bones = Object.fromEntries(mesh.skeleton.bones.map((b) => [b.name.replace('mixamorig', ''), b]));
+  root.updateMatrixWorld(true); mesh.skeleton.update();
+  const box = new THREE.Box3().setFromObject(root, true); const size = box.getSize(V()), c = box.getCenter(V());
+  cam.position.set(c.x, c.y + size.y * 0.05, c.z + size.y * 2.4); cam.lookAt(c);
+
+  const geo = mesh.geometry, n = geo.attributes.position.count, idx = geo.index.array;
+  const SK = geo.attributes.skinIndex, SW = geo.attributes.skinWeight;
+  const name = (j) => mesh.skeleton.bones[j].name.replace('mixamorig', '');
+  const snap = () => { root.updateMatrixWorld(true); mesh.skeleton.update(); const v = V(), a = new Float32Array(n * 3); for (let i = 0; i < n; i++) { mesh.getVertexPosition(i, v); v.applyMatrix4(mesh.matrixWorld); a[i * 3] = v.x; a[i * 3 + 1] = v.y; a[i * 3 + 2] = v.z; } return a; };
+  const rest = snap();
+  const wp = (b) => b.getWorldPosition(V());
+  const out = { altura: +size.y.toFixed(3), vertices: n, triangulos: idx.length / 3 };
+
+  // 1. Simetría de huesos (izquierda vs derecha reflejada en X)
+  const pairs = [['Shoulder'], ['Arm'], ['ForeArm'], ['Hand'], ['UpLeg'], ['Leg'], ['Foot'], ['ToeBase']];
+  const hips = wp(bones.Hips);
+  out.simetria = {};
+  for (const [p] of pairs) {
+    const L = wp(bones['Left' + p]), R = wp(bones['Right' + p]);
+    out.simetria[p] = { L: L.toArray().map((x) => +x.toFixed(3)), R: R.toArray().map((x) => +x.toFixed(3)),
+      error_espejo_m: +Math.hypot((L.x - hips.x) + (R.x - hips.x), L.y - R.y, L.z - R.z).toFixed(3) };
+  }
+  const headY = wp(bones.Neck).y, headJ = wp(bones.Head);
+  out.huesos_centrales = Object.fromEntries(['Hips', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Head'].map((k) => [k, wp(bones[k]).toArray().map((x) => +x.toFixed(3))]));
+
+  // 2. Regiones geométricas (independientes de los pesos)
+  const chestY = wp(bones.Spine2).y, hipY = hips.y;
+  const torsoHalf = Math.abs(wp(bones.LeftArm).x - wp(bones.RightArm).x) / 2;
+  const headSet = [], bellySet = [];
+  for (let i = 0; i < n; i++) {
+    const x = rest[i * 3], y = rest[i * 3 + 1], z = rest[i * 3 + 2];
+    if (y > headY + (headJ.y - headY) * 0.5) headSet.push(i);
+    if (y > hipY && y < chestY && Math.abs(x - hips.x) < torsoHalf * 0.55 && z > hips.z) bellySet.push(i);
+  }
+  const ARM = /(Shoulder|Arm|ForeArm|Hand)$/, LEG = /(UpLeg|Leg|Foot|ToeBase)$/;
+  const contamination = (set, re) => { let k = 0, maxw = 0; const by = {}; for (const i of set) { let w = 0; for (let s = 0; s < 4; s++) { const ww = SW.getComponent(i, s); if (ww > 0 && re.test(name(SK.getComponent(i, s)))) { w += ww; by[name(SK.getComponent(i, s))] = (by[name(SK.getComponent(i, s))] || 0) + 1; } } if (w > 0.01) k++; maxw = Math.max(maxw, w); } return { vertices_region: set.length, con_peso_ajeno: k, pct: +(100 * k / set.length).toFixed(2), peso_max: +maxw.toFixed(3), huesos: by }; };
+  out.pesos = {
+    cabeza_con_peso_de_brazos: contamination(headSet, ARM),
+    cabeza_con_peso_de_piernas: contamination(headSet, LEG),
+    barriga_con_peso_de_piernas: contamination(bellySet, LEG),
+    barriga_con_peso_de_brazos: contamination(bellySet, ARM),
+  };
+
+  // 3. Pruebas controladas
+  const nTri = idx.length / 3, step = Math.max(1, Math.floor(nTri / 60000));
+  const L = (a, i, j) => Math.hypot(a[i * 3] - a[j * 3], a[i * 3 + 1] - a[j * 3 + 1], a[i * 3 + 2] - a[j * 3 + 2]);
+  const inBelly = new Uint8Array(n); bellySet.forEach((i) => (inBelly[i] = 1));
+  const stretch = (p, onlyBelly) => { const r = []; for (let t = 0; t < nTri; t += onlyBelly ? 1 : step) { const a = idx[t * 3], b = idx[t * 3 + 1], c2 = idx[t * 3 + 2]; if (onlyBelly && !(inBelly[a] && inBelly[b] && inBelly[c2])) continue; for (const [i, j] of [[a, b], [b, c2], [c2, a]]) { const l0 = L(rest, i, j); if (l0 > 1e-7) r.push(L(p, i, j) / l0); } } r.sort((x, y) => x - y); if (!r.length) return null; const pk = (f) => +r[Math.min(r.length - 1, Math.floor(r.length * f))].toFixed(3); return { max: +r[r.length - 1].toFixed(2), p999: pk(0.999), p001: pk(0.001), min: +r[0].toFixed(3) }; };
+  const disp = (p, set) => { let m = 0; for (const i of set) m = Math.max(m, Math.hypot(p[i * 3] - rest[i * 3], p[i * 3 + 1] - rest[i * 3 + 1], p[i * 3 + 2] - rest[i * 3 + 2])); return +(m / size.y * 100).toFixed(3); };
+  const rotateWorld = (b, axis, deg) => { const pq = b.parent.getWorldQuaternion(new THREE.Quaternion()); const qw = new THREE.Quaternion().setFromAxisAngle(AX[axis], THREE.MathUtils.degToRad(deg)); const delta = pq.clone().invert().multiply(qw).multiply(pq); b.quaternion.premultiply(delta); };
+  const restQ = new Map(mesh.skeleton.bones.map((b) => [b, b.quaternion.clone()]));
+  const reset = () => { for (const [b, qq] of restQ) b.quaternion.copy(qq); };
+  out.pruebas = {};
+  for (const [tname, bn, axis, deg] of TESTS) {
+    reset(); rotateWorld(bones[bn], axis, deg); const p = snap();
+    const head = /Head/.test(bn) ? null : disp(p, headSet);
+    out.pruebas[tname] = { global: stretch(p, false), barriga_estiramiento: stretch(p, true), barriga_desplaz_pct_altura: disp(p, bellySet), cabeza_desplaz_pct_altura: head };
+  }
+  reset(); root.updateMatrixWorld(true);
+  // Depuración visual: regiones o mapa de calor de desplazamiento de una prueba
+  const viz = q.get('viz');
+  if (viz) {
+    const col = new Float32Array(n * 3).fill(0.85);
+    if (viz === 'regions') { for (const i of headSet) col.set([0.9, 0.25, 0.3], i * 3); for (const i of bellySet) col.set([0.2, 0.45, 0.95], i * 3); }
+    else { const t = TESTS.find((x) => x[0] === viz); rotateWorld(bones[t[1]], t[2], t[3]); const p = snap(); reset(); root.updateMatrixWorld(true); mesh.skeleton.update();
+      // color por estiramiento local máximo de las aristas que tocan cada vértice
+      const sv = new Float32Array(n); for (let t2 = 0; t2 < nTri; t2++) { const a = idx[t2*3], b = idx[t2*3+1], c3 = idx[t2*3+2]; for (const [i, j] of [[a,b],[b,c3],[c3,a]]) { const l0 = L(rest, i, j); if (l0 > 1e-7) { const r = L(p, i, j) / l0; const e = Math.abs(Math.log(r)); if (e > sv[i]) sv[i] = e; if (e > sv[j]) sv[j] = e; } } }
+      for (let i = 0; i < n; i++) { const k = Math.min(1, sv[i] / Math.log(2)); col.set([0.85 + 0.15 * k, 0.85 * (1 - k), 0.85 * (1 - k)], i * 3); }
+      if (q.get('posed')) rotateWorld(bones[t[1]], t[2], t[3]);
+    }
+    geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    mesh.material = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide });
+    root.updateMatrixWorld(true);
+  }
+  const shot = q.get('shot'); if (shot) { const t = TESTS.find((x) => x[0] === shot); rotateWorld(bones[t[1]], t[2], t[3]); root.updateMatrixWorld(true); }
+  if (q.get('yaw')) { const yaw = parseFloat(q.get('yaw')) * Math.PI / 180, d = size.y * 2.4; cam.position.set(c.x + Math.sin(yaw) * d, c.y + size.y * 0.05, c.z + Math.cos(yaw) * d); cam.lookAt(c); }
+  renderer.render(scene, cam);
+  window.RESULT = out; document.getElementById('out').textContent = JSON.stringify(out, null, 2);
+}, undefined, (e) => (window.RESULT = { error: String(e) }));
+</script>
+</body>
+</html>
