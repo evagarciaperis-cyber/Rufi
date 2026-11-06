@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Rufi · Demo Aval ICO</title>
+<!--
+  ENTORNO DE PRUEBAS. Reproduce la ESTRUCTURA de https://referencehome.es/ICO/aval-ico-valencia.html
+  (mismos identificadores: #test, #q-body, .q-res, #simulador, #precio, #sim-figures, #wa-dock, #masc)
+  con contenido de ejemplo. No es la landing real y sus cálculos no son los del simulador real.
+  Uso: `npm run build` y `python3 -m http.server 8000` en la raíz → /examples/demo-aval-ico/
+-->
+<style>
+  :root{--granate:#A11F48;--beige:#F0DFCF;--blanco:#F8F6F2;--tinta:#2B2B2B;--gris:#5E5A56;--linea:#D9CEC3;--verde:#4A5D5A;--wa-h:76px}
+  *{box-sizing:border-box}
+  body{margin:0;font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tinta);background:var(--blanco);padding-bottom:calc(var(--wa-h) + env(safe-area-inset-bottom))}
+  .demo-note{background:#2B2B2B;color:#fff;font-size:13px;padding:8px max(16px,env(safe-area-inset-left));text-align:center}
+  .demo-note a{color:#fff}
+  section{padding:56px max(16px,env(safe-area-inset-left)) 56px max(16px,env(safe-area-inset-right));border-bottom:1px solid var(--linea)}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:clamp(30px,6vw,46px);line-height:1.1;margin:0 0 12px} h2{font-size:clamp(24px,4.5vw,32px);margin:0 0 10px}
+  .eyebrow{color:var(--granate);font-weight:700;text-transform:uppercase;font-size:13px;letter-spacing:.06em;margin:0}
+  .hero{background:var(--beige);min-height:70vh;display:flex;align-items:center}
+  .card{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:18px;margin-top:16px}
+  button.ui,.btn{font:inherit;border:0;border-radius:12px;padding:12px 16px;background:var(--granate);color:#fff;cursor:pointer}
+  button.ui.alt{background:#fff;color:var(--tinta);border:1px solid var(--linea)}
+  .field{display:grid;gap:4px;margin-top:12px} input{font:inherit;padding:10px 12px;border:1px solid var(--linea);border-radius:10px}
+  .q-res{margin-top:12px;padding:14px;border-radius:12px;background:#E1E8E3}
+  .spacer{height:60vh}
+  .wa-dock{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 106px calc(10px + env(safe-area-inset-bottom)) 14px;background:rgba(248,246,242,.94);border-top:1px solid var(--linea);display:flex}
+  .wa-dock .btn{flex:1;text-align:center;text-decoration:none;min-height:54px;display:grid;place-items:center;background:#1f7a52}
+  @media (min-width:768px){.wa-dock{left:auto;right:190px;bottom:24px;background:transparent;border:0;padding:0}.wa-dock .btn{padding:14px 22px}}
+  /* imitación de la mascota anterior (v0): Rufi la oculta con replaceSelector */
+  #masc{position:fixed;right:4px;bottom:2px;z-index:46;width:96px;height:108px;background:#ccc;border-radius:20px;display:grid;place-items:center;font-size:12px}
+  .tools{position:fixed;left:8px;top:44px;z-index:60;background:#fff;border:1px solid var(--linea);border-radius:12px;padding:8px;font-size:12px;display:flex;flex-wrap:wrap;gap:4px;max-width:min(360px,calc(100vw - 16px))}
+  .tools button{font:inherit;font-size:12px;padding:5px 8px;border-radius:8px;border:1px solid var(--linea);background:#fff;cursor:pointer}
+  .tools[hidden]{display:none}
+</style>
+</head>
+<body>
+<p class="demo-note">Entorno de pruebas de Rufi · reproduce la estructura de la landing del Aval ICO con contenido de ejemplo · <a href="#" id="tools-toggle">herramientas</a></p>
+<div class="tools" id="tools" hidden aria-label="Herramientas de prueba">
+  <button data-s="greet">saludar (wave)</button><button data-s="curious">curioso</button><button data-s="happy">contento (smile)</button>
+  <button data-r="blink">parpadeo</button><button data-s="sleep">dormir</button><button data-s="idle">reposo</button>
+  <button id="reset">reiniciar sesión</button>
+</div>
+
+<section class="hero" id="inicio"><div class="wrap">
+  <p class="eyebrow">Aval ICO · Valencia</p>
+  <h1 id="h1">Aval ICO para tu primera vivienda (página de prueba)</h1>
+  <p>Contenido de ejemplo para probar el comportamiento de Rufi. Desplázate hasta el test y el simulador.</p>
+</div></section>
+
+<section id="cifras"><div class="wrap"><h2>Las condiciones (ejemplo)</h2><p>Texto de relleno.</p><div class="spacer"></div></div></section>
+
+<section class="quiz-sec" id="test" aria-labelledby="t-test"><div class="wrap">
+  <p class="eyebrow">Test de un minuto</p>
+  <h2 id="t-test">¿Encajas en el aval ICO?</h2>
+  <div class="card quiz" id="quiz"><div class="q-body" id="q-body" aria-live="polite">
+    <p class="q-title">¿Vas a comprar tu primera vivienda?</p>
+    <button class="ui" type="button" id="q-yes">Sí</button> <button class="ui alt" type="button">No</button>
+  </div></div>
+</div></section>
+
+<section id="simulador" aria-labelledby="t-sim"><div class="wrap">
+  <p class="eyebrow">Simulador orientativo</p>
+  <h2 id="t-sim">¿Cuánto ahorro sigues necesitando?</h2>
+  <div class="card">
+    <div class="field"><label for="precio">Precio de compra</label><input id="precio" inputmode="numeric" placeholder="200.000"></div>
+    <div class="field"><label for="tasacion">Valor de tasación</label><input id="tasacion" inputmode="numeric" placeholder="200.000"></div>
+    <div class="field"><label for="gastos">Impuestos y gastos</label><input id="gastos" inputmode="numeric" placeholder="20.000"></div>
+    <div id="resultado" aria-live="polite"><p id="sim-status">Escribe el precio de compra para ver el cálculo.</p><div id="sim-figures" hidden><p><strong>Ahorro orientativo:</strong> <span id="r-ahorro">—</span></p></div></div>
+  </div>
+  <div class="spacer"></div>
+</div></section>
+
+<section id="contacto"><div class="wrap"><h2>Contacto (ejemplo)</h2><div class="spacer"></div></div></section>
+
+<div class="wa-dock" id="wa-dock"><a class="btn" href="https://wa.me/34674612272" target="_blank" rel="noopener">Escríbenos por WhatsApp</a></div>
+<div id="masc">mascota v0</div>
+
+<script>
+  // Test de ejemplo: al responder, aparece .q-res (como en la landing real)
+  document.getElementById('q-yes').addEventListener('click', () => {
+    document.getElementById('q-body').innerHTML = '<div class="q-res"><h3 class="q-title" tabindex="-1">Por lo que nos cuentas, cumples los requisitos principales</h3><p>Resultado de ejemplo.</p></div>';
+  });
+  // Simulador de ejemplo: muestra #sim-figures al escribir un precio
+  document.getElementById('precio').addEventListener('input', (e) => {
+    const v = parseInt(e.target.value.replace(/\D/g, ''), 10);
+    const box = document.getElementById('sim-figures');
+    if (v) { box.hidden = false; document.getElementById('r-ahorro').textContent = Math.round(v * 0.1).toLocaleString('es-ES') + ' € (ejemplo)'; } else box.hidden = true;
+  });
+  // Herramientas de prueba
+  document.getElementById('tools-toggle').addEventListener('click', (e) => { e.preventDefault(); const t = document.getElementById('tools'); t.hidden = !t.hidden; });
+  document.querySelectorAll('#tools [data-s]').forEach((b) => b.addEventListener('click', () => window.Rufi.instance && window.Rufi.instance.setState(b.dataset.s)));
+  document.querySelectorAll('#tools [data-r]').forEach((b) => b.addEventListener('click', () => window.Rufi.instance && window.Rufi.instance.react(b.dataset.r)));
+  document.getElementById('reset').addEventListener('click', () => { window.Rufi.resetSession('aval-ico-valencia'); location.reload(); });
+</script>
+
+<!-- Instalación de Rufi: estas dos líneas son todo lo que se añade a la landing real -->
+<script src="../../dist/config/aval-ico.js"></script>
+<script src="../../dist/rufi.js" defer></script>
+</body>
+</html>
