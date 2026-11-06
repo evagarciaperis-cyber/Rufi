@@ -66,3 +66,18 @@ test('el original está intacto (si está descargado de Git LFS)', { skip: (!exi
   assert.equal(r.triangulos, 270410);
   assert.deepEqual(r.animaciones.map((a) => a.nombre).sort(), [...CLIPS].sort());
 });
+
+// Fase 3: modelo A-pose con pesos corregidos y animaciones propias
+const animado = path.join(root, 'models', 'rufi-animado.web.glb');
+test('rufi-animado.web.glb: presupuesto web y animaciones idle, wave y curious', () => {
+  const buf = readFileSync(animado);
+  const r = inspectGlb(buf);
+  assert.ok(buf.length / 1024 <= spec.presupuesto_web.glb_objetivo_kb, `${buf.length / 1024} KB`);
+  assert.ok(r.triangulos <= spec.presupuesto_web.triangulos_max);
+  assert.deepEqual(r.animaciones.map((a) => a.nombre).sort(), ['curious', 'idle', 'wave']);
+  const dur = Object.fromEntries(r.animaciones.map((a) => [a.nombre, a.duracion_s]));
+  assert.deepEqual(dur, { idle: 4, wave: 3.2, curious: 2.6 });
+  assert.equal(r.esqueletos[0].huesos, 24);
+  assert.ok(!r.animaciones.some((a) => /Walking|Running/.test(a.nombre)), 'no debe incluir Walking/Running');
+  for (const img of r.imagenes) assert.ok(img.ancho <= 1024 && img.alto <= 1024);
+});

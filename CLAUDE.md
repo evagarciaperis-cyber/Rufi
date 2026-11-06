@@ -11,13 +11,15 @@ Este repositorio (`evagarciaperis-cyber/Rufi`, <https://github.com/evagarciaperi
 ## Reglas de identidad (no negociables)
 
 - La imagen oficial es `assets/original/mascota.png` (SHA-256 en `RUFI.md`). **No la modifiques, no la regeneres y no la sustituyas.** Para la web usa las copias redimensionadas de `assets/web/`.
-- No cambies cara, colores, proporciones, cresta de dos lóbulos granate, pañuelo verde con nudo a la izquierda del personaje, manos sin dedos ni suelas granate.
+- No cambies cara, colores, proporciones, cresta de dos lóbulos granate, pañuelo verde con nudo a la izquierda del personaje, manos con dedos pequeños y redondeados (aprobadas en la fase 3) ni suelas granate.
 - No generes con IA "otra versión" de Rufi ni un personaje parecido. Si hace falta arte nuevo (vistas, expresiones), se encarga y lo aprueba Reference Home.
 - Expresiones prohibidas: enfado, llanto, miedo intenso, burla, guiño insinuante.
 
 ## Reglas de honestidad
 
-- **Existe el modelo 3D real de Rufi** (Meshy): `models/original/rufianimado.glb` (original, Git LFS) y `models/rufi.web.glb` (web, 698 KB). Se ve fiel en reposo, **pero no es todavía un Rufi animable según el contrato**: esqueleto Mixamo, sin shape keys, y sus 4 animaciones (Idle_11, Idle_15, Walking, Running) deforman la malla. Ver `docs/09-modelo-3d-meshy.md`.
+- **Base de trabajo: el modelo A-pose** (`models/candidatos/apose/original/Meshy_rufi.glb`, intacto en Git LFS). Su versión con pesos corregidos y animaciones `idle`, `wave` y `curious` es `models/rufi-animado.web.glb`, generada con `tools/rig-fix/fix-rig.mjs` + `tools/optimize-model.mjs`. Medido y documentado en `docs/12-rigging-fase-3.md`. Sigue sin cumplir el contrato completo de la fase 1 (esqueleto Mixamo, sin shape keys faciales, clips con otros nombres).
+- El modelo anterior (`models/rufi.web.glb`, pose de saludo) queda como referencia histórica: sus animaciones deforman la malla.
+- No usar Walking ni Running (Meshy) hasta corregirlas.
 - No afirmes que Rufi está listo para animarse en producción mientras ningún GLB pase `node tools/validate-glb.mjs` sin `--allow-proxy` y sin errores.
 - Nunca sustituyas el 3D por movimientos CSS del personaje completo.
 - Distingue siempre entre **medido** (calculado sobre la imagen), **estimado** (propuesta) y **verificado** (probado en Blender/navegador).

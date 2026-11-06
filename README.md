@@ -6,6 +6,8 @@ Repositorio fuente de **Rufi**: identidad, especificación técnica, pipeline 3D
 
 ## Estado
 
+**Fase 3 — rig corregido y animaciones (rama `fase-3-rigging`).** `models/rufi-animado.web.glb` (**556,2 KB**): modelo A-pose con los pesos corregidos y las animaciones de esqueleto `idle`, `wave` y `curious`. Cara, ojos, pañuelo, barriga y piernas verificados sin deformación. Pendiente en Blender: pliegue de la axila en `wave`, expresiones faciales. Ver [`docs/12-rigging-fase-3.md`](docs/12-rigging-fase-3.md) y `examples/visor-animaciones/`.
+
 **Fase 2 — modelo 3D real (Meshy): incorporado, analizado y optimizado.** Ver [`docs/09-modelo-3d-meshy.md`](docs/09-modelo-3d-meshy.md).
 
 | Fase 2 | |

@@ -22,10 +22,10 @@ Medidos en `docs/01-analisis-visual.md`. Ninguna versión (2D, 3D, ilustración,
 - **Cejas** marrón oscuro, finas y en relieve, separadas del ojo.
 - **Boca** abierta en sonrisa, cavidad roja oscura y lengua rosa, **sin dientes**.
 - **Rubor** rosa suave en ambas mejillas. **Sin nariz.**
-- **Brazos** cortos tipo manopla, **sin dedos**.
+- **Brazos** cortos con **manos de dedos pequeños y redondeados** (decisión oficial de Reference Home, 6-nov-2026, al adoptar el modelo 3D A-pose como base). Sustituye a la manopla sin dedos de la imagen 2D original.
 - **Pies** cortos y redondeados con **suela granate** gruesa (`#731824`).
 
-Prohibido: cambiar colores, proporciones, número de lóbulos de la cresta, color o posición del pañuelo, añadir dedos, dientes, nariz, ropa, accesorios o logotipos sobre el personaje, o sustituirlo por otro personaje "parecido".
+Prohibido: cambiar colores, proporciones, número de lóbulos de la cresta, color o posición del pañuelo, cambiar la forma de las manos aprobada, añadir dientes, nariz, ropa, accesorios o logotipos sobre el personaje, o sustituirlo por otro personaje "parecido".
 
 ## 3. Personalidad
 

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rufi · Animaciones</title>
+<!--
+  Visor de las animaciones de esqueleto de Rufi (fase 3): idle, wave y curious.
+  Mide en vivo el estiramiento de la malla mientras se reproducen y permite compararlo
+  con el modelo A-pose original de Meshy (sin corregir).
+  Uso local: `python3 -m http.server 8000` en la raíz y abrir /examples/visor-animaciones/
+-->
+<style>
+  :root{--granate:#A11F48;--tinta:#2B2B2B;--gris:#5E5A56;--linea:#D9CEC3;--papel:#FFFDF9;--fondo:#F6ECE2;--aviso:#8a5a00;--aviso-bg:#fff4dc;--ok:#2f6b3f;--ok-bg:#e3f1e6}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--tinta:#EEE;--gris:#B5ADA6;--linea:#4a4440;--papel:#1d1a19;--fondo:#151312;--aviso:#f3c76b;--aviso-bg:#2e2615;--ok:#9fd8ad;--ok-bg:#1b2a1f;color-scheme:dark}}
+  :root[data-theme="dark"]{--tinta:#EEE;--gris:#B5ADA6;--linea:#4a4440;--papel:#1d1a19;--fondo:#151312;--aviso:#f3c76b;--aviso-bg:#2e2615;--ok:#9fd8ad;--ok-bg:#1b2a1f;color-scheme:dark}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tinta);background:var(--fondo);display:grid;grid-template-columns:minmax(0,1fr) 350px;min-height:100vh}
+  @media (max-width:860px){body{grid-template-columns:1fr}#stage{min-height:62vh}aside{max-height:none}}
+  #stage{position:relative;min-height:100vh}
+  #stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  #loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--gris)}
+  #loading[hidden],#legend[hidden]{display:none}
+  #legend{position:absolute;left:12px;bottom:12px;font-size:12px;color:var(--gris);background:var(--papel);border:1px solid var(--linea);border-radius:8px;padding:6px 9px}
+  aside{background:var(--papel);border-left:1px solid var(--linea);padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow:auto;max-height:100vh}
+  h1{font-size:17px;margin:0 0 2px} h2{font-size:12px;margin:18px 0 8px;color:var(--granate);text-transform:uppercase;letter-spacing:.05em}
+  p{margin:0 0 8px} .muted{color:var(--gris);font-size:12px}
+  .seg{display:flex;border:1px solid var(--linea);border-radius:10px;overflow:hidden}
+  .seg button{flex:1;border:0;border-radius:0}
+  .clips{display:grid;gap:6px}
+  button{font:inherit;border:1px solid var(--linea);background:transparent;color:inherit;border-radius:9px;padding:7px 10px;cursor:pointer;text-align:left}
+  button:hover{border-color:var(--granate)}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--granate);outline-offset:2px}
+  button[aria-pressed="true"]{background:var(--granate);color:#fff;border-color:var(--granate)}
+  .clips button small{display:block;font-size:12px;opacity:.85}
+  .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  label{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:6px}
+  input[type=range]{flex:1;accent-color:var(--granate)}
+  #time{font-variant-numeric:tabular-nums;font-size:12px;color:var(--gris);min-width:92px;text-align:right}
+  #meter{border-radius:10px;padding:9px 11px;font-size:12.5px;margin-top:8px;background:var(--ok-bg);color:var(--ok)}
+  #meter.warn{background:var(--aviso-bg);color:var(--aviso)}
+  #meter dl{display:grid;grid-template-columns:auto auto;gap:2px 10px;margin:4px 0 0} #meter dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="stage"><canvas id="c" role="img" aria-label="Rufi en 3D reproduciendo animaciones de esqueleto"></canvas><div id="loading">Cargando…</div><div id="legend" hidden>Rojo = malla estirada o comprimida (rojo intenso ≥ 2×)</div></div>
+<aside>
+  <h1>Rufi · Animaciones</h1>
+  <p class="muted">Animaciones de esqueleto del modelo A-pose con los pesos corregidos (fase 3).</p>
+  <h2>Modelo</h2>
+  <div class="seg" id="models"></div>
+  <h2>Animaciones</h2>
+  <div class="clips" id="clips"></div>
+  <h2>Reproducción</h2>
+  <div class="row"><button id="play" type="button">Pausa</button><button id="restart" type="button">Reiniciar</button><button id="rest" type="button">Reposo</button></div>
+  <div class="row" style="margin-top:8px"><input id="scrub" type="range" min="0" max="1" step="0.001" value="0" aria-label="Línea de tiempo"><span id="time">0,00 / 0,00 s</span></div>
+  <label>Velocidad <input id="speed" type="range" min="0.1" max="2" step="0.05" value="1"><span id="speedv">1,00×</span></label>
+  <label><input id="loop" type="checkbox" checked> Repetir en bucle</label>
+  <h2>Medición en vivo</h2>
+  <label><input id="heat" type="checkbox"> Mapa de estiramiento</label>
+  <div id="meter">Reproduce una animación para medir.</div>
+  <h2>Vista</h2>
+  <div class="row"><button id="front" type="button">Frente</button><button id="three4" type="button">3/4</button><button id="close" type="button">Cara</button></div>
+</aside>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+const $ = (id) => document.getElementById(id);
+const fmt = (n, d = 2) => n.toFixed(d).replace('.', ',');
+const MODELS = window.RUFI_ANIM_MODELS || [
+  { id: 'fase3', label: 'Rufi animado (fase 3)', src: '../../models/rufi-animado.web.glb' },
+  { id: 'meshy', label: 'A-pose original (Meshy)', src: '../../models/candidatos/apose/rufi-apose.web.glb' },
+];
+const NOTES = {
+  idle: 'Respiración suave · 4 s en bucle', wave: 'Saludo con el brazo izquierdo · 3,2 s', curious: 'Inclinación de cabeza · 2,6 s',
+  Walking: 'De Meshy · deforma la malla', Running: 'De Meshy · deforma la malla',
+};
+
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x9a8f88, 2.0));
+const key = new THREE.DirectionalLight(0xffffff, 1.7); key.position.set(-1.2, 2.4, 2.6); scene.add(key);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 50);
+const orbit = new OrbitControls(camera, canvas); orbit.enableDamping = true;
+const clock = new THREE.Clock();
+const cache = new Map();
+let cur = null, action = null, paused = false, lastMeasure = 0;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function resize() { const r = canvas.parentElement.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / Math.max(1, r.height); camera.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(canvas.parentElement);
+
+function skinned(m) {
+  m.root.updateMatrixWorld(true); m.mesh.skeleton.update();
+  const n = m.mesh.geometry.attributes.position.count, a = new Float32Array(n * 3), v = new THREE.Vector3();
+  for (let i = 0; i < n; i++) { m.mesh.getVertexPosition(i, v); a[i * 3] = v.x; a[i * 3 + 1] = v.y; a[i * 3 + 2] = v.z; }
+  return a;
+}
+
+function measure() {
+  const m = cur; const p = skinned(m); const idx = m.mesh.geometry.index.array, rest = m.rest, n = rest.length / 3;
+  const L = (a, i, j) => Math.hypot(a[i * 3] - a[j * 3], a[i * 3 + 1] - a[j * 3 + 1], a[i * 3 + 2] - a[j * 3 + 2]);
+  const sv = new Float32Array(n); const r = [];
+  for (let t = 0; t < idx.length; t += 3) for (const [i, j] of [[idx[t], idx[t + 1]], [idx[t + 1], idx[t + 2]], [idx[t + 2], idx[t]]]) {
+    const l0 = L(rest, i, j); if (l0 < 1e-7) continue; const x = L(p, i, j) / l0; r.push(x); const e = Math.abs(Math.log(x)); if (e > sv[i]) sv[i] = e; if (e > sv[j]) sv[j] = e;
+  }
+  r.sort((a, b) => a - b);
+  const p999 = r[Math.floor(r.length * 0.999)], max = r[r.length - 1], bad = r.filter((x) => x > 2 || x < 0.5).length;
+  m.peak = { p999: Math.max(m.peak.p999, p999), max: Math.max(m.peak.max, max), bad: Math.max(m.peak.bad, bad) };
+  const warn = m.peak.p999 > 1.8 || m.peak.bad > r.length * 0.0005;
+  $('meter').className = warn ? 'warn' : '';
+  $('meter').innerHTML = `<strong>${warn ? 'Deformación apreciable' : 'Sin deformación apreciable'}</strong> <span class="muted">(peor valor desde que empezó la animación)</span><dl><dt>Estiramiento p99,9</dt><dd>${fmt(m.peak.p999)}×</dd><dt>Máximo</dt><dd>${fmt(m.peak.max, 1)}×</dd><dt>Aristas &gt; 2× o &lt; 0,5×</dt><dd>${m.peak.bad.toLocaleString('es-ES')}</dd></dl>`;
+  if ($('heat').checked) { const col = m.mesh.geometry.attributes.color; for (let i = 0; i < n; i++) { const k = Math.min(1, sv[i] / Math.LN2); col.setXYZ(i, 0.92, 0.88 * (1 - k), 0.84 * (1 - k)); } col.needsUpdate = true; }
+}
+
+function view(kind) {
+  const m = cur; if (!m) return; const d = m.size.y * 2.3; const target = m.center.clone();
+  if (kind === 'three4') camera.position.set(m.center.x + d * 0.62, m.center.y + m.size.y * 0.08, m.center.z + d * 0.8);
+  else if (kind === 'close') { target.y = m.center.y + m.size.y * 0.25; camera.position.set(m.center.x, target.y, m.center.z + d * 0.45); }
+  else camera.position.set(m.center.x, m.center.y + m.size.y * 0.05, m.center.z + d);
+  orbit.target.copy(target); orbit.update();
+}
+
+async function load(def) {
+  if (cache.has(def.id)) return cache.get(def.id);
+  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+  const gltf = def.b64 ? await new Promise((res, rej) => loader.parse(Uint8Array.from(atob(def.b64), (c) => c.charCodeAt(0)).buffer, '', res, rej)) : await loader.loadAsync(def.src);
+  let mesh; gltf.scene.traverse((o) => { if (o.isSkinnedMesh) mesh = o; });
+  const n = mesh.geometry.attributes.position.count;
+  mesh.geometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3).fill(0.9), 3));
+  const m = { root: gltf.scene, mesh, clips: gltf.animations, mixer: new THREE.AnimationMixer(gltf.scene), material: mesh.material,
+    heat: new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide }), peak: { p999: 1, max: 1, bad: 0 } };
+  m.rest = skinned(m);
+  const box = new THREE.Box3().setFromObject(gltf.scene, true); m.size = box.getSize(new THREE.Vector3()); m.center = box.getCenter(new THREE.Vector3());
+  cache.set(def.id, m); return m;
+}
+
+function select(clip, btn) {
+  if (action) action.stop();
+  cur.peak = { p999: 1, max: 1, bad: 0 };
+  action = cur.mixer.clipAction(clip);
+  action.setLoop($('loop').checked ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
+  action.clampWhenFinished = true; action.timeScale = Number($('speed').value);
+  action.reset().play(); paused = false; $('play').textContent = 'Pausa';
+  document.querySelectorAll('#clips button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+}
+
+async function show(def) {
+  $('loading').hidden = false;
+  if (action) { action.stop(); action = null; }
+  if (cur) scene.remove(cur.root);
+  cur = await load(def); scene.add(cur.root); view('front');
+  cur.mesh.material = $('heat').checked ? cur.heat : cur.material;
+  $('clips').textContent = '';
+  for (const clip of cur.clips) {
+    const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `${clip.name}<small>${NOTES[clip.name] || ''} · ${fmt(clip.duration)} s</small>`;
+    b.onclick = () => select(clip, b); $('clips').appendChild(b);
+  }
+  document.querySelectorAll('#models button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === def.id)));
+  $('meter').className = ''; $('meter').textContent = 'Reproduce una animación para medir.';
+  $('loading').hidden = true;
+  window.RUFI_ANIM = { model: def.id, clips: cur.clips.map((c) => [c.name, c.duration]) };
+  if (!reduceMotion) { const idle = cur.clips.find((c) => c.name === 'idle'); if (idle) select(idle, $('clips').firstElementChild); }
+}
+
+for (const def of MODELS) { const b = document.createElement('button'); b.type = 'button'; b.textContent = def.label; b.dataset.id = def.id; b.onclick = () => show(def).catch((e) => { $('loading').textContent = 'No se pudo cargar: ' + e.message; }); $('models').appendChild(b); }
+$('play').onclick = () => { if (!action) return; paused = !paused; action.paused = paused; $('play').textContent = paused ? 'Reproducir' : 'Pausa'; };
+$('restart').onclick = () => { if (action) { cur.peak = { p999: 1, max: 1, bad: 0 }; action.reset().play(); paused = false; $('play').textContent = 'Pausa'; } };
+$('rest').onclick = () => { if (action) action.stop(); action = null; cur.mixer.stopAllAction(); document.querySelectorAll('#clips button').forEach((b) => b.setAttribute('aria-pressed', 'false')); };
+$('speed').oninput = (e) => { $('speedv').textContent = `${fmt(Number(e.target.value))}×`; if (action) action.timeScale = Number(e.target.value); };
+$('loop').onchange = (e) => { if (action) action.setLoop(e.target.checked ? THREE.LoopRepeat : THREE.LoopOnce, Infinity); };
+$('scrub').oninput = (e) => { if (!action) return; paused = true; action.paused = true; $('play').textContent = 'Reproducir'; action.time = Number(e.target.value) * action.getClip().duration; cur.mixer.update(0); measure(); };
+$('heat').onchange = (e) => { if (!cur) return; cur.mesh.material = e.target.checked ? cur.heat : cur.material; $('legend').hidden = !e.target.checked; if (e.target.checked) measure(); };
+$('front').onclick = () => view('front'); $('three4').onclick = () => view('three4'); $('close').onclick = () => view('close');
+window.RUFI_MEASURE = () => { measure(); return cur.peak; };
+show(MODELS[0]).catch((e) => { $('loading').textContent = 'No se pudo cargar: ' + e.message; });
+
+resize();
+renderer.setAnimationLoop((now) => {
+  const dt = clock.getDelta();
+  if (cur && action && !paused) cur.mixer.update(dt);
+  if (cur && action) {
+    const dur = action.getClip().duration, t = action.time % dur;
+    if (!paused) $('scrub').value = String(t / dur);
+    $('time').textContent = `${fmt(t)} / ${fmt(dur)} s`;
+    if (!paused && now - lastMeasure > 250) { lastMeasure = now; measure(); }
+  }
+  orbit.update(); renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

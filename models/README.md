@@ -12,6 +12,10 @@
 
 **Importante:** las 4 animaciones incluidas (Idle_11, Idle_15, Walking, Running) deforman la malla. No usar en producción hasta re-riggear.
 
+## Fase 3
+
+`rufi-animado.web.glb` (556,2 KB): modelo A-pose con los pesos corregidos por `tools/rig-fix/fix-rig.mjs` y las animaciones `idle`, `wave` y `curious`. Es la nueva base para la web (ver `docs/12-rigging-fase-3.md`). `rufi.web.glb` se conserva como referencia histórica.
+
 ## Candidatos
 
 `candidatos/apose/`: modelo regenerado en A-pose (original en LFS + `rufi-apose.web.glb`, 609,9 KB). Validado en `docs/11-validacion-modelo-apose.md`. **No sustituye** a `rufi.web.glb` hasta que Reference Home lo apruebe.
