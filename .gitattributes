@@ -1,0 +1,4 @@
+# Original del modelo 3D (33 MB): Git LFS para no inflar el historial.
+models/original/** filter=lfs diff=lfs merge=lfs -text
+# El modelo optimizado (< 1 MB) va en Git normal.
+*.glb binary
