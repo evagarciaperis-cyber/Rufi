@@ -1,0 +1,40 @@
+{
+  "$comment": "Correspondencia entre el esqueleto Mixamo del modelo de Meshy (models/rufi.web.glb) y el contrato de spec/rufi.character.json. NO modifica el contrato: documenta qué hay y qué falta. En three.js los nombres llegan sin ':' (mixamorig:Hips → mixamorigHips) porque GLTFLoader sanea los nombres de nodo.",
+  "modelo": "models/rufi.web.glb (optimizado desde models/original/rufianimado.glb)",
+  "lado": "Mixamo 'Left' = lado izquierdo del personaje = sufijo _L del contrato. Verificado: mixamorig:LeftHand está en +X y es el brazo levantado de la imagen oficial.",
+  "orientacion_gltf": "+Y arriba, el personaje mira a +Z (verificado con el hueso 'headfront').",
+  "escala": { "altura_modelo_m": 1.65, "altura_contrato_m": 1.0, "factor_al_contrato": 0.606 },
+  "huesos": {
+    "root": { "mixamo": null, "nota": "El nodo 'Armature' (escala 0,01) hace de raíz; no es un hueso del skin" },
+    "pelvis": { "mixamo": "mixamorig:Hips" },
+    "spine": { "mixamo": "mixamorig:Spine", "nota": "Mixamo tiene además Spine1 entre spine y chest" },
+    "chest": { "mixamo": "mixamorig:Spine2" },
+    "neck": { "mixamo": "mixamorig:Neck" },
+    "head": { "mixamo": "mixamorig:Head", "nota": "HeadTop_End (extremo) y headfront (marcador frontal) no deforman de forma útil" },
+    "crest_base": { "mixamo": null, "falta": true },
+    "crest_lobe_big": { "mixamo": null, "falta": true },
+    "crest_lobe_small": { "mixamo": null, "falta": true },
+    "eye_L": { "mixamo": null, "falta": true, "nota": "Los ojos son parte de la malla única: no pueden girar" },
+    "eye_R": { "mixamo": null, "falta": true },
+    "brow_L": { "mixamo": null, "falta": true },
+    "brow_R": { "mixamo": null, "falta": true },
+    "scarf_knot": { "mixamo": null, "falta": true },
+    "scarf_tail_a": { "mixamo": null, "falta": true },
+    "scarf_tail_b": { "mixamo": null, "falta": true },
+    "upper_arm_L": { "mixamo": "mixamorig:LeftArm", "nota": "LeftShoulder (clavícula) es un hueso extra" },
+    "forearm_L": { "mixamo": "mixamorig:LeftForeArm" },
+    "hand_L": { "mixamo": "mixamorig:LeftHand" },
+    "upper_arm_R": { "mixamo": "mixamorig:RightArm", "nota": "RightShoulder (clavícula) es un hueso extra" },
+    "forearm_R": { "mixamo": "mixamorig:RightForeArm" },
+    "hand_R": { "mixamo": "mixamorig:RightHand" },
+    "leg_L": { "mixamo": "mixamorig:LeftUpLeg", "nota": "Mixamo tiene además LeftLeg (rodilla)" },
+    "foot_L": { "mixamo": "mixamorig:LeftFoot", "nota": "y LeftToeBase" },
+    "leg_R": { "mixamo": "mixamorig:RightUpLeg" },
+    "foot_R": { "mixamo": "mixamorig:RightFoot", "nota": "Mal colocado: x = -0,294 frente a +0,129 del pie izquierdo (asimetría del auto-rig)" }
+  },
+  "shape_keys": { "presentes": 0, "faltan": "las 18 obligatorias (parpadeo, bocas, cejas…): la malla no tiene morph targets" },
+  "clips": {
+    "presentes": ["Idle_11", "Idle_15", "Walking", "Running"],
+    "equivalencia_contrato": "Ninguno equivale a un clip obligatorio; además deforman la malla (ver docs/09-modelo-3d-meshy.md)"
+  }
+}

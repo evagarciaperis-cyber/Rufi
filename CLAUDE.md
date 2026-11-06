@@ -17,7 +17,9 @@ Este repositorio (`evagarciaperis-cyber/Rufi`, <https://github.com/evagarciaperi
 
 ## Reglas de honestidad
 
-- **No afirmes que existe un modelo 3D animable de Rufi mientras no haya un GLB del modelo real que pase `node tools/validate-glb.mjs` sin `--allow-proxy`.** Hoy solo existen el esqueleto, la maqueta gris `PROXY_*` y la especificación.
+- **Existe el modelo 3D real de Rufi** (Meshy): `models/original/rufianimado.glb` (original, Git LFS) y `models/rufi.web.glb` (web, 698 KB). Se ve fiel en reposo, **pero no es todavía un Rufi animable según el contrato**: esqueleto Mixamo, sin shape keys, y sus 4 animaciones (Idle_11, Idle_15, Walking, Running) deforman la malla. Ver `docs/09-modelo-3d-meshy.md`.
+- No afirmes que Rufi está listo para animarse en producción mientras ningún GLB pase `node tools/validate-glb.mjs` sin `--allow-proxy` y sin errores.
+- Nunca sustituyas el 3D por movimientos CSS del personaje completo.
 - Distingue siempre entre **medido** (calculado sobre la imagen), **estimado** (propuesta) y **verificado** (probado en Blender/navegador).
 - No digas que el PNG tiene articulaciones: es una imagen plana.
 - Rufi no simula IA: sus mensajes son textos predefinidos.
@@ -36,6 +38,8 @@ Este repositorio (`evagarciaperis-cyber/Rufi`, <https://github.com/evagarciaperi
 - Texturas en WebP (`EXT_texture_webp`). KTX2 solo si hay muchas: su transcodificador pesa ~254 KB gzip.
 - Runtime previsto: three.js (subconjunto ~163 KB gzip), cargado de forma diferida, con la imagen estática como póster y alternativa. Ver `docs/05-evaluacion-blender-gltf-vs-rive.md` y `docs/08-runtime-web-plan.md`.
 - Versiones fijadas y con al menos dos semanas de antigüedad (ej. `three@0.186.1`). Nada de `latest`.
+- Modelos: el original va siempre en `models/original/` con Git LFS y sin modificar; la versión web se regenera con `npm run optimize` (simplificación con atributos y tangentes conservadas: la simplificación solo por posición produce rayas, verificado).
+- En three.js los huesos Mixamo llegan sin `:` (`mixamorig:Spine1` → `mixamorigSpine1`). Correspondencia con el contrato en `spec/rig-mapping-mixamo.json`.
 - Web: sin estilos globales (Shadow DOM), `position: fixed` (sin CLS), respeta `prefers-reduced-motion`, accesible con teclado y lector de pantalla, sin dependencias pesadas en la carga inicial.
 
 ## Comprobaciones antes de entregar
@@ -44,11 +48,12 @@ Este repositorio (`evagarciaperis-cyber/Rufi`, <https://github.com/evagarciaperi
 npm test                                         # validador y contrato
 python3 tools/analyze_reference.py               # si cambia la imagen de referencia (no debería)
 node tools/validate-glb.mjs ruta/rufi.glb        # cualquier GLB nuevo
+node tools/inspect-model.mjs ruta/rufi.glb       # qué contiene realmente
 ```
 
 Si hay Blender disponible: `npm run pipeline:proxy` (plantilla → maqueta → GLB → validación).
 
-Revisión visual: sirve el repo por HTTP y abre `tools/glb-viewer/?src=ruta.glb`; usa «Comparar con la imagen oficial» con el clip `pose_reference`.
+Revisión visual: sirve el repo por HTTP y abre `examples/visor-rufi/` (animaciones del modelo real) o `tools/glb-viewer/?src=ruta.glb` («Comparar con la imagen oficial» con el clip `pose_reference`).
 
 ## Comportamiento en las webs (resumen de `RUFI.md`)
 

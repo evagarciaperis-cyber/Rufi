@@ -2,6 +2,8 @@
 
 Lo que **no** se puede producir desde este repositorio con lo disponible, por orden de importancia.
 
+> **Actualización fase 2:** ya existe un modelo 3D real generado con Meshy (`models/`). Resuelve el modelado y las texturas, pero **no el rig**: hay que re-riggearlo, añadir shape keys y crear los clips del contrato. Ver `docs/09-modelo-3d-meshy.md §6`.
+
 ## 1. Pregunta crítica: ¿existe el archivo 3D original?
 
 La imagen oficial tiene todas las señales de ser un **render 3D** (iluminación de estudio, oclusión ambiental, fieltro con microfibra, profundidad de los ojos). Si existe el archivo fuente (`.blend`, `.c4d`, `.max`, `.ma`, `.fbx`, `.obj`, `.ztl`, `.usd`…), es **el recurso más valioso**:
