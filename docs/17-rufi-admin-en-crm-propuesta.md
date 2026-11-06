@@ -1,6 +1,8 @@
 # 17 · Rufi Admin en el CRM + API pública mínima — diseño técnico (pendiente de autorización)
 
-Fecha: 6-nov-2026. Estado: **solo diseño**. No hay código, ni SQL ejecutado, ni cambios en el CRM,
+Fecha: 6-nov-2026. Estado: **arquitectura aprobada** (solo administradores; idiomas es, en, fr, it, de; IA preparada pero apagada). Fase A hecha (`18-fase-a-contrato-1.1.md`). **Comprobado:** Vercel en plan **Hobby**; Joomla en producción **6.2.0** (el plugin será para Joomla 6).
+
+Estado original: **solo diseño**. No hay código, ni SQL ejecutado, ni cambios en el CRM,
 ni despliegues. Sustituye al diseño PHP de `16-rufi-admin-ia-diseno.md`, que se conserva como
 referencia.
 

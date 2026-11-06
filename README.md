@@ -6,6 +6,8 @@ Repositorio fuente de **Rufi**: identidad, especificación técnica, pipeline 3D
 
 ## Estado
 
+**Fase A (8) — contrato 1.1 y API Rufi ↔ CRM (rama `fase-8a-contrato-1.1`).** Esquema 1.1 compatible con 1.0 (idiomas es/en/fr/it/de, IA preparada y apagada, enlaces seguros), especificación de la API pública del CRM (abuso, caché, caducidad, apagado de emergencia) y casos compartidos. Motor publicado sin cambios. Ver [`docs/18-fase-a-contrato-1.1.md`](docs/18-fase-a-contrato-1.1.md) y [`spec/rufi-crm-api.md`](spec/rufi-crm-api.md).
+
 **Fase 7 — instalación centralizada (rama `fase-7-centralizado`).** Rufi se instala una vez en `/rufi/` y cada página añade **una línea** (`<script src="/rufi/rufi.js" data-rufi-config="<página>" defer></script>`) o, en Joomla, un fragmento global + `configs/_routes.json`. Cargador de 1 KB gzip; motor y modelo únicos en `/rufi/v/<versión>/` (caché de un año, vuelta atrás cambiando `_global.json`); configuraciones JSON por página validadas con `spec/rufi-config.schema.json`; interruptor general, `disabledPages`, `?rufi=off|on|debug`; códigos `ref` y evento `rufi:action` para WhatsApp/ManyChat. Pruebas: cargador 53/53, componente 148/148, paquete FTP en Apache 48/48 (con y sin `.htaccess`). Ver [`docs/15-instalacion-centralizada.md`](docs/15-instalacion-centralizada.md) y `hosting/LEEME-INSTALACION.md`.
 
 **Fase 6 — prueba real (rama `fase-6-prueba-real`).** Paquete FTP con la copia noindex `/ICO/aval-ico-valencia-rufi-test.html`; sustituido por el de la fase 7.

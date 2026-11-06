@@ -1,0 +1,339 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://referencehome.es/rufi/schema/1.1/rufi-crm-api.schema.json",
+  "title": "API pública Rufi ↔ CRM (rufi-crm/1)",
+  "description": "Formas exactas de las peticiones y respuestas de la API pública del CRM para Rufi. Ver spec/rufi-crm-api.md. Cualquier campo no listado está prohibido (additionalProperties: false): así la API no puede filtrar datos del CRM por descuido.",
+  "x-api-version": "rufi-crm/1",
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "maxLength": 64
+    },
+    "iso": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "pageEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "api",
+        "slug",
+        "status",
+        "revision",
+        "issuedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "api": {
+          "const": "rufi-crm/1"
+        },
+        "slug": {
+          "$ref": "#/$defs/slug"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "disabled",
+            "killed"
+          ],
+          "description": "active: hay config · disabled: página apagada · killed: Rufi apagado en todo el sitio (apagado de emergencia)"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Contador del SITIO, siempre creciente: cada publicación, apagado o encendido lo incrementa"
+        },
+        "engine": {
+          "$ref": "#/$defs/version"
+        },
+        "contract": {
+          "enum": [
+            "1.0",
+            "1.1"
+          ]
+        },
+        "issuedAt": {
+          "$ref": "#/$defs/iso"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/iso",
+          "description": "Caducidad dura: pasada esta fecha, ninguna copia (navegador, respaldo estático) puede usarse"
+        },
+        "preview": {
+          "const": true
+        },
+        "config": {
+          "type": "object",
+          "description": "Configuración (spec/rufi-config.schema.json). Solo con status active"
+        }
+      }
+    },
+    "routeResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "api",
+        "slug"
+      ],
+      "properties": {
+        "api": {
+          "const": "rufi-crm/1"
+        },
+        "slug": {
+          "$ref": "#/$defs/slug"
+        }
+      }
+    },
+    "chatSessionRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slug",
+        "lang"
+      ],
+      "properties": {
+        "slug": {
+          "$ref": "#/$defs/slug"
+        },
+        "lang": {
+          "enum": [
+            "es",
+            "en",
+            "fr",
+            "it",
+            "de"
+          ]
+        }
+      }
+    },
+    "chatSessionResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "api",
+        "ticket",
+        "expiresAt",
+        "maxMessages"
+      ],
+      "properties": {
+        "api": {
+          "const": "rufi-crm/1"
+        },
+        "ticket": {
+          "type": "string",
+          "pattern": "^v1\\.[A-Za-z0-9_-]{16,400}\\.[A-Za-z0-9_-]{43}$"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/iso"
+        },
+        "maxMessages": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        }
+      }
+    },
+    "chatRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ticket",
+        "slug",
+        "lang",
+        "messages"
+      ],
+      "properties": {
+        "ticket": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "slug": {
+          "$ref": "#/$defs/slug"
+        },
+        "lang": {
+          "enum": [
+            "es",
+            "en",
+            "fr",
+            "it",
+            "de"
+          ]
+        },
+        "messages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "role",
+              "content"
+            ],
+            "properties": {
+              "role": {
+                "enum": [
+                  "user",
+                  "assistant"
+                ]
+              },
+              "content": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
+            }
+          }
+        }
+      }
+    },
+    "chatResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "api",
+        "reply",
+        "remaining"
+      ],
+      "properties": {
+        "api": {
+          "const": "rufi-crm/1"
+        },
+        "reply": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200
+        },
+        "handoff": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "href"
+          ],
+          "properties": {
+            "type": {
+              "const": "whatsapp"
+            },
+            "href": {
+              "type": "string",
+              "pattern": "^https://wa\\.me/[0-9]{8,15}(\\?text=[^\\s]*)?$"
+            }
+          }
+        },
+        "remaining": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "error"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "error": {
+          "type": "object",
+          "required": [
+            "code",
+            "message"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "enum": [
+                "bad_request",
+                "unauthorized",
+                "forbidden",
+                "not_found",
+                "payload_too_large",
+                "rate_limited",
+                "unavailable",
+                "disabled"
+              ]
+            },
+            "message": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "retryAfter": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 86400
+            }
+          }
+        }
+      }
+    },
+    "previewClaims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v",
+        "slug",
+        "draft",
+        "exp",
+        "nonce"
+      ],
+      "properties": {
+        "v": {
+          "const": 1
+        },
+        "slug": {
+          "$ref": "#/$defs/slug"
+        },
+        "draft": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "exp": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "segundos Unix; máximo 600 s después de la emisión"
+        },
+        "nonce": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{16,64}$"
+        }
+      }
+    },
+    "fallbackFile": {
+      "description": "Respaldo estático en /rufi/configs/<slug>.json en modo API: el mismo sobre que devuelve la API (pageEnvelope), exportado desde el CRM",
+      "$ref": "#/$defs/pageEnvelope"
+    },
+    "localGlobal": {
+      "type": "object",
+      "description": "Ampliación 1.1 de /rufi/configs/_global.json (en Arsys, fuera del CRM)",
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "api"
+          ],
+          "properties": {
+            "api": {
+              "type": "string",
+              "pattern": "^https://[a-z0-9.-]+(:[0-9]+)?/[A-Za-z0-9/_-]*$"
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 500,
+              "maximum": 5000
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "def": "error",
+  "value": {
+    "error": {
+      "code": "rate_limited",
+      "message": "Demasiadas peticiones. Inténtalo más tarde.",
+      "retryAfter": 600
+    }
+  }
+}

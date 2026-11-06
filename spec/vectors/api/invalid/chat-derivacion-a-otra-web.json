@@ -1,0 +1,12 @@
+{
+  "def": "chatResponse",
+  "value": {
+    "api": "rufi-crm/1",
+    "reply": "x",
+    "remaining": 1,
+    "handoff": {
+      "type": "whatsapp",
+      "href": "https://evil.example/wa"
+    }
+  }
+}

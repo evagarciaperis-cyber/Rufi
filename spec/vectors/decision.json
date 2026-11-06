@@ -1,0 +1,1146 @@
+{
+  "now": "2026-11-06T12:00:00Z",
+  "envelopes": {
+    "activa10": {
+      "api": "rufi-crm/1",
+      "slug": "demo",
+      "status": "active",
+      "revision": 10,
+      "issuedAt": "2026-11-06T10:00:00Z",
+      "expiresAt": "2026-11-13T10:00:00Z",
+      "engine": "1.1.0",
+      "contract": "1.1",
+      "config": {
+        "page": "demo",
+        "contract": "1.1",
+        "version": "1.1.0",
+        "lang": "es",
+        "welcome": {
+          "text": "¡Hola! Soy Rufi, de Reference Home."
+        },
+        "whatsapp": {
+          "number": "34674612272",
+          "message": "Hola, vengo de vuestra web"
+        },
+        "panel": {
+          "title": "¿En qué te ayudo?",
+          "subtitle": "Elige una opción.",
+          "footnote": "Información orientativa.",
+          "options": [
+            {
+              "id": "info",
+              "label": "Ver información",
+              "icon": "check",
+              "action": {
+                "type": "scroll",
+                "target": "#info"
+              }
+            },
+            {
+              "id": "asesor",
+              "label": "Hablar con Reference Home",
+              "icon": "whatsapp",
+              "action": {
+                "type": "whatsapp"
+              }
+            }
+          ]
+        },
+        "triggers": [
+          {
+            "id": "llega-info",
+            "on": "visible",
+            "selector": "#info",
+            "say": "¿Te cuento algo de esta sección?"
+          }
+        ]
+      }
+    },
+    "activa12": {
+      "api": "rufi-crm/1",
+      "slug": "demo",
+      "status": "active",
+      "revision": 12,
+      "issuedAt": "2026-11-06T10:00:00Z",
+      "expiresAt": "2026-11-13T10:00:00Z",
+      "engine": "1.1.0",
+      "contract": "1.1",
+      "config": {
+        "page": "demo",
+        "contract": "1.1",
+        "version": "1.1.0",
+        "lang": "es",
+        "welcome": {
+          "text": "¡Hola! Soy Rufi, de Reference Home."
+        },
+        "whatsapp": {
+          "number": "34674612272",
+          "message": "Hola, vengo de vuestra web"
+        },
+        "panel": {
+          "title": "¿En qué te ayudo?",
+          "subtitle": "Elige una opción.",
+          "footnote": "Información orientativa.",
+          "options": [
+            {
+              "id": "info",
+              "label": "Ver información",
+              "icon": "check",
+              "action": {
+                "type": "scroll",
+                "target": "#info"
+              }
+            },
+            {
+              "id": "asesor",
+              "label": "Hablar con Reference Home",
+              "icon": "whatsapp",
+              "action": {
+                "type": "whatsapp"
+              }
+            }
+          ]
+        },
+        "triggers": [
+          {
+            "id": "llega-info",
+            "on": "visible",
+            "selector": "#info",
+            "say": "¿Te cuento algo de esta sección?"
+          }
+        ]
+      }
+    },
+    "activa9": {
+      "api": "rufi-crm/1",
+      "slug": "demo",
+      "status": "active",
+      "revision": 9,
+      "issuedAt": "2026-11-06T10:00:00Z",
+      "expiresAt": "2026-11-13T10:00:00Z",
+      "engine": "1.1.0",
+      "contract": "1.1",
+      "config": {
+        "page": "demo",
+        "contract": "1.1",
+        "version": "1.1.0",
+        "lang": "es",
+        "welcome": {
+          "text": "¡Hola! Soy Rufi, de Reference Home."
+        },
+        "whatsapp": {
+          "number": "34674612272",
+          "message": "Hola, vengo de vuestra web"
+        },
+        "panel": {
+          "title": "¿En qué te ayudo?",
+          "subtitle": "Elige una opción.",
+          "footnote": "Información orientativa.",
+          "options": [
+            {
+              "id": "info",
+              "label": "Ver información",
+              "icon": "check",
+              "action": {
+                "type": "scroll",
+                "target": "#info"
+              }
+            },
+            {
+              "id": "asesor",
+              "label": "Hablar con Reference Home",
+              "icon": "whatsapp",
+              "action": {
+                "type": "whatsapp"
+              }
+            }
+          ]
+        },
+        "triggers": [
+          {
+            "id": "llega-info",
+            "on": "visible",
+            "selector": "#info",
+            "say": "¿Te cuento algo de esta sección?"
+          }
+        ]
+      }
+    },
+    "killed11": {
+      "api": "rufi-crm/1",
+      "slug": "demo",
+      "status": "killed",
+      "revision": 11,
+      "issuedAt": "2026-11-06T10:00:00Z",
+      "expiresAt": "2026-11-13T10:00:00Z"
+    },
+    "disabled11": {
+      "api": "rufi-crm/1",
+      "slug": "demo",
+      "status": "disabled",
+      "revision": 11,
+      "issuedAt": "2026-11-06T10:00:00Z",
+      "expiresAt": "2026-11-13T10:00:00Z"
+    },
+    "caducada": {
+      "api": "rufi-crm/1",
+      "slug": "demo",
+      "status": "active",
+      "revision": 13,
+      "issuedAt": "2026-11-06T10:00:00Z",
+      "expiresAt": "2026-11-06T11:00:00Z",
+      "engine": "1.1.0",
+      "contract": "1.1",
+      "config": {
+        "page": "demo",
+        "contract": "1.1",
+        "version": "1.1.0",
+        "lang": "es",
+        "welcome": {
+          "text": "¡Hola! Soy Rufi, de Reference Home."
+        },
+        "whatsapp": {
+          "number": "34674612272",
+          "message": "Hola, vengo de vuestra web"
+        },
+        "panel": {
+          "title": "¿En qué te ayudo?",
+          "subtitle": "Elige una opción.",
+          "footnote": "Información orientativa.",
+          "options": [
+            {
+              "id": "info",
+              "label": "Ver información",
+              "icon": "check",
+              "action": {
+                "type": "scroll",
+                "target": "#info"
+              }
+            },
+            {
+              "id": "asesor",
+              "label": "Hablar con Reference Home",
+              "icon": "whatsapp",
+              "action": {
+                "type": "whatsapp"
+              }
+            }
+          ]
+        },
+        "triggers": [
+          {
+            "id": "llega-info",
+            "on": "visible",
+            "selector": "#info",
+            "say": "¿Te cuento algo de esta sección?"
+          }
+        ]
+      }
+    },
+    "otroSlug": {
+      "api": "rufi-crm/1",
+      "slug": "otra",
+      "status": "active",
+      "revision": 20,
+      "issuedAt": "2026-11-06T10:00:00Z",
+      "expiresAt": "2026-11-13T10:00:00Z",
+      "engine": "1.1.0",
+      "contract": "1.1",
+      "config": {
+        "page": "otra",
+        "contract": "1.1",
+        "version": "1.1.0",
+        "lang": "es",
+        "welcome": {
+          "text": "¡Hola! Soy Rufi, de Reference Home."
+        },
+        "whatsapp": {
+          "number": "34674612272",
+          "message": "Hola, vengo de vuestra web"
+        },
+        "panel": {
+          "title": "¿En qué te ayudo?",
+          "subtitle": "Elige una opción.",
+          "footnote": "Información orientativa.",
+          "options": [
+            {
+              "id": "info",
+              "label": "Ver información",
+              "icon": "check",
+              "action": {
+                "type": "scroll",
+                "target": "#info"
+              }
+            },
+            {
+              "id": "asesor",
+              "label": "Hablar con Reference Home",
+              "icon": "whatsapp",
+              "action": {
+                "type": "whatsapp"
+              }
+            }
+          ]
+        },
+        "triggers": [
+          {
+            "id": "llega-info",
+            "on": "visible",
+            "selector": "#info",
+            "say": "¿Te cuento algo de esta sección?"
+          }
+        ]
+      }
+    },
+    "invalida": {
+      "api": "rufi-crm/1",
+      "slug": "demo",
+      "status": "active",
+      "revision": 30,
+      "issuedAt": "2026-11-06T10:00:00Z",
+      "expiresAt": "2026-11-13T10:00:00Z",
+      "engine": "1.1.0",
+      "contract": "1.1",
+      "config": {
+        "page": "demo",
+        "contract": "1.1",
+        "version": "1.1.0",
+        "lang": "es",
+        "welcome": {
+          "text": "¡Hola! Soy Rufi, de Reference Home."
+        },
+        "whatsapp": {
+          "number": "34674612272",
+          "message": "Hola, vengo de vuestra web"
+        },
+        "panel": {
+          "title": "¿En qué te ayudo?",
+          "subtitle": "Elige una opción.",
+          "footnote": "Información orientativa.",
+          "options": [
+            {
+              "id": "info",
+              "label": "Ver información",
+              "icon": "check",
+              "action": {
+                "type": "scroll",
+                "target": "#info"
+              }
+            },
+            {
+              "id": "asesor",
+              "label": "Hablar con Reference Home",
+              "icon": "whatsapp",
+              "action": {
+                "type": "whatsapp"
+              }
+            }
+          ]
+        },
+        "triggers": [
+          {
+            "id": "llega-info",
+            "on": "visible",
+            "selector": "#info",
+            "say": "¿Te cuento algo de esta sección?"
+          }
+        ]
+      },
+      "owner_email": "x@y.es"
+    },
+    "preview": {
+      "api": "rufi-crm/1",
+      "slug": "demo",
+      "status": "active",
+      "revision": 10,
+      "issuedAt": "2026-11-06T10:00:00Z",
+      "expiresAt": "2026-11-13T10:00:00Z",
+      "engine": "1.1.0",
+      "contract": "1.1",
+      "config": {
+        "page": "demo",
+        "contract": "1.1",
+        "version": "1.1.0",
+        "lang": "es",
+        "welcome": {
+          "text": "¡Hola! Soy Rufi, de Reference Home."
+        },
+        "whatsapp": {
+          "number": "34674612272",
+          "message": "Hola, vengo de vuestra web"
+        },
+        "panel": {
+          "title": "¿En qué te ayudo?",
+          "subtitle": "Elige una opción.",
+          "footnote": "Información orientativa.",
+          "options": [
+            {
+              "id": "info",
+              "label": "Ver información",
+              "icon": "check",
+              "action": {
+                "type": "scroll",
+                "target": "#info"
+              }
+            },
+            {
+              "id": "asesor",
+              "label": "Hablar con Reference Home",
+              "icon": "whatsapp",
+              "action": {
+                "type": "whatsapp"
+              }
+            }
+          ]
+        },
+        "triggers": [
+          {
+            "id": "llega-info",
+            "on": "visible",
+            "selector": "#info",
+            "say": "¿Te cuento algo de esta sección?"
+          }
+        ]
+      },
+      "preview": true
+    }
+  },
+  "cases": [
+    {
+      "name": "?rufi=off gana a todo",
+      "input": {
+        "query": {
+          "rufi": "off"
+        },
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "activa10"
+        },
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "off",
+        "cache": "keep"
+      }
+    },
+    {
+      "name": "apagado local en Arsys (sin depender del CRM)",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": false,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "activa10"
+        },
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "local-kill",
+        "cache": "clear"
+      }
+    },
+    {
+      "name": "apagado local + ?rufi=on → sigue el flujo",
+      "input": {
+        "query": {
+          "rufi": "on"
+        },
+        "localGlobal": {
+          "enabled": false,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "activa10"
+        },
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": true,
+        "reason": "api",
+        "source": "api",
+        "cache": "write",
+        "revision": 10
+      }
+    },
+    {
+      "name": "página en disabledPages local",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [
+            "demo"
+          ],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "activa10"
+        },
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "local-disabled",
+        "cache": "clear"
+      }
+    },
+    {
+      "name": "sin source → comportamiento 1.0 sin cambios",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.0.0"
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": null,
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": null,
+        "reason": "legacy",
+        "source": "legacy",
+        "cache": "keep"
+      }
+    },
+    {
+      "name": "sin _global.json (no se pudo leer) → 1.0",
+      "input": {
+        "query": {},
+        "localGlobal": null,
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": null,
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": null,
+        "reason": "legacy",
+        "source": "legacy",
+        "cache": "keep"
+      }
+    },
+    {
+      "name": "API correcta",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "activa10"
+        },
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": true,
+        "reason": "api",
+        "source": "api",
+        "cache": "write",
+        "revision": 10
+      }
+    },
+    {
+      "name": "API: sitio apagado (killed) → no carga y guarda la marca",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "killed11"
+        },
+        "cache": "activa10",
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "killed",
+        "cache": "write",
+        "revision": 11
+      }
+    },
+    {
+      "name": "API: página apagada",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "disabled11"
+        },
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "disabled",
+        "cache": "write",
+        "revision": 11
+      }
+    },
+    {
+      "name": "?rufi=on no salta un apagado remoto",
+      "input": {
+        "query": {
+          "rufi": "on"
+        },
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "killed11"
+        },
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "killed",
+        "cache": "write",
+        "revision": 11
+      }
+    },
+    {
+      "name": "API 404 (no publicada) → no carga y borra la copia",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "not-found"
+        },
+        "cache": "activa10",
+        "fallback": "activa10"
+      },
+      "expect": {
+        "load": false,
+        "reason": "not-found",
+        "cache": "clear"
+      }
+    },
+    {
+      "name": "API caída → copia del navegador",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "timeout"
+        },
+        "cache": "activa10",
+        "fallback": null
+      },
+      "expect": {
+        "load": true,
+        "reason": "cache",
+        "source": "cache",
+        "cache": "keep",
+        "revision": 10
+      }
+    },
+    {
+      "name": "API caída → respaldo estático",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "error",
+          "status": 503
+        },
+        "cache": null,
+        "fallback": "activa10"
+      },
+      "expect": {
+        "load": true,
+        "reason": "fallback",
+        "source": "fallback",
+        "cache": "keep",
+        "revision": 10
+      }
+    },
+    {
+      "name": "API caída → gana la revisión más alta",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "timeout"
+        },
+        "cache": "activa10",
+        "fallback": "activa12"
+      },
+      "expect": {
+        "load": true,
+        "reason": "fallback",
+        "source": "fallback",
+        "cache": "keep",
+        "revision": 12
+      }
+    },
+    {
+      "name": "API caída + marca de apagado en el navegador → un respaldo viejo NO resucita a Rufi",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "timeout"
+        },
+        "cache": "killed11",
+        "fallback": "activa10"
+      },
+      "expect": {
+        "load": false,
+        "reason": "killed",
+        "cache": "keep",
+        "revision": 11
+      }
+    },
+    {
+      "name": "API caída + respaldo publicado DESPUÉS del apagado → carga",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "timeout"
+        },
+        "cache": "killed11",
+        "fallback": "activa12"
+      },
+      "expect": {
+        "load": true,
+        "reason": "fallback",
+        "source": "fallback",
+        "cache": "keep",
+        "revision": 12
+      }
+    },
+    {
+      "name": "CDN sirve una respuesta antigua: gana la copia más reciente (apagado)",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "activa9"
+        },
+        "cache": "killed11",
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "killed",
+        "cache": "keep",
+        "revision": 11
+      }
+    },
+    {
+      "name": "copia caducada no se usa",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "timeout"
+        },
+        "cache": "caducada",
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "unavailable",
+        "cache": "clear"
+      }
+    },
+    {
+      "name": "respaldo caducado no se usa",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "timeout"
+        },
+        "cache": null,
+        "fallback": "caducada"
+      },
+      "expect": {
+        "load": false,
+        "reason": "unavailable",
+        "cache": "keep"
+      }
+    },
+    {
+      "name": "copia de otra página no se usa",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "timeout"
+        },
+        "cache": "otroSlug",
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "unavailable",
+        "cache": "clear"
+      }
+    },
+    {
+      "name": "API responde un sobre inválido → copia",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "invalida"
+        },
+        "cache": "activa10",
+        "fallback": null
+      },
+      "expect": {
+        "load": true,
+        "reason": "cache",
+        "source": "cache",
+        "cache": "keep",
+        "revision": 10
+      }
+    },
+    {
+      "name": "API responde un sobre inválido y no hay copia",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "invalida"
+        },
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "api-invalid",
+        "cache": "keep"
+      }
+    },
+    {
+      "name": "API caída y nada más → no carga (la página no se ve afectada)",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "timeout"
+        },
+        "cache": null,
+        "fallback": null
+      },
+      "expect": {
+        "load": false,
+        "reason": "unavailable",
+        "cache": "keep"
+      }
+    },
+    {
+      "name": "vista previa correcta (no toca la copia)",
+      "input": {
+        "query": {
+          "preview": "v1.x.y"
+        },
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "preview"
+        },
+        "cache": "activa10",
+        "fallback": null
+      },
+      "expect": {
+        "load": true,
+        "reason": "preview",
+        "source": "preview",
+        "cache": "keep"
+      }
+    },
+    {
+      "name": "vista previa fallida → no carga, sin respaldo",
+      "input": {
+        "query": {
+          "preview": "v1.x.y"
+        },
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "error",
+          "status": 401
+        },
+        "cache": "activa10",
+        "fallback": "activa12"
+      },
+      "expect": {
+        "load": false,
+        "reason": "preview-failed",
+        "cache": "keep"
+      }
+    },
+    {
+      "name": "sobre de vista previa en modo normal → se ignora",
+      "input": {
+        "query": {},
+        "localGlobal": {
+          "enabled": true,
+          "version": "1.1.0",
+          "disabledPages": [],
+          "source": {
+            "api": "https://crm.referencehome.es/api/public/rufi/v1",
+            "timeoutMs": 2500
+          }
+        },
+        "slug": "demo",
+        "now": "2026-11-06T12:00:00Z",
+        "api": {
+          "kind": "ok",
+          "envelope": "preview"
+        },
+        "cache": "activa10",
+        "fallback": null
+      },
+      "expect": {
+        "load": true,
+        "reason": "cache",
+        "source": "cache",
+        "cache": "keep",
+        "revision": 10
+      }
+    }
+  ]
+}

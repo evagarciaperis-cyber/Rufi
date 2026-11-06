@@ -1,0 +1,9 @@
+{
+  "def": "chatSessionResponse",
+  "value": {
+    "api": "rufi-crm/1",
+    "ticket": "v1.eyJzaWQiOiJhYmNkZWZnaGlqa2xtbm9wIn0.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "expiresAt": "2026-11-06T10:30:00Z",
+    "maxMessages": 15
+  }
+}

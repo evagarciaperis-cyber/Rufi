@@ -1,0 +1,23 @@
+{
+  "apagado-con-config.json": "/config: no se envía con status killed",
+  "sin-caducidad.json": "/expiresAt: obligatorio",
+  "caducidad-mayor-30-dias.json": "/expiresAt: como mucho 30 días",
+  "caduca-antes-de-emitirse.json": "/expiresAt: debe ser posterior a issuedAt",
+  "fecha-no-utc.json": "/issuedAt: fecha no válida",
+  "slug-distinto-de-page.json": "/config/page: debe ser igual a slug",
+  "fuga-de-datos-del-crm.json": "/owner_email: propiedad desconocida",
+  "fuga-de-datos-en-config.json": "/config/contactos: propiedad desconocida",
+  "activa-sin-motor.json": "/engine: obligatorio con status active",
+  "config-11-con-motor-100.json": "/config/version: lang, contract necesitan el motor ≥ 1.1.0",
+  "config-11-con-contrato-10.json": "/contract: la configuración usa lang (1.1)",
+  "activa-con-enabled-false.json": "/config/enabled: una página apagada se envía con status disabled",
+  "api-desconocida.json": ": debe ser \"rufi-crm/1\"",
+  "revision-negativa.json": "/revision: mínimo 0",
+  "chat-demasiados-mensajes.json": "/messages: como mucho 6 elementos",
+  "chat-mensaje-largo.json": "/messages/0/content: texto demasiado largo",
+  "chat-rol-system.json": "/messages/0/role: valor no permitido",
+  "chat-derivacion-a-otra-web.json": "/handoff/href: formato no válido",
+  "error-con-detalle-interno.json": "/error/stack: propiedad desconocida",
+  "ruta-con-datos-extra.json": "/pages: propiedad desconocida",
+  "preview-claims-sin-caducidad.json": "/exp: obligatorio"
+}

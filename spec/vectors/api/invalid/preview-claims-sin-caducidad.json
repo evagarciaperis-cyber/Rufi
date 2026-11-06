@@ -1,0 +1,9 @@
+{
+  "def": "previewClaims",
+  "value": {
+    "v": 1,
+    "slug": "demo",
+    "draft": 1,
+    "nonce": "abcdefghijklmnop"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "def": "pageEnvelope",
+  "value": {
+    "api": "rufi-crm/1",
+    "slug": "demo",
+    "status": "killed",
+    "revision": 10,
+    "issuedAt": "2026-11-06T10:00:00Z",
+    "expiresAt": "2026-11-13T10:00:00Z",
+    "engine": "1.1.0",
+    "contract": "1.1",
+    "config": {
+      "page": "demo",
+      "contract": "1.1",
+      "version": "1.1.0",
+      "lang": "es",
+      "welcome": {
+        "text": "¡Hola! Soy Rufi, de Reference Home."
+      },
+      "whatsapp": {
+        "number": "34674612272",
+        "message": "Hola, vengo de vuestra web"
+      },
+      "panel": {
+        "title": "¿En qué te ayudo?",
+        "subtitle": "Elige una opción.",
+        "footnote": "Información orientativa.",
+        "options": [
+          {
+            "id": "info",
+            "label": "Ver información",
+            "icon": "check",
+            "action": {
+              "type": "scroll",
+              "target": "#info"
+            }
+          },
+          {
+            "id": "asesor",
+            "label": "Hablar con Reference Home",
+            "icon": "whatsapp",
+            "action": {
+              "type": "whatsapp"
+            }
+          }
+        ]
+      },
+      "triggers": [
+        {
+          "id": "llega-info",
+          "on": "visible",
+          "selector": "#info",
+          "say": "¿Te cuento algo de esta sección?"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "page": "demo",
+  "contract": "1.1",
+  "version": "1.1.0",
+  "lang": "es",
+  "welcome": {
+    "text": "¡Hola! Soy Rufi, de Reference Home."
+  },
+  "whatsapp": {
+    "number": "34674612272",
+    "message": "Hola, vengo de vuestra web"
+  },
+  "panel": {
+    "title": "¿En qué te ayudo?",
+    "subtitle": "Elige una opción.",
+    "footnote": "Información orientativa.",
+    "options": [
+      {
+        "id": "info",
+        "label": "X",
+        "action": {
+          "type": "link",
+          "href": "http://referencehome.es/"
+        }
+      },
+      {
+        "id": "asesor",
+        "label": "Hablar con Reference Home",
+        "icon": "whatsapp",
+        "action": {
+          "type": "whatsapp"
+        }
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "id": "llega-info",
+      "on": "visible",
+      "selector": "#info",
+      "say": "¿Te cuento algo de esta sección?"
+    }
+  ]
+}

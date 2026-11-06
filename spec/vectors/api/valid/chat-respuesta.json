@@ -1,0 +1,12 @@
+{
+  "def": "chatResponse",
+  "value": {
+    "api": "rufi-crm/1",
+    "reply": "It depends on your case; the bank decides. Shall we talk on WhatsApp?",
+    "handoff": {
+      "type": "whatsapp",
+      "href": "https://wa.me/34674612272?text=Hola"
+    },
+    "remaining": 14
+  }
+}

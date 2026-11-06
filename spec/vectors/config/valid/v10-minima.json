@@ -1,0 +1,18 @@
+{
+  "page": "demo-10",
+  "welcome": {
+    "text": "Hola"
+  },
+  "panel": {
+    "title": "Hola",
+    "options": [
+      {
+        "id": "a",
+        "label": "A",
+        "action": {
+          "type": "panel"
+        }
+      }
+    ]
+  }
+}

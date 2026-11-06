@@ -1,0 +1,38 @@
+{
+  "def": "chatRequest",
+  "value": {
+    "ticket": "t",
+    "slug": "demo",
+    "lang": "es",
+    "messages": [
+      {
+        "role": "user",
+        "content": "a"
+      },
+      {
+        "role": "user",
+        "content": "a"
+      },
+      {
+        "role": "user",
+        "content": "a"
+      },
+      {
+        "role": "user",
+        "content": "a"
+      },
+      {
+        "role": "user",
+        "content": "a"
+      },
+      {
+        "role": "user",
+        "content": "a"
+      },
+      {
+        "role": "user",
+        "content": "a"
+      }
+    ]
+  }
+}
