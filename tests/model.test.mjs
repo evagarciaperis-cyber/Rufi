@@ -81,3 +81,19 @@ test('rufi-animado.web.glb: presupuesto web y animaciones idle, wave y curious',
   assert.ok(!r.animaciones.some((a) => /Walking|Running/.test(a.nombre)), 'no debe incluir Walking/Running');
   for (const img of r.imagenes) assert.ok(img.ancho <= 1024 && img.alto <= 1024);
 });
+
+// Fase 4: expresiones faciales con geometría real
+const expresivo = path.join(root, 'models', 'rufi-expresivo.web.glb');
+test('rufi-expresivo.web.glb: párpados y sonrisa como morph targets, 5 animaciones, presupuesto web', () => {
+  const buf = readFileSync(expresivo);
+  const r = inspectGlb(buf);
+  assert.ok(buf.length / 1024 <= spec.presupuesto_web.glb_objetivo_kb, `${buf.length / 1024} KB`);
+  assert.ok(r.triangulos <= spec.presupuesto_web.triangulos_max, `${r.triangulos}`);
+  // cuerpo + párpado y pestaña por ojo, todos con las mismas 2 formas
+  assert.equal(r.mallas[0].primitivas.length, 5);
+  for (const p of r.mallas[0].primitivas) assert.equal(p.morph_targets, 2);
+  assert.deepEqual(r.mallas[0].nombres_morph, ['blink', 'smile']);
+  assert.deepEqual(r.animaciones.map((a) => a.nombre).sort(), ['blink', 'curious', 'idle', 'smile', 'wave']);
+  for (const a of r.animaciones) assert.equal(a.canales.weights, 1, `${a.nombre} debe animar las expresiones`);
+  assert.ok(!r.animaciones.some((a) => /Walking|Running/.test(a.nombre)));
+});

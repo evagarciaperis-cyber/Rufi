@@ -1,0 +1,75 @@
+{
+  "entrada": "/tmp/claude-0/-home-user/8ee05376-6b07-5496-aced-44da2d0788f1/scratchpad/f4/rig-simpl.glb",
+  "salida": "/tmp/claude-0/-home-user/8ee05376-6b07-5496-aced-44da2d0788f1/scratchpad/f4/rig-face.glb",
+  "ojos": [
+    {
+      "lado": "izquierdo",
+      "vertices_apertura": 557,
+      "vertices_contorno": 42,
+      "centro": [
+        0.1959,
+        1.006,
+        0.3035
+      ]
+    },
+    {
+      "lado": "derecho",
+      "vertices_apertura": 529,
+      "vertices_contorno": 36,
+      "centro": [
+        -0.2184,
+        1.0084,
+        0.3026
+      ]
+    }
+  ],
+  "parpados": [
+    {
+      "rejilla_parpado": "24×10",
+      "ancho_ojo_mm": 214.6,
+      "alto_ojo_centro_mm": 148.7,
+      "uv_piel": [
+        0.6658470034599304,
+        0.8680419921875
+      ],
+      "uv_pestana": [
+        0.005998999811708927,
+        0.7373380064964294
+      ]
+    },
+    {
+      "rejilla_parpado": "24×10",
+      "ancho_ojo_mm": 221.5,
+      "alto_ojo_centro_mm": 152.2,
+      "uv_piel": [
+        0.4891270101070404,
+        0.023585021495819092
+      ],
+      "uv_pestana": [
+        0.9584019780158997,
+        0.04575401544570923
+      ]
+    }
+  ],
+  "sonrisa": {
+    "vertices_boca": 183,
+    "semiancho_boca_m": 0.1035,
+    "vertices_deformados": 1042
+  },
+  "corrector_axila": {
+    "vertices_zona": 337,
+    "desplazamiento_max_mm": 12.08,
+    "instante_pose_s": 1.15
+  },
+  "morph_targets": [
+    "blink",
+    "smile"
+  ],
+  "animaciones": [
+    "idle",
+    "wave",
+    "curious",
+    "blink",
+    "smile"
+  ]
+}

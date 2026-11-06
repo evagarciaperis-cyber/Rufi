@@ -20,6 +20,7 @@ Este repositorio (`evagarciaperis-cyber/Rufi`, <https://github.com/evagarciaperi
 - **Base de trabajo: el modelo A-pose** (`models/candidatos/apose/original/Meshy_rufi.glb`, intacto en Git LFS). Su versión con pesos corregidos y animaciones `idle`, `wave` y `curious` es `models/rufi-animado.web.glb`, generada con `tools/rig-fix/fix-rig.mjs` + `tools/optimize-model.mjs`. Medido y documentado en `docs/12-rigging-fase-3.md`. Sigue sin cumplir el contrato completo de la fase 1 (esqueleto Mixamo, sin shape keys faciales, clips con otros nombres).
 - El modelo anterior (`models/rufi.web.glb`, pose de saludo) queda como referencia histórica: sus animaciones deforman la malla.
 - No usar Walking ni Running (Meshy) hasta corregirlas.
+- Fase 4: `models/rufi-expresivo.web.glb` tiene expresiones con **geometría real**. Los ojos de Meshy están pintados en la textura: el parpadeo lo hacen párpados nuevos (`tools/face-rig/add-face.mjs`) que, con peso 0, no pintan ningún píxel (verificado). No describas el parpadeo como deformación de los ojos originales ni lo sustituyas por CSS.
 - No afirmes que Rufi está listo para animarse en producción mientras ningún GLB pase `node tools/validate-glb.mjs` sin `--allow-proxy` y sin errores.
 - Nunca sustituyas el 3D por movimientos CSS del personaje completo.
 - Distingue siempre entre **medido** (calculado sobre la imagen), **estimado** (propuesta) y **verificado** (probado en Blender/navegador).

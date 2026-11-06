@@ -20,6 +20,7 @@
  *   R5 Muslos: por debajo de la cadera o junto al eje del muslo se conserva; en la barriga
  *      (por encima de la cadera y lejos del eje) se retira gradualmente hacia la columna.
  *   R6 Suavizado laplaciano de los pesos solo en las zonas de transición del tronco.
+ *   R8 Suavizado adicional de pesos en las axilas (13 cm alrededor de cada brazo).
  *   R7 Transición en la parte inferior de la cabeza: de 60 % Head en la costura a 100 % Head
  *      a 8 cm sobre la superficie, para repartir el giro de la cabeza (el resto lo absorbe la
  *      franja de piel bajo la cabeza, oculta por el vuelo de la cabeza).
@@ -245,6 +246,35 @@ for (let iter = 0; iter < 4; iter++) {
   }
   for (const [i, acc] of next) weights[i] = normalize(acc);
 }
+
+// R8 axila: suavizado adicional de los pesos alrededor de cada articulación del brazo
+// (radio 13 cm, sin cabeza ni pañuelo). Reparte la transición tronco–brazo en una zona
+// más ancha y elimina el pliegue bajo el brazo al levantarlo (wave). Probado: quitar el
+// peso del tronco por distancia lo empeoraba (nuevo borde).
+let armpit = 0;
+// R8: suavizado de la transición alrededor de cada brazo (13 cm). Probado: quitar el peso
+// del tronco a la piel del brazo por distancia lo empeoraba (nuevo borde y desgarro).
+{
+  const zoneA = [];
+  for (const i of reps) {
+    if (region[i] === 1 || region[i] === 2) continue;
+    const p = P(i);
+    if (dist(p, jpos.LeftArm) < 0.13 || dist(p, jpos.RightArm) < 0.13) zoneA.push(i);
+  }
+  const inZone = new Uint8Array(n); for (const i of zoneA) inZone[i] = 1;
+  for (let iter = 0; iter < 12; iter++) {
+    const next = new Map();
+    for (const i of zoneA) {
+      const acc = new Map(); for (const [k, w] of weights[i]) acc.set(k, w * 0.5);
+      const ns = nbr[i]; const f = 0.5 / ns.length;
+      for (const j of ns) for (const [k, w] of weights[weld[j]]) acc.set(k, (acc.get(k) || 0) + w * f);
+      next.set(i, acc);
+    }
+    for (const [i, acc] of next) weights[i] = normalize(acc);
+  }
+  armpit = zoneA.length;
+}
+stats.R8_axila_suavizada = armpit;
 
 // Escritura: 4 influencias como máximo, normalizadas; duplicados de costura = representante
 let multi = 0;

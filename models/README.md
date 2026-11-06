@@ -12,6 +12,10 @@
 
 **Importante:** las 4 animaciones incluidas (Idle_11, Idle_15, Walking, Running) deforman la malla. No usar en producción hasta re-riggear.
 
+## Fase 4
+
+`rufi-expresivo.web.glb` (593,7 KB): base de la fase 3 + suavizado de axilas + párpados y pestañas de geometría real (`blink`) + sonrisa (`smile`). Animaciones `idle`, `wave`, `curious`, `blink` y `smile`. `blender/rufi-fase4.blend`: el mismo modelo en Blender para el trabajo manual (ver `docs/13-expresiones-fase-4.md` §5).
+
 ## Fase 3
 
 `rufi-animado.web.glb` (556,2 KB): modelo A-pose con los pesos corregidos por `tools/rig-fix/fix-rig.mjs` y las animaciones `idle`, `wave` y `curious`. Es la nueva base para la web (ver `docs/12-rigging-fase-3.md`). `rufi.web.glb` se conserva como referencia histórica.

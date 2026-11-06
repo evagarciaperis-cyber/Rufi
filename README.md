@@ -6,6 +6,8 @@ Repositorio fuente de **Rufi**: identidad, especificación técnica, pipeline 3D
 
 ## Estado
 
+**Fase 4 — expresiones faciales (rama `fase-4-expresiones`).** `models/rufi-expresivo.web.glb` (**593,7 KB**): párpados de geometría real (`blink`) y sonrisa (`smile`) como morph targets, integrados en `idle`, `wave` y `curious`. Con los ojos abiertos la cara es idéntica al original (0 píxeles distintos). Pendiente en Blender: correctiva de la axila. Ver [`docs/13-expresiones-fase-4.md`](docs/13-expresiones-fase-4.md) y `examples/visor-expresiones/`.
+
 **Fase 3 — rig corregido y animaciones (rama `fase-3-rigging`).** `models/rufi-animado.web.glb` (**556,2 KB**): modelo A-pose con los pesos corregidos y las animaciones de esqueleto `idle`, `wave` y `curious`. Cara, ojos, pañuelo, barriga y piernas verificados sin deformación. Pendiente en Blender: pliegue de la axila en `wave`, expresiones faciales. Ver [`docs/12-rigging-fase-3.md`](docs/12-rigging-fase-3.md) y `examples/visor-animaciones/`.
 
 **Fase 2 — modelo 3D real (Meshy): incorporado, analizado y optimizado.** Ver [`docs/09-modelo-3d-meshy.md`](docs/09-modelo-3d-meshy.md).

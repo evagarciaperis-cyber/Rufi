@@ -22,6 +22,9 @@
  *   5. Texturas a WebP redimensionadas por tipo: color, normales y metal/rugosidad.
  *   6. quantize + EXT_meshopt_compression: compresión de geometría y animación.
  *
+ * --quantize-position N: bits de cuantización de posiciones (14 por defecto; 16 conserva mejor la cara).
+ * --skip-textures deja las texturas como están (para un segundo paso sin recomprimirlas).
+ *
  * Nunca modifica el archivo de entrada.
  */
 import { NodeIO } from '@gltf-transform/core';
@@ -50,6 +53,8 @@ const opts = {
   quality: Number(arg('quality', '82')),
   meshopt: !process.argv.includes('--no-meshopt'),
   dropTangents: process.argv.includes('--drop-tangents'),
+  skipTextures: process.argv.includes('--skip-textures'),
+  quantizePosition: Number(arg('quantize-position', '14')),
   positionOnly: process.argv.includes('--position-only'),
   normalWeight: Number(arg('normal-weight', '1')),
   uvWeight: Number(arg('uv-weight', '1')),
@@ -126,14 +131,14 @@ if (opts.ratio < 1) {
 await doc.transform(resample(), prune());
 
 // Texturas por tipo: el mapa de normales necesita más calidad que el color.
-await doc.transform(
+if (!opts.skipTextures) await doc.transform(
   textureCompress({ encoder: sharp, targetFormat: 'webp', slots: /^baseColor/, resize: [opts.tex, opts.tex], quality: opts.quality }),
   textureCompress({ encoder: sharp, targetFormat: 'webp', slots: /^normal/, resize: [opts.normalTex, opts.normalTex], quality: Math.min(95, opts.quality + 8) }),
   textureCompress({ encoder: sharp, targetFormat: 'webp', slots: /^metallicRoughness/, resize: [opts.mrTex, opts.mrTex], quality: opts.quality }),
 );
 
 if (opts.meshopt) {
-  await doc.transform(quantize(), meshopt({ encoder: MeshoptEncoder, level: 'medium' }));
+  await doc.transform(quantize({ quantizePosition: opts.quantizePosition }), meshopt({ encoder: MeshoptEncoder, level: 'medium' }));
 }
 
 await io.write(output, doc);
