@@ -1,0 +1,118 @@
+✓ [1.0 · _global.json sin source] Rufi se activa
+✓ [1.0 · _global.json sin source] motor publicado 1.0.0 y configuración de Arsys
+✓ [1.0 · _global.json sin source] no pide nada a Storage
+✓ [1.0 · _global.json sin source] sin errores en consola
+✓ [1.0 · configuración 1.0 con el motor 1.1.0] Rufi se activa
+✓ [1.0 · configuración 1.0 con el motor 1.1.0] núcleo 1.1.0
+✓ [1.0 · configuración 1.0 con el motor 1.1.0] textos en español, como con 1.0.0
+✓ [1.0 · configuración 1.0 con el motor 1.1.0] etiqueta de cerrar en español
+✓ [1.0 · configuración 1.0 con el motor 1.1.0] sin errores en consola
+✓ [1.1 · estado activo + página activa] Rufi se activa
+✓ [1.1 · estado activo + página activa] pide status.json y su página a Storage (no a Arsys)
+✓ [1.1 · estado activo + página activa] motor del sobre (engine 1.1.0)
+✓ [1.1 · estado activo + página activa] guarda copia del estado y de la página
+✓ [1.1 · estado activo + página activa] sin errores en consola
+✓ [1.1 · sitio apagado (status killed)] Rufi NO se activa
+✓ [1.1 · sitio apagado (status killed)] no descarga núcleo, 3D ni modelo
+✓ [1.1 · sitio apagado (status killed)] guarda la marca de apagado
+✓ [1.1 · sitio apagado (status killed)] evento rufi:off con motivo
+✓ [1.1 · sitio apagado (status killed)] sin errores en consola
+✓ [1.1 · ?rufi=on no salta el apagado del CRM] Rufi NO se activa
+✓ [1.1 · página apagada (disabled)] Rufi NO se activa
+✓ [1.1 · página retirada (404)] Rufi NO se activa aunque haya copia
+✓ [1.1 · página retirada (404)] borra la copia
+✓ [1.1 · _global.json local enabled:false] Rufi NO se activa y no pide nada a Storage
+✓ [1.1 · _global.json local enabled:false] borra las copias
+✓ [1.1 · source no válido (http://)] falla cerrado: ni Rufi ni modo 1.0 ni Storage
+✓ [1.1 · apagado urgente con la página abierta] Rufi está activo
+✓ [1.1 · apagado urgente con la página abierta] Rufi sale de la página
+✓ [1.1 · apagado urgente con la página abierta] rufi:off (live) con motivo killed
+✓ [1.1 · apagado urgente con la página abierta] el motor 1.1.0 se desmonta (rufi:destroy)
+✓ [1.1 · apagado urgente con la página abierta] no vuelve sin recargar
+✓ [1.1 · apagado urgente con la página abierta] sin errores en consola
+✓ [1.1 · página apagada con la página abierta] Rufi sale de la página
+✓ [1.1 · apagado local (Arsys) con la página abierta] Rufi sale de la página
+✓ [1.1 · corte de red con la página abierta] Rufi se queda (un fallo no lo oculta)
+✓ [1.1 · configuración nueva con la página abierta] avisa (rufi:update) y guarda la copia para la siguiente carga
+✓ [1.1 · apagado con motor 1.0.0 (sobre engine 1.0.0)] Rufi activo con el núcleo 1.0.0
+✓ [1.1 · apagado con motor 1.0.0 (sobre engine 1.0.0)] el cargador lo retira igualmente
+✓ [1.1 · apagado con motor 1.0.0 (sobre engine 1.0.0)] sin errores en consola
+✓ [1.1 · página caducada] Rufi NO se activa
+✓ [1.1 · estado caducado] Rufi NO se activa
+✓ [1.1 · Storage caído + copia caducada] Rufi NO se activa y borra la copia caducada
+✓ [1.1 · status.json no es JSON] Rufi NO se activa
+✓ [1.1 · status.json no es JSON] sin errores en consola
+✓ [1.1 · status.json con un campo de más] Rufi NO se activa
+✓ [1.1 · status.json con un campo de más] sin errores en consola
+✓ [1.1 · página con datos que no son del contrato] Rufi NO se activa
+✓ [1.1 · página con datos que no son del contrato] sin errores en consola
+✓ [1.1 · página con revisión en texto] Rufi NO se activa
+✓ [1.1 · página con revisión en texto] sin errores en consola
+✓ [1.1 · página con config manipulada (enlace javascript:)] Rufi NO se activa
+✓ [1.1 · página con config manipulada (enlace javascript:)] sin errores en consola
+✓ [1.1 · página de otro slug] Rufi NO se activa
+✓ [1.1 · página de otro slug] sin errores en consola
+✓ [1.1 · página demasiado grande (> 64 KB)] Rufi NO se activa
+✓ [1.1 · página demasiado grande (> 64 KB)] sin errores en consola
+✓ [1.1 · vista previa servida como página normal] Rufi NO se activa
+✓ [1.1 · vista previa servida como página normal] sin errores en consola
+✓ [1.1 · Storage corta la conexión, visitante nuevo] Rufi NO se activa (la página sigue bien)
+✓ [1.1 · Storage corta la conexión, visitante nuevo] sin errores en consola
+✓ [1.1 · Storage tarda más que timeoutMs] Rufi NO se activa (espera máx. 1,5 s)
+✓ [1.1 · Storage caído, visitante que vuelve con copia válida] Rufi se activa con su copia
+✓ [1.1 · Storage caído, vuelve con marca de apagado] Rufi NO se activa
+✓ [1.1 · CDN con estado viejo, el navegador ya vio el apagado] sigue apagado (gana la revisión más alta)
+✓ [1.1 · Storage responde 503] Rufi NO se activa
+✓ [1.1 · Joomla: v1/routes/<sha256>.json] Rufi se activa
+✓ [1.1 · Joomla: v1/routes/<sha256>.json] busca la ruta por su hash
+✓ [1.1 · Joomla: ruta desconocida] Rufi NO se activa
+✓ [1.1 · configuración en la página + sitio apagado] Rufi NO se activa
+✓ [1.1 · configuración en la página + sitio activo] Rufi se activa
+✓ [idioma es · <html lang="es">] bienvenida
+✓ [idioma es · <html lang="es">] evento ready con el idioma
+✓ [idioma es · <html lang="es">] atributo lang del componente
+✓ [idioma es · <html lang="es">] título y opciones del panel
+✓ [idioma es · <html lang="es">] mensaje de WhatsApp traducido — https://wa.me/34674612272?text=Hola%2C%20vengo%20de%20vuestra%20web
+✓ [idioma es · <html lang="es">] interfaz (cerrar) traducida
+✓ [idioma es · <html lang="es">] sin errores en consola
+✓ [idioma en · <html lang="en">] bienvenida
+✓ [idioma en · <html lang="en">] evento ready con el idioma
+✓ [idioma en · <html lang="en">] atributo lang del componente
+✓ [idioma en · <html lang="en">] título y opciones del panel
+✓ [idioma en · <html lang="en">] mensaje de WhatsApp traducido — https://wa.me/34674612272?text=Hi%2C%20I'm%20coming%20from%20your%20website
+✓ [idioma en · <html lang="en">] interfaz (cerrar) traducida
+✓ [idioma en · <html lang="en">] sin errores en consola
+✓ [idioma fr · <html lang="fr">] bienvenida
+✓ [idioma fr · <html lang="fr">] evento ready con el idioma
+✓ [idioma fr · <html lang="fr">] atributo lang del componente
+✓ [idioma fr · <html lang="fr">] título y opciones del panel
+✓ [idioma fr · <html lang="fr">] mensaje de WhatsApp traducido — https://wa.me/34674612272?text=Bonjour%2C%20je%20viens%20de%20votre%20site
+✓ [idioma fr · <html lang="fr">] interfaz (cerrar) traducida
+✓ [idioma fr · <html lang="fr">] sin errores en consola
+✓ [idioma it · <html lang="it">] bienvenida
+✓ [idioma it · <html lang="it">] evento ready con el idioma
+✓ [idioma it · <html lang="it">] atributo lang del componente
+✓ [idioma it · <html lang="it">] título y opciones del panel
+✓ [idioma it · <html lang="it">] mensaje de WhatsApp traducido — https://wa.me/34674612272?text=Ciao%2C%20arrivo%20dal%20vostro%20sito
+✓ [idioma it · <html lang="it">] interfaz (cerrar) traducida
+✓ [idioma it · <html lang="it">] sin errores en consola
+✓ [idioma de · <html lang="de">] bienvenida
+✓ [idioma de · <html lang="de">] evento ready con el idioma
+✓ [idioma de · <html lang="de">] atributo lang del componente
+✓ [idioma de · <html lang="de">] título y opciones del panel
+✓ [idioma de · <html lang="de">] mensaje de WhatsApp traducido — https://wa.me/34674612272?text=Hallo%2C%20ich%20komme%20von%20Ihrer%20Website
+✓ [idioma de · <html lang="de">] interfaz (cerrar) traducida
+✓ [idioma de · <html lang="de">] sin errores en consola
+✓ [idioma no disponible (pt) → navegador es-ES → base] español
+✓ [vista previa local · token válido] muestra el borrador
+✓ [vista previa local · token válido] texto del borrador y aviso «Vista previa»
+✓ [vista previa local · token válido] solo usa la API (ni Storage ni copias)
+✓ [vista previa local · token válido] quita el token de la barra de direcciones
+✓ [vista previa local · token válido] sin errores en consola
+✓ [vista previa local · firma manipulada] no se muestra nada (tampoco la copia)
+✓ [vista previa local · caducado] no se muestra nada (tampoco la copia)
+✓ [vista previa local · de otra página] no se muestra nada (tampoco la copia)
+✓ [vista previa local · firmado con otro secreto] no se muestra nada (tampoco la copia)
+✓ [vista previa local · con forma no válida] no se muestra nada (tampoco la copia)
+
+116/116 comprobaciones superadas

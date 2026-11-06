@@ -138,6 +138,12 @@ Los textos son siempre **predefinidos**: Rufi no simula un chat ni una IA. Mante
   3. Probar en una página con su configuración fijada a `"version": "1.1.0"`.
   4. Cambiar `"version": "1.1.0"` en `_global.json` → todas las páginas pasan a la nueva.
 - **Vuelta atrás**: volver a poner `"version": "1.0.0"` en `_global.json` (efecto inmediato).
+- **Versiones publicadas protegidas** (fase D): `scripts/published-versions.json` guarda las
+  huellas SHA-256 de cada carpeta ya subida. `npm run build` no las borra ni las reconstruye,
+  comprueba sus huellas antes y después, y se niega a construir una versión de esa lista.
+- **Contrato 1.1 (Supabase Storage, apagado con la página abierta, idiomas)**: ver
+  `docs/16-fase-d-cargador-1.1.md`. Sin `source.static` en `_global.json`, el cargador 1.1 se
+  comporta exactamente como el 1.0.0.
 - **Apagado de emergencia**: `"enabled": false` en `_global.json`. Para quitarlo de una sola
   página: añadirla a `disabledPages` o poner `enabled: false` en su configuración.
 

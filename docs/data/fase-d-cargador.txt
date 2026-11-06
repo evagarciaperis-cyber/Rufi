@@ -1,0 +1,55 @@
+✓ [landing con data-rufi-config] Rufi se activa
+✓ [landing con data-rufi-config] núcleo desde /rufi/v/1.0.0/ (versión de _global.json)
+✓ [landing con data-rufi-config] configuración con ?v=configVersion
+✓ [landing con data-rufi-config] no consulta _routes.json
+✓ [landing con data-rufi-config] página y assetsBase correctos
+✓ [landing con data-rufi-config] sin errores en consola
+✓ [?rufi=off] Rufi NO se activa
+✓ [?rufi=off] no descarga núcleo, 3D ni modelo — /rufi/rufi.js
+✓ [?rufi=off] no pide nada a /rufi/ salvo el cargador
+✓ [?rufi=off] sin errores en consola
+✓ [_global.json enabled:false] Rufi NO se activa
+✓ [_global.json enabled:false] no descarga núcleo, 3D ni modelo — /rufi/rufi.js /rufi/configs/_global.json
+✓ [_global.json enabled:false] no pide la configuración
+✓ [_global.json enabled:false] sin errores en consola
+✓ [_global.json enabled:false + ?rufi=on] Rufi se activa
+✓ [_global.json enabled:false + ?rufi=on] sin errores en consola
+✓ [página en disabledPages] Rufi NO se activa
+✓ [página en disabledPages] no descarga núcleo, 3D ni modelo — /rufi/rufi.js /rufi/configs/_global.json
+✓ [página en disabledPages] sin errores en consola
+✓ [configuración con enabled:false] Rufi NO se activa
+✓ [configuración con enabled:false] no descarga núcleo, 3D ni modelo — /rufi/rufi.js /rufi/configs/_global.json /rufi/configs/aval-ico-valencia.json?v=2026-11-06
+✓ [configuración con enabled:false] sin errores en consola
+✓ [configuración inexistente] Rufi NO se activa
+✓ [configuración inexistente] no descarga núcleo, 3D ni modelo — /rufi/rufi.js /rufi/configs/_global.json /rufi/configs/no-existe.json?v=2026-11-06
+✓ [configuración inexistente] sin errores en consola
+✓ [sin _global.json (fallo de red)] Rufi se activa
+✓ [sin _global.json (fallo de red)] usa la versión del cargador (1.1.0)
+✓ [sin _global.json (fallo de red)] sin errores en consola
+✓ [versión fijada en la configuración] Rufi NO se activa
+✓ [versión fijada en la configuración] pide /rufi/v/0.9.0/rufi-core.js (vuelta atrás por página)
+✓ [versión fijada en la configuración] sin errores en consola
+✓ [Joomla: fragmento global, página en _routes.json] Rufi se activa
+✓ [Joomla: fragmento global, página en _routes.json] consulta _routes.json
+✓ [Joomla: fragmento global, página en _routes.json] sin errores en consola
+✓ [Joomla: fragmento global, página no listada] Rufi NO se activa
+✓ [Joomla: fragmento global, página no listada] no descarga núcleo, 3D ni modelo — /rufi/rufi.js /rufi/configs/_global.json /rufi/configs/_routes.json
+✓ [Joomla: fragmento global, página no listada] solo pide _global.json y _routes.json
+✓ [Joomla: fragmento global, página no listada] sin errores en consola
+✓ [Joomla: prefijo en _routes.json] Rufi se activa
+✓ [Joomla: prefijo en _routes.json] sin errores en consola
+✓ [configuración en la propia página] Rufi se activa
+✓ [configuración en la propia página] no pide archivo de configuración
+✓ [configuración en la propia página] usa la configuración de la página
+✓ [configuración en la propia página] sin errores en consola
+✓ [ajuste en la página sobre el archivo] Rufi se activa
+✓ [ajuste en la página sobre el archivo] mezcla archivo + ajuste
+✓ [ajuste en la página sobre el archivo] sin errores en consola
+✓ [?rufi=debug] Rufi se activa
+✓ [?rufi=debug] activa debug
+✓ [?rufi=debug] sin errores en consola
+✓ [cargador incluido dos veces] Rufi se activa
+✓ [cargador incluido dos veces] un solo núcleo
+✓ [cargador incluido dos veces] sin errores en consola
+
+53/53 comprobaciones superadas

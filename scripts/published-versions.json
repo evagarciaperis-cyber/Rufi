@@ -1,0 +1,9 @@
+{
+  "$comment": "Carpetas de /rufi/v/<versión>/ YA PUBLICADAS en el servidor: no se modifican nunca. npm run build comprueba estas huellas SHA-256 antes y después de construir y se niega a reconstruir una versión de esta lista. Una versión se añade aquí solo cuando se ha subido de verdad (con autorización).",
+  "1.0.0": {
+    "rufi-3d.js": "f708835b7d159873424ad467e69c55ca3d8397a9ef9b76127b67a8dc50ef6c15",
+    "rufi-core.js": "09685a892d2750655e5c24286a74010955b03b2d5a1e172f0e8ee092aa550d0e",
+    "rufi-expresivo.web.glb": "a72185cbe3ef132ec33a2b6961db1b16865bedd020b5dd662ffea9f675d66547",
+    "rufi-poster.webp": "c37b400d532e56a099ecf705f9462636448a472e3cda52c1dc8b0f7d4bdedd96"
+  }
+}

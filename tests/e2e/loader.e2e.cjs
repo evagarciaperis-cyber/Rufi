@@ -2,6 +2,7 @@
  * Pruebas del cargador central (dist/rufi.js) en Chromium: decide bien cuándo NO cargar Rufi.
  * Sirve dist/ como si fuera https://referencehome.es/rufi/ (sin red: todo con page.route).
  * Uso: npm run build && node tests/e2e/loader.e2e.cjs
+ * Fase D: el cargador es el 1.1, pero con este _global.json (sin source) debe comportarse como el 1.0.0.
  */
 const { chromium } = require('playwright');
 const fs = require('fs'); const path = require('path');
@@ -45,10 +46,10 @@ async function scenario(browser, name, { url = '/ICO/aval-ico-valencia.html', sn
   const G = JSON.parse(fs.readFileSync(path.join(DIST, 'configs/_global.json'), 'utf8'));
   const CFG = JSON.parse(fs.readFileSync(path.join(DIST, 'configs/aval-ico-valencia.json'), 'utf8'));
   await scenario(browser, 'landing con data-rufi-config', {}, { mounts: true, check: [
-    [`núcleo desde /rufi/v/${V}/`, ({ core }) => core.length === 1 && core[0] === `/rufi/v/${V}/rufi-core.js`],
+    [`núcleo desde /rufi/v/${G.version}/ (versión de _global.json)`, ({ core }) => core.length === 1 && core[0] === `/rufi/v/${G.version}/rufi-core.js`],
     ['configuración con ?v=configVersion', ({ reqs }) => reqs.includes(`/rufi/configs/aval-ico-valencia.json?v=${G.configVersion}`)],
     ['no consulta _routes.json', ({ reqs }) => !reqs.some((r) => r.includes('_routes'))],
-    ['página y assetsBase correctos', ({ cfg }) => cfg && cfg.page === 'aval-ico-valencia' && cfg.assetsBase.endsWith(`/rufi/v/${V}/`)],
+    ['página y assetsBase correctos', ({ cfg }) => cfg && cfg.page === 'aval-ico-valencia' && cfg.assetsBase.endsWith(`/rufi/v/${G.version}/`)],
   ] });
   await scenario(browser, '?rufi=off', { url: '/ICO/aval-ico-valencia.html?rufi=off' }, { mounts: false, check: [['no pide nada a /rufi/ salvo el cargador', ({ reqs }) => reqs.filter((r) => r.startsWith('/rufi/')).join() === '/rufi/rufi.js']] });
   await scenario(browser, '_global.json enabled:false', { override: { 'configs/_global.json': { ...G, enabled: false } } }, { mounts: false, check: [['no pide la configuración', ({ reqs }) => !reqs.some((r) => r.includes('aval-ico-valencia.json'))]] });

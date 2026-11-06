@@ -20,7 +20,10 @@ test('la configuración de pruebas solo difiere en lo previsto', () => {
 
 test('_global.json y _routes.json apuntan a cosas que existen', () => {
   const g = load('configs/_global.json'), pkg = load('package.json');
-  assert.equal(g.version, pkg.rufiVersion);
+  // _global.json apunta a una versión publicada (scripts/published-versions.json) o a la que se construye.
+  // Fase D: sigue en 1.0.0 hasta que se autorice el cambio a 1.1.0.
+  const published = Object.keys(load('scripts/published-versions.json')).filter((k) => k !== '$comment');
+  assert.ok(g.version === pkg.rufiVersion || published.includes(g.version), `versión ${g.version}`);
   for (const n of g.disabledPages) assert.ok(pages.includes(`configs/${n}.json`), n);
   for (const r of load('configs/_routes.json').routes) { assert.ok(r.path || r.prefix); assert.ok(pages.includes(`configs/${r.config}.json`), r.config); }
 });

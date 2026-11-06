@@ -10,7 +10,34 @@
  *   cuando la página ya ha cargado y el navegador está libre. Sin WebGL o con movimiento
  *   reducido, se queda el póster: Rufi siempre se ve y el panel siempre funciona.
  * - Mensajes predefinidos: no es un chat ni simula inteligencia artificial.
+ * - 1.1.0: idiomas del contrato 1.1 (es/en/fr/it/de). El idioma se elige con pickLang() y los
+ *   textos con resolveTexts(), ambas de spec/reference/i18n.mjs, tal cual: <html lang> de la
+ *   página → idiomas del navegador → idioma base de la configuración. Los textos de la propia
+ *   interfaz (botones de cerrar, etiqueta por defecto) también se traducen. Rufi.destroy() lo
+ *   retira de la página (lo usa el cargador cuando llega un apagado con la página abierta).
  */
+import { pickLang, resolveTexts } from '../spec/reference/i18n.mjs';
+
+/** Textos de la interfaz del propio componente (no de la configuración). Pendientes de revisión por Reference Home. */
+const UI = {
+  es: { label: 'Rufi, asistente de Reference Home: abrir opciones de ayuda', title: '¿En qué te ayudo?', closeBubble: 'Cerrar mensaje de Rufi', closePanel: 'Cerrar opciones', preview: 'Vista previa · borrador' },
+  en: { label: 'Rufi, Reference Home assistant: open help options', title: 'How can I help?', closeBubble: 'Close Rufi’s message', closePanel: 'Close options', preview: 'Preview · draft' },
+  fr: { label: 'Rufi, assistant de Reference Home : ouvrir les options d’aide', title: 'Comment puis-je vous aider ?', closeBubble: 'Fermer le message de Rufi', closePanel: 'Fermer les options', preview: 'Aperçu · brouillon' },
+  it: { label: 'Rufi, assistente di Reference Home: apri le opzioni di aiuto', title: 'Come posso aiutarti?', closeBubble: 'Chiudi il messaggio di Rufi', closePanel: 'Chiudi le opzioni', preview: 'Anteprima · bozza' },
+  de: { label: 'Rufi, Assistent von Reference Home: Hilfeoptionen öffnen', title: 'Wie kann ich helfen?', closeBubble: 'Nachricht von Rufi schließen', closePanel: 'Optionen schließen', preview: 'Vorschau · Entwurf' },
+};
+
+/** Idioma y textos de la configuración (contrato 1.1). Una configuración 1.0 sale igual, en «es». */
+function localize(cfg) {
+  const lang = pickLang({ htmlLang: document.documentElement.getAttribute('lang') || '', navigatorLangs: (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language]).filter(Boolean), cfg });
+  if (!cfg || !cfg.i18n) return { lang, cfg };
+  // resolveTexts clona con JSON: se conservan aparte los campos que no son JSON (p. ej. modelBuffer en pruebas).
+  const out = resolveTexts(cfg, lang);
+  for (const k of Object.keys(cfg)) if (!(k in out) && k !== 'i18n') out[k] = cfg[k];
+  if (cfg.modelBuffer) out.modelBuffer = cfg.modelBuffer;
+  return { lang: out.lang || lang, cfg: out };
+}
+
 (function () {
   'use strict';
   if (window.Rufi && window.Rufi.__loaded) return;
@@ -99,20 +126,26 @@
   .opt strong{display:block;font-size:14px} .opt small{display:block;color:var(--muted);font-size:12px}
   .ar{color:var(--g);font-weight:700}
   .foot{margin:10px 2px 0;color:var(--muted);font-size:11.5px}
+  .badge{position:absolute;top:-22px;right:4px;background:#2B2B2B;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap}
   @media (prefers-reduced-motion: reduce){.poster,canvas,.bubble,.panel{transition:none}}
   `;
 
   class RufiWidget {
     constructor(cfg) {
-      this.cfg = merge(DEFAULTS, cfg);
+      const loc = localize(cfg);
+      this.lang = UI[loc.lang] ? loc.lang : 'es';
+      this.ui = UI[this.lang];
+      this.cfg = merge({ ...DEFAULTS, label: this.ui.label, panel: { ...DEFAULTS.panel, title: this.ui.title } }, loc.cfg);
       this.key = `rufi:${this.cfg.page}:`;
       this.engine = null; this.state = 'hidden'; this.shown = 0; this.lastBubble = 0; this.typingAt = 0; this.queue = [];
       this.reduced = reducedMotion();
     }
 
     mount() {
+      if (this.destroyed) return;
       const c = this.cfg;
-      if (c.replaceSelector) document.querySelectorAll(c.replaceSelector).forEach((el) => { el.hidden = true; el.setAttribute('aria-hidden', 'true'); el.style.setProperty('display', 'none', 'important'); });
+      this.replaced = [];
+      if (c.replaceSelector) document.querySelectorAll(c.replaceSelector).forEach((el) => { this.replaced.push([el, el.hidden, el.getAttribute('aria-hidden'), el.style.getPropertyValue('display'), el.style.getPropertyPriority('display')]); el.hidden = true; el.setAttribute('aria-hidden', 'true'); el.style.setProperty('display', 'none', 'important'); });
       this.host = document.createElement('div');
       this.host.id = 'rufi-root'; this.host.setAttribute('data-rufi', '');
       const root = this.host.attachShadow({ mode: 'open' });
@@ -122,28 +155,48 @@
           <button class="hit" type="button" aria-expanded="false" aria-controls="rufi-panel"></button>
           <div class="bubble" role="status" aria-live="polite" hidden>
             <button class="bubble-t" type="button"><b>Rufi</b><span></span></button>
-            <button class="x" type="button" aria-label="Cerrar mensaje de Rufi"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <button class="x" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
           </div>
           <div class="panel" id="rufi-panel" role="dialog" aria-modal="false" aria-labelledby="rufi-title" hidden>
             <div class="head"><div><p class="title" id="rufi-title"></p><p class="sub"></p></div>
-              <button class="x close" type="button" aria-label="Cerrar opciones"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+              <button class="x close" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
             <ul></ul><p class="foot"></p>
           </div>
         </div>`;
       this.$ = (s) => root.querySelector(s);
       this.el = this.$('.rufi');
       this.$('.hit').setAttribute('aria-label', c.label);
+      this.host.setAttribute('lang', this.lang);
+      this.$('.bubble .x').setAttribute('aria-label', this.ui.closeBubble);
+      this.$('.close').setAttribute('aria-label', this.ui.closePanel);
+      if (c.preview) { const b = document.createElement('span'); b.className = 'badge'; b.textContent = this.ui.preview; this.el.appendChild(b); }
       this.$('.poster').src = c.assetsBase + c.poster;
       this.buildPanel();
       this.applyLayout();
-      addEventListener('resize', () => this.applyLayout(), { passive: true });
+      this.onResize = () => this.applyLayout();
+      addEventListener('resize', this.onResize, { passive: true });
       document.body.appendChild(this.host);
       this.bind();
       this.watchContext();
       this.startIntro();
       this.loadEngine();
       window.Rufi.instance = this;
-      this.emit('ready', {});
+      this.emit('ready', { lang: this.lang });
+    }
+
+    /** Retira a Rufi de la página: lo usa el cargador si llega un apagado con la página abierta. */
+    destroy() {
+      if (this.destroyed) return; this.destroyed = true;
+      clearInterval(this.tick); clearTimeout(this.hideT); clearTimeout(this.transientT);
+      removeEventListener('resize', this.onResize);
+      if (this.engine) try { this.engine.dispose(); } catch (e) { /* */ }
+      this.engine = null; this.queue = []; this.state = 'hidden';
+      if (this.host) this.host.remove();
+      for (const [el, hidden, aria, disp, prio] of this.replaced || []) { // vuelve a mostrar lo que Rufi sustituía
+        el.hidden = hidden; if (aria == null) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', aria);
+        if (disp) el.style.setProperty('display', disp, prio); else el.style.removeProperty('display');
+      }
+      this.emit('destroy', {});
     }
 
     isMobile() { return innerWidth < this.cfg.breakpoint || (window.matchMedia && matchMedia('(pointer: coarse)').matches); }
@@ -187,11 +240,12 @@
       for (const ev of ['pointermove', 'keydown', 'scroll', 'touchstart']) addEventListener(ev, activity, { passive: true });
       document.addEventListener('input', (e) => { if (!e.composedPath().includes(this.host)) this.typingAt = performance.now(); }, true);
       this.lastActivity = performance.now();
-      setInterval(() => { if (this.state === 'idle' && this.$('.panel').hidden && performance.now() - this.lastActivity > this.cfg.sleepAfter) this.setState('sleep'); this.flushQueue(); }, 1000);
+      this.tick = setInterval(() => { if (this.state === 'idle' && this.$('.panel').hidden && performance.now() - this.lastActivity > this.cfg.sleepAfter) this.setState('sleep'); this.flushQueue(); }, 1000);
     }
 
     // ------------------------------------------------------------------ estados
     setState(name) {
+      if (this.destroyed) return;
       if (this.state === name && name !== 'curious') return;
       this.state = name;
       // Estados pasajeros sin clip propio: vuelven a reposo (si no, Rufi no volvería a dormirse)
@@ -224,6 +278,7 @@
       const go = () => import(/* webpackIgnore: true */ this.cfg.assetsBase + this.cfg.engine)
         .then((m) => m.createRufi3D({ container: this.$('.stage'), modelUrl: this.cfg.assetsBase + this.cfg.model, modelBuffer: this.cfg.modelBuffer || null, maxFps: this.isMobile() ? this.cfg.maxFpsMobile : this.cfg.maxFps, maxPixelRatio: this.isMobile() ? 1.5 : 2, onStateEnd: (s, next) => { this.emit('state-end', { state: s }); if (this.state === s) { this.state = next; this.el.classList.toggle('hidden', false); this.emit('state', { state: next }); } } }))
         .then((engine) => {
+          if (this.destroyed) { try { engine.dispose(); } catch (e) { /* */ } return; }
           this.engine = engine;
           this.$('.poster').classList.remove('on');
           if (this.introDue) this.introRun();
@@ -243,6 +298,7 @@
 
     /** Muestra un mensaje si las reglas lo permiten; si el visitante está escribiendo, espera. */
     say(m) {
+      if (this.destroyed) return false;
       const b = this.cfg.bubbles;
       if (m.once && store.get(this.key + 'visto:' + m.id)) return false;
       if (!m.force) {
@@ -357,6 +413,7 @@
     isVisible(el, ratio) { const r = el.getBoundingClientRect(); const vis = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0)); return vis / Math.min(r.height || 1, innerHeight) >= ratio * 0.8; }
 
     emit(name, detail) {
+      if (this.destroyed && name !== 'destroy') return;
       const d = { page: this.cfg.page, ...(this.cfg.test ? { test: true } : {}), ...detail };
       if (this.cfg.test || this.cfg.debug) try { console.info(`[Rufi${this.cfg.test ? ' PRUEBA' : ''}] ${name}`, d); } catch (e) { /* */ }
       try { document.dispatchEvent(new CustomEvent(`rufi:${name}`, { detail: d })); } catch (e) { /* sin eventos */ }
@@ -367,9 +424,12 @@
     __loaded: true,
     init(cfg) {
       const w = new RufiWidget(cfg);
+      window.Rufi.instance = w; // antes de montarse, para que destroy() también lo pare
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => w.mount(), { once: true }); else w.mount();
       return w;
     },
+    /** Retira a Rufi (apagado con la página abierta). */
+    destroy() { if (window.Rufi.instance) window.Rufi.instance.destroy(); },
     /** Solo para pruebas: borra la memoria de sesión de una página. */
     resetSession(page = 'default') { try { Object.keys(sessionStorage).filter((k) => k.startsWith(`rufi:${page}:`)).forEach((k) => sessionStorage.removeItem(k)); } catch (e) { /* */ } },
   };
