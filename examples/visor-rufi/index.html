@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rufi · Visor 3D</title>
+<!--
+  Visor de pruebas del modelo 3D de Rufi (models/rufi.web.glb).
+  Reproduce cada animación del GLB de forma individual mediante su esqueleto.
+  Uso local: en la raíz del repositorio, `python3 -m http.server 8000` y abrir
+  http://localhost:8000/examples/visor-rufi/   ·   ?src=ruta.glb carga otro archivo.
+  Es una herramienta interna: no es el componente que irá en las landings.
+-->
+<style>
+  :root{--granate:#A11F48;--tinta:#2B2B2B;--gris:#5E5A56;--linea:#D9CEC3;--papel:#FFFDF9;--fondo:#F6ECE2;--aviso:#8a5a00;--aviso-bg:#fff4dc}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--tinta:#EEE;--gris:#B5ADA6;--linea:#4a4440;--papel:#1d1a19;--fondo:#151312;--aviso:#f3c76b;--aviso-bg:#2e2615}}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tinta);background:var(--fondo);display:grid;grid-template-columns:minmax(0,1fr) 340px;min-height:100vh}
+  @media (max-width:860px){body{grid-template-columns:1fr}#stage{min-height:62vh}aside{max-height:none}}
+  #stage{position:relative;min-height:100vh}
+  #stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  #loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--gris)}
+  aside{background:var(--papel);border-left:1px solid var(--linea);padding:16px;overflow:auto;max-height:100vh}
+  h1{font-size:17px;margin:0 0 2px} h2{font-size:12px;margin:18px 0 8px;color:var(--granate);text-transform:uppercase;letter-spacing:.05em}
+  p{margin:0 0 8px} .muted{color:var(--gris);font-size:12px}
+  .clips{display:grid;gap:6px}
+  button{font:inherit;border:1px solid var(--linea);background:transparent;color:inherit;border-radius:9px;padding:7px 10px;cursor:pointer;text-align:left}
+  button:hover{border-color:var(--granate)}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--granate);outline-offset:2px}
+  button[aria-pressed="true"]{background:var(--granate);color:#fff;border-color:var(--granate)}
+  .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  label{display:flex;gap:8px;align-items:center;font-size:13px}
+  input[type=range]{flex:1;accent-color:var(--granate)}
+  .badge{display:inline-block;font-size:11px;padding:1px 6px;border-radius:6px;background:var(--aviso-bg);color:var(--aviso);margin-left:6px}
+  .warn{background:var(--aviso-bg);color:var(--aviso);border-radius:10px;padding:10px 12px;font-size:12.5px}
+  dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0;font-size:12.5px} dt{color:var(--gris)} dd{margin:0}
+  #time{font-variant-numeric:tabular-nums;font-size:12px;color:var(--gris);min-width:92px;text-align:right}
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="stage"><canvas id="c" aria-label="Rufi en 3D" role="img"></canvas><div id="loading">Cargando a Rufi…</div></div>
+<aside>
+  <h1>Rufi · Visor 3D</h1>
+  <p class="muted">Modelo real (Meshy) optimizado para la web. Cada botón reproduce una animación del GLB mediante su esqueleto.</p>
+  <div class="warn" role="note"><strong>Estado:</strong> las 4 animaciones de Meshy deforman la malla (brazos aplastados, grietas en la barriga). El reposo es correcto. Detalle en <code>docs/09-modelo-3d-meshy.md</code>.</div>
+
+  <h2>Animaciones del modelo</h2>
+  <div class="clips" id="clips"></div>
+
+  <h2>Pruebas de esqueleto <span class="badge">generadas en el visor</span></h2>
+  <p class="muted">No están en el GLB. Mueven huesos concretos para comprobar el rig.</p>
+  <div class="clips" id="tests"></div>
+
+  <h2>Reproducción</h2>
+  <div class="row">
+    <button id="play" type="button">Pausa</button>
+    <button id="restart" type="button">Reiniciar</button>
+    <button id="rest" type="button">Reposo</button>
+  </div>
+  <div class="row" style="margin-top:8px"><input id="scrub" type="range" min="0" max="1" step="0.001" value="0" aria-label="Línea de tiempo"><span id="time">0,00 / 0,00 s</span></div>
+  <label style="margin-top:6px">Velocidad <input id="speed" type="range" min="0.1" max="2" step="0.05" value="1"><span id="speedv">1,00×</span></label>
+  <label><input id="loop" type="checkbox" checked> Repetir en bucle</label>
+
+  <h2>Vista</h2>
+  <div class="row">
+    <button id="front" type="button">Frente</button>
+    <button id="side" type="button">Lateral</button>
+    <button id="close" type="button">Cara</button>
+  </div>
+  <label style="margin-top:8px"><input id="wire" type="checkbox"> Malla (wireframe)</label>
+  <label><input id="bones" type="checkbox"> Mostrar huesos</label>
+
+  <h2>Modelo</h2>
+  <dl id="info"><dt>Archivo</dt><dd>—</dd></dl>
+</aside>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+const $ = (id) => document.getElementById(id);
+const fmt = (n, d = 2) => n.toFixed(d).replace('.', ',');
+const src = new URLSearchParams(location.search).get('src') || window.RUFI_GLB_URL || '../../models/rufi.web.glb';
+
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x9a8f88, 2.0));
+const key = new THREE.DirectionalLight(0xffffff, 1.7); key.position.set(-1.2, 2.4, 2.6); scene.add(key);
+const rim = new THREE.DirectionalLight(0xfff2e6, 0.6); rim.position.set(1.5, 1.2, -1.5); scene.add(rim);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 50);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+const clock = new THREE.Clock();
+
+let mixer, action = null, model, mesh, skeletonHelper, size = new THREE.Vector3(), center = new THREE.Vector3();
+let paused = false;
+const buttons = [];
+
+function resize() {
+  const r = canvas.parentElement.getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false);
+  camera.aspect = r.width / Math.max(1, r.height);
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+new ResizeObserver(resize).observe(canvas.parentElement);
+
+function view(kind) {
+  const d = size.y * 2.3;
+  const target = center.clone();
+  if (kind === 'side') camera.position.set(center.x + d, center.y + size.y * 0.05, center.z);
+  else if (kind === 'close') { target.y = center.y + size.y * 0.27; camera.position.set(center.x, target.y, center.z + d * 0.42); }
+  else camera.position.set(center.x, center.y + size.y * 0.05, center.z + d);
+  controls.target.copy(target);
+  controls.update();
+}
+
+function bone(name) { return mesh.skeleton.bones.find((b) => b.name === name); }
+
+/** Pruebas: pistas de huesos reales creadas en el visor (no forman parte del GLB). */
+function buildTests() {
+  const rot = (bn, axis, degs, times) => {
+    const b = bone(bn); const q0 = b.quaternion.clone(); const vals = [];
+    for (const d of degs) vals.push(...q0.clone().multiply(new THREE.Quaternion().setFromAxisAngle(axis, THREE.MathUtils.degToRad(d))).toArray());
+    return new THREE.QuaternionKeyframeTrack(`${bn}.quaternion`, times, vals);
+  };
+  const scl = (bn, amounts, times) => {
+    const vals = []; for (const k of amounts) vals.push(1 + k * 0.6, 1 + k, 1 + k * 0.6);
+    return new THREE.VectorKeyframeTrack(`${bn}.scale`, times, vals);
+  };
+  const Y = new THREE.Vector3(0, 1, 0);
+  const t = [0, 0.3, 0.6, 0.9, 1.2, 1.6];
+  return [
+    { clip: new THREE.AnimationClip('Respiración (columna, ±2 %)', 4, [scl('mixamorigSpine1', [0, 0.02, 0], [0, 2, 4]), scl('mixamorigSpine2', [0, 0.02, 0], [0, 2, 4])]), note: 'limpia' },
+    { clip: new THREE.AnimationClip('Saludo (mano y antebrazo, ±12°)', 1.6, [rot('mixamorigLeftForeArm', Y, [0, 12, -12, 12, -12, 0], t), rot('mixamorigLeftHand', Y, [0, 12, -12, 12, -12, 0], t)]), note: 'pequeña marca en la mano' },
+  ];
+}
+
+function select(clip, btn) {
+  if (action) action.stop();
+  action = mixer.clipAction(clip);
+  action.setLoop($('loop').checked ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
+  action.clampWhenFinished = true;
+  action.timeScale = Number($('speed').value);
+  action.reset().play();
+  paused = false; $('play').textContent = 'Pausa';
+  buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+}
+
+function addButton(container, clip, label) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.textContent = label;
+  b.setAttribute('aria-pressed', 'false');
+  b.onclick = () => select(clip, b);
+  container.appendChild(b); buttons.push(b);
+}
+
+new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(src, (gltf) => {
+  model = gltf.scene; scene.add(model);
+  model.traverse((o) => { if (o.isSkinnedMesh) mesh = o; });
+  model.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(model, true);
+  box.getSize(size); box.getCenter(center);
+  view('front');
+  mixer = new THREE.AnimationMixer(model);
+  for (const clip of gltf.animations) addButton($('clips'), clip, `${clip.name} · ${fmt(clip.duration)} s`);
+  for (const t of buildTests()) addButton($('tests'), t.clip, `${t.clip.name} — ${t.note}`);
+  skeletonHelper = new THREE.SkeletonHelper(model); skeletonHelper.visible = false; scene.add(skeletonHelper);
+  let tris = 0; const g = mesh.geometry; tris = (g.index ? g.index.count : g.attributes.position.count) / 3;
+  $('info').innerHTML = '';
+  const add = (k, v) => { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; $('info').append(dt, dd); };
+  add('Archivo', src.split('/').pop());
+  add('Triángulos', Math.round(tris).toLocaleString('es-ES'));
+  add('Huesos', mesh.skeleton.bones.length);
+  add('Animaciones', gltf.animations.map((a) => a.name).join(', '));
+  add('Altura', `${fmt(size.y)} m`);
+  $('loading').remove();
+  window.RUFI_VISOR = { clips: gltf.animations.map((a) => [a.name, a.duration]), bones: mesh.skeleton.bones.length, tris: Math.round(tris) };
+}, undefined, (e) => { $('loading').textContent = 'No se pudo cargar el modelo: ' + e.message; });
+
+$('play').onclick = () => { if (!action) return; paused = !paused; action.paused = paused; $('play').textContent = paused ? 'Reproducir' : 'Pausa'; };
+$('restart').onclick = () => { if (action) { action.reset().play(); paused = false; $('play').textContent = 'Pausa'; } };
+$('rest').onclick = () => { if (action) action.stop(); action = null; mixer?.stopAllAction(); model && mesh.skeleton.pose(); buttons.forEach((b) => b.setAttribute('aria-pressed', 'false')); };
+$('speed').oninput = (e) => { $('speedv').textContent = `${fmt(Number(e.target.value))}×`; if (action) action.timeScale = Number(e.target.value); };
+$('loop').onchange = (e) => { if (action) action.setLoop(e.target.checked ? THREE.LoopRepeat : THREE.LoopOnce, Infinity); };
+$('scrub').oninput = (e) => { if (!action) return; paused = true; action.paused = true; $('play').textContent = 'Reproducir'; action.time = Number(e.target.value) * action.getClip().duration; mixer.update(0); };
+$('front').onclick = () => view('front'); $('side').onclick = () => view('side'); $('close').onclick = () => view('close');
+$('wire').onchange = (e) => { if (mesh) mesh.material.wireframe = e.target.checked; };
+$('bones').onchange = (e) => { if (skeletonHelper) skeletonHelper.visible = e.target.checked; };
+
+resize();
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta();
+  if (mixer && !paused) mixer.update(dt);
+  if (action) {
+    const dur = action.getClip().duration;
+    const t = action.time % dur;
+    if (!paused) $('scrub').value = String(t / dur);
+    $('time').textContent = `${fmt(t)} / ${fmt(dur)} s`;
+  }
+  controls.update();
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

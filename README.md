@@ -6,6 +6,17 @@ Repositorio fuente de **Rufi**: identidad, especificación técnica, pipeline 3D
 
 ## Estado
 
+**Fase 2 — modelo 3D real (Meshy): incorporado, analizado y optimizado.** Ver [`docs/09-modelo-3d-meshy.md`](docs/09-modelo-3d-meshy.md).
+
+| Fase 2 | |
+|---|---|
+| Modelo real | `models/original/rufianimado.glb` (33 MB, Git LFS) → `models/rufi.web.glb` (**697,7 KB**, 27 040 triángulos, WebP + Meshopt) |
+| Animaciones presentes | Idle_11, Idle_15, Walking, Running (verificado) |
+| Problema | Las 4 animaciones **deforman** la malla (rig automático en pose de saludo, pesos defectuosos). El reposo es correcto |
+| Contrato | No lo cumple aún: esqueleto Mixamo, sin shape keys, sin clips propios |
+| Visor | `examples/visor-rufi/` |
+| Siguiente paso | Re-rig con pesos limpios + shape keys + clips del contrato |
+
 **Fase 1 — análisis y preparación del personaje: completada.**
 
 | Hecho y verificado | Pendiente |
@@ -17,7 +28,7 @@ Repositorio fuente de **Rufi**: identidad, especificación técnica, pipeline 3D
 | Validador de GLB y visor de revisión | Conexión con ManyChat |
 | Evaluación Blender + glTF frente a Rive, con medidas propias | |
 
-> **No existe todavía un modelo 3D animable de Rufi.** La maqueta `PROXY_*` está hecha con primitivas grises y solo sirve para probar el pipeline; el validador la rechaza como modelo final.
+> **Ya existe el modelo 3D real de Rufi, pero todavía no es animable según el contrato** (ver arriba). La maqueta `PROXY_*` de la fase 1 sigue sirviendo solo para probar el pipeline.
 
 ## Estructura
 
@@ -31,16 +42,23 @@ assets/
   original/mascota.png      Imagen oficial SIN MODIFICAR (fuente de verdad)
   reference/                Guías, regiones, paleta, superposición de la maqueta y primeros planos
   web/                      Copias redimensionadas (WebP/PNG) para póster y documentación
+models/
+  original/rufianimado.glb  Modelo real de Meshy, intacto (Git LFS)
+  rufi.web.glb              Versión optimizada para la web
+examples/visor-rufi/        Visor de pruebas: reproduce cada animación
 blender/
   rufi_rig_template.blend   Plantilla: esqueleto RIG_Rufi + referencia a escala
   scripts/                  Construcción de la plantilla y exportación a GLB
 tools/
   analyze_reference.py      Análisis reproducible de la imagen
   validate-glb.mjs          Validador del contrato (sin dependencias)
+  inspect-model.mjs         Informe de lo que contiene un GLB
+  optimize-model.mjs        Optimización para la web (glTF-Transform + meshoptimizer + sharp)
   glb-viewer/               Visor de revisión con comparación frente a la imagen oficial
 tests/                      Pruebas (node --test)
 docs/                       01 análisis · 02 modelo 3D · 03 rig · 04 expresiones y movimientos ·
-                            05 evaluación Blender/Rive · 06 pipeline · 07 recursos pendientes · 08 plan web
+                            05 evaluación Blender/Rive · 06 pipeline · 07 recursos pendientes · 08 plan web ·
+                            09 modelo 3D de Meshy · 10 reutilizar en landings
 ```
 
 ## Uso rápido
@@ -50,6 +68,7 @@ npm test                                    # validador y contrato
 python3 tools/analyze_reference.py          # regenerar el análisis (requiere Pillow)
 node tools/validate-glb.mjs archivo.glb     # validar cualquier GLB de Rufi
 npm run pipeline:proxy                      # requiere Blender en el PATH: plantilla → maqueta → GLB → validación
+npm install && npm run optimize             # regenerar models/rufi.web.glb desde el original (requiere el archivo LFS)
 ```
 
 Visor: `python3 -m http.server` en la raíz y abrir `http://localhost:8000/tools/glb-viewer/?src=../../build/rufi_proxy.glb`.

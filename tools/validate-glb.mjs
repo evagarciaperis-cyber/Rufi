@@ -49,13 +49,28 @@ export function parseGlb(buf) {
   return { json, bin };
 }
 
-/** Dimensiones de una imagen PNG o JPEG embebida. null si no se reconoce. */
+/** Dimensiones de una imagen PNG, JPEG o WebP embebida. null si no se reconoce. */
 export function imageSize(bytes) {
   if (!bytes || bytes.length < 24) return null;
   // PNG: firma + IHDR
   if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) {
     const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     return { width: dv.getUint32(16), height: dv.getUint32(20), type: 'png' };
+  }
+  // WebP: contenedor RIFF con chunk VP8 (con pérdida), VP8L (sin pérdida) o VP8X (extendido)
+  if (bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46
+    && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50 && bytes.length >= 30) {
+    const chunk = String.fromCharCode(bytes[12], bytes[13], bytes[14], bytes[15]);
+    if (chunk === 'VP8 ') {
+      return { width: (bytes[26] | (bytes[27] << 8)) & 0x3fff, height: (bytes[28] | (bytes[29] << 8)) & 0x3fff, type: 'webp' };
+    }
+    if (chunk === 'VP8L') {
+      const [b0, b1, b2, b3] = [bytes[21], bytes[22], bytes[23], bytes[24]];
+      return { width: 1 + (((b1 & 0x3f) << 8) | b0), height: 1 + (((b3 & 0x0f) << 10) | (b2 << 2) | ((b1 & 0xc0) >> 6)), type: 'webp' };
+    }
+    if (chunk === 'VP8X') {
+      return { width: 1 + (bytes[24] | (bytes[25] << 8) | (bytes[26] << 16)), height: 1 + (bytes[27] | (bytes[28] << 8) | (bytes[29] << 16)), type: 'webp' };
+    }
   }
   // JPEG: buscar marcador SOFn
   if (bytes[0] === 0xff && bytes[1] === 0xd8) {
