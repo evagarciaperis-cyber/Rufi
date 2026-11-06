@@ -45,6 +45,12 @@ Este repositorio (`evagarciaperis-cyber/Rufi`, <https://github.com/evagarciaperi
 - En three.js los huesos Mixamo llegan sin `:` (`mixamorig:Spine1` → `mixamorigSpine1`). Correspondencia con el contrato en `spec/rig-mapping-mixamo.json`.
 - Web: sin estilos globales (Shadow DOM), `position: fixed` (sin CLS), respeta `prefers-reduced-motion`, accesible con teclado y lector de pantalla, sin dependencias pesadas en la carga inicial.
 
+## Componente web (fase 5)
+
+- Código en `src/`, publicable en `dist/` (`npm run build`). El componente habla con los estados del contrato; la traducción al modelo real está **solo** en `src/adapter.js`.
+- No editar la landing para instalarlo: dos líneas antes de `</body>` (ver `docs/14-componente-web.md §5`).
+- Pruebas: `npm run build && node tests/e2e/rufi.e2e.cjs --landing build/aval-ico-valencia.html`.
+
 ## Comprobaciones antes de entregar
 
 ```bash
