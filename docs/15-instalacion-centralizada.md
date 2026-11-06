@@ -42,7 +42,7 @@ Una línea antes de `</body>`. No se toca nada más de la página:
 
 ### Joomla
 
-Dos opciones:
+Tres opciones:
 
 - **Por página** (sin tocar la plantilla): en el artículo o en un módulo «HTML personalizado»
   asignado solo a esa página, la misma línea con `data-rufi-config`. El editor debe permitir
@@ -62,6 +62,9 @@ Dos opciones:
   ```
   `path` es exacto (sin dominio ni `?…`); `prefix` cubre todas las URL que empiezan así. Gana la
   primera coincidencia. Con URL amigables de Joomla, usar la ruta que se ve en el navegador.
+- **Plugin de sistema `plg_system_rufi`** (fase F, preparado pero **no instalado**): inserta la
+  línea con `data-rufi-config` según la URL o el elemento de menú, sin editar la plantilla ni los
+  artículos. Ver `docs/20-fase-f-plugin-joomla.md`.
 
 ### Configuración dentro de la página (sin archivo)
 

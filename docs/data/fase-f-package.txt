@@ -1,0 +1,16 @@
+✓ 8 archivos, los mismos que integrations/joomla/plg_system_rufi/
+✓ rufi.xml en la raíz del zip
+✓ contenido idéntico byte a byte (SHA-256 de cada archivo)
+✓ php -l sin errores en los archivos PHP del zip
+
+✓ build/plg_system_rufi-0.1.0.zip (14.6 KB) · versión 0.1.0
+  SHA-256 dd1b1800ae53d385522f4631e78eeb4a6ce42d3ceb778c161d45b06c746cb00e
+  Contenido:
+    language/en-GB/plg_system_rufi.ini
+    language/en-GB/plg_system_rufi.sys.ini
+    language/es-ES/plg_system_rufi.ini
+    language/es-ES/plg_system_rufi.sys.ini
+    rufi.xml
+    services/provider.php
+    src/Extension/Rufi.php
+    src/Helper/Injector.php

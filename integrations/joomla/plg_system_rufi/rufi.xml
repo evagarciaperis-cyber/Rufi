@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Rufi · plugin de sistema para Joomla 6 (fase F).
+  Inserta la línea del cargador central de Rufi en las páginas públicas, sin editar las landings.
+  Código preparado y probado de forma aislada; NO probado aún en un Joomla real.
+  Ver docs/20-fase-f-plugin-joomla.md en el repositorio de Rufi.
+-->
+<extension type="plugin" group="system" method="upgrade">
+	<name>plg_system_rufi</name>
+	<author>Reference Home</author>
+	<creationDate>2026-11-06</creationDate>
+	<copyright>(C) 2026 Reference Home</copyright>
+	<license>Propietaria (UNLICENSED)</license>
+	<authorUrl>https://referencehome.es</authorUrl>
+	<version>0.1.0</version>
+	<description>PLG_SYSTEM_RUFI_XML_DESCRIPTION</description>
+	<namespace path="src">ReferenceHome\Plugin\System\Rufi</namespace>
+	<files>
+		<folder plugin="rufi">services</folder>
+		<folder>src</folder>
+		<folder>language</folder>
+	</files>
+	<languages folder="language">
+		<language tag="es-ES">es-ES/plg_system_rufi.ini</language>
+		<language tag="es-ES">es-ES/plg_system_rufi.sys.ini</language>
+		<language tag="en-GB">en-GB/plg_system_rufi.ini</language>
+		<language tag="en-GB">en-GB/plg_system_rufi.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="note_site"
+					type="note"
+					label="PLG_SYSTEM_RUFI_NOTE_SITE_LABEL"
+					description="PLG_SYSTEM_RUFI_NOTE_SITE_DESC"
+					class="alert alert-info w-100"
+				/>
+				<field
+					name="enabled"
+					type="radio"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					label="PLG_SYSTEM_RUFI_FIELD_ENABLED_LABEL"
+					description="PLG_SYSTEM_RUFI_FIELD_ENABLED_DESC"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					name="loader_url"
+					type="text"
+					default="/rufi/rufi.js"
+					filter="string"
+					maxlength="512"
+					required="true"
+					label="PLG_SYSTEM_RUFI_FIELD_LOADER_URL_LABEL"
+					description="PLG_SYSTEM_RUFI_FIELD_LOADER_URL_DESC"
+				/>
+				<field
+					name="allowed_origins"
+					type="textarea"
+					rows="3"
+					filter="string"
+					hint="https://referencehome.es"
+					label="PLG_SYSTEM_RUFI_FIELD_ALLOWED_ORIGINS_LABEL"
+					description="PLG_SYSTEM_RUFI_FIELD_ALLOWED_ORIGINS_DESC"
+				/>
+				<field
+					name="fallback"
+					type="list"
+					default="none"
+					filter="cmd"
+					label="PLG_SYSTEM_RUFI_FIELD_FALLBACK_LABEL"
+					description="PLG_SYSTEM_RUFI_FIELD_FALLBACK_DESC"
+					>
+					<option value="none">PLG_SYSTEM_RUFI_FIELD_FALLBACK_NONE</option>
+					<option value="routes">PLG_SYSTEM_RUFI_FIELD_FALLBACK_ROUTES</option>
+				</field>
+			</fieldset>
+			<fieldset name="mapping" label="PLG_SYSTEM_RUFI_FIELDSET_MAPPING">
+				<field
+					name="url_map"
+					type="subform"
+					multiple="true"
+					layout="joomla.form.field.subform.repeatable-table"
+					label="PLG_SYSTEM_RUFI_FIELD_URL_MAP_LABEL"
+					description="PLG_SYSTEM_RUFI_FIELD_URL_MAP_DESC"
+					>
+					<form>
+						<field
+							name="match"
+							type="list"
+							default="exact"
+							filter="cmd"
+							label="PLG_SYSTEM_RUFI_FIELD_MATCH_LABEL"
+							>
+							<option value="exact">PLG_SYSTEM_RUFI_FIELD_MATCH_EXACT</option>
+							<option value="prefix">PLG_SYSTEM_RUFI_FIELD_MATCH_PREFIX</option>
+						</field>
+						<field
+							name="path"
+							type="text"
+							filter="string"
+							maxlength="512"
+							hint="/ICO/aval-ico-valencia.html"
+							label="PLG_SYSTEM_RUFI_FIELD_PATH_LABEL"
+						/>
+						<field
+							name="config"
+							type="text"
+							filter="string"
+							maxlength="64"
+							pattern="[a-z0-9\-]{1,64}"
+							hint="aval-ico-valencia"
+							label="PLG_SYSTEM_RUFI_FIELD_CONFIG_LABEL"
+						/>
+					</form>
+				</field>
+				<field
+					name="menu_map"
+					type="subform"
+					multiple="true"
+					layout="joomla.form.field.subform.repeatable-table"
+					label="PLG_SYSTEM_RUFI_FIELD_MENU_MAP_LABEL"
+					description="PLG_SYSTEM_RUFI_FIELD_MENU_MAP_DESC"
+					>
+					<form>
+						<field
+							name="itemid"
+							type="menuitem"
+							filter="integer"
+							label="PLG_SYSTEM_RUFI_FIELD_ITEMID_LABEL"
+							>
+							<option value="">JSELECT</option>
+						</field>
+						<field
+							name="config"
+							type="text"
+							filter="string"
+							maxlength="64"
+							pattern="[a-z0-9\-]{1,64}"
+							hint="aval-ico-valencia"
+							label="PLG_SYSTEM_RUFI_FIELD_CONFIG_LABEL"
+						/>
+					</form>
+				</field>
+				<field
+					name="excluded_paths"
+					type="textarea"
+					rows="5"
+					filter="string"
+					hint="/component/users"
+					label="PLG_SYSTEM_RUFI_FIELD_EXCLUDED_LABEL"
+					description="PLG_SYSTEM_RUFI_FIELD_EXCLUDED_DESC"
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

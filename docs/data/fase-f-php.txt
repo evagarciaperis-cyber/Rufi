@@ -1,0 +1,284 @@
+
+# Inserción
+✓ inserta en una página HTML pública con configuración
+✓ config resuelta
+✓ byte a byte idéntica fuera del punto de inserción (justo antes de </body>)
+✓ exactamente una etiqueta
+✓ queda como una línea propia antes de </body>
+✓ inject() devuelve el mismo HTML que process()
+✓ conserva bytes no UTF-8 y \r\n
+✓ </BODY > en mayúsculas y con espacio
+✓ con BOM UTF-8 al principio
+✓ modo «cargador sin nombre»: sin data-rufi-config
+✓ sin configuración y sin modo _routes.json: no inserta
+✓ añade el nonce de CSP si Joomla lo da
+✓ nonce no válido: se ignora
+
+# Idempotencia
+✓ segunda pasada: no cambia nada
+✓ motivo: cargador ya presente
+✓ ya incluido (línea manual idéntica): no se toca
+✓ ya incluido (fragmento global sin nombre): no se toca
+✓ ya incluido (URL absoluta del cargador): no se toca
+✓ ya incluido (con ?v= y comillas simples): no se toca
+✓ ya incluido (sin comillas): no se toca
+✓ ya incluido (otro src con data-rufi-config): no se toca
+✓ ya incluido (en el <head>): no se toca
+✓ detecta el cargador con la URL configurada
+✓ otros scripts con «rufi» en el nombre no cuentan
+
+# Sin </body>
+✓ fragmento sin body: intacto
+✓ body sin cerrar: intacto
+✓ </body> solo en comentario: intacto
+✓ </bodyx> no es cierre: intacto
+
+# Varios </body> (scripts, comentarios, atributos)
+✓ en un script antes: se inserta ante el </body> real
+✓ en un script después: se inserta ante el </body> real
+✓ en un comentario después: se inserta ante el </body> real
+✓ en un comentario antes: se inserta ante el </body> real
+✓ en <style>: se inserta ante el </body> real
+✓ en <textarea>: se inserta ante el </body> real
+✓ en <template>: se inserta ante el </body> real
+✓ en <noscript>: se inserta ante el </body> real
+✓ en un atributo: se inserta ante el </body> real
+✓ en CDATA: se inserta ante el </body> real
+✓ script con </script dentro de cadena: se inserta ante el </body> real
+✓ <script/> no se cierra solo: se inserta ante el </body> real
+✓ script con atributo «>» entre comillas: se inserta ante el </body> real
+✓ dos </body> reales: el último
+✓ script sin cerrar: no hay </body> real
+✓ comentario sin cerrar: no hay </body> real
+
+# Correspondencia página → configuración
+✓ URL exacta
+✓ ignora ?consulta
+✓ ignora barra final
+✓ distingue mayúsculas (como el cargador)
+✓ prefijo: la propia ruta
+✓ prefijo: gana la primera regla
+✓ prefijo por segmentos: /hipotecasx no cuenta
+✓ filas de subformulario como objetos
+✓ por elemento de menú (Itemid como texto en ajustes)
+✓ por elemento de menú (Itemid como texto en la petición)
+✓ la URL va antes que el menú
+✓ sin coincidencia: nada
+✓ sin coincidencia: HTML intacto
+✓ reglas no válidas se descartan
+✓ sin ajustes: desactivado
+✓ URL del cargador por defecto
+✓ interruptor general en No
+✓ normalizePath igual que spec/reference/routes.mjs (15 vectores)
+✓ SHA-256 de las rutas normalizadas igual que los vectores
+
+# Rutas excluidas
+✓ ruta normal con prefijo «/»: inserta
+✓ excluida configurada (y por debajo)
+✓ excluida con espacios y barra final
+✓ por segmentos: /privadox no está excluida
+✓ /administrator siempre excluida
+✓ /api siempre excluida
+✓ /installation siempre excluida
+✓ Joomla en subcarpeta: /web/administrator excluida
+✓ ruta con «..»: no inserta
+✓ ruta codificada (%61dministrator): excluida
+
+# XSS en nombres de configuración y URL
+✓ nombre rechazado: "\"><script>alert(1)<\/script>"
+✓ nombre rechazado: "a\" onload=\"alert(1)"
+✓ nombre rechazado: "Aval-ICO"
+✓ nombre rechazado: "aval_ico"
+✓ nombre rechazado: "aval ico"
+✓ nombre rechazado: "aval.ico"
+✓ nombre rechazado: "..\/..\/x"
+✓ nombre rechazado: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+✓ nombre rechazado: "av\nal"
+✓ nombre rechazado: "aval\u0000"
+✓ nombre rechazado: "á"
+✓ nombre rechazado: ""
+✓ espacios alrededor del nombre: se recortan (dato del formulario)
+✓ nombre de 64 caracteres: válido
+✓ nombre del contrato: válido
+✓ URL rechazada: "javascript:alert(1)"
+✓ URL rechazada: "JAVASCRIPT:alert(1)\/\/x.js"
+✓ URL rechazada: "data:text\/javascript,alert(1)"
+✓ URL rechazada: "\/\/evil.example\/rufi.js"
+✓ URL rechazada: "\/\\evil.example\/rufi.js"
+✓ URL rechazada: "https:\/\/evil.example\/rufi\/rufi.js"
+✓ URL rechazada: "https:\/\/referencehome.es.evil.example\/rufi\/rufi.js"
+✓ URL rechazada: "https:\/\/user:pass@referencehome.es\/rufi\/rufi.js"
+✓ URL rechazada: "https:\/\/evil.example@referencehome.es\/rufi\/rufi.js"
+✓ URL rechazada: "http:\/\/referencehome.es\/rufi\/rufi.js"
+✓ URL rechazada: "\/rufi\/rufi.js\" onload=\"alert(1)"
+✓ URL rechazada: "\/rufi\/rufi.js'><script>alert(1)<\/script>"
+✓ URL rechazada: "\/rufi\/rufi.js#\"><b>"
+✓ URL rechazada: "\/rufi\/..\/evil.js"
+✓ URL rechazada: "\/rufi\/%2e%2e\/evil.js"
+✓ URL rechazada: "\/rufi\/rufi.css"
+✓ URL rechazada: "rufi\/rufi.js"
+✓ URL rechazada: "\/rufi\/ru fi.js"
+✓ URL rechazada: "\/rufi\/\nrufi.js"
+✓ URL rechazada: "\/rufi\/\u0000rufi.js"
+✓ URL rechazada: "\/rufi\/%zzrufi.js"
+✓ URL rechazada: ""
+✓ espacios alrededor: se recortan
+✓ URL aceptada: /rufi/rufi.js
+✓ URL aceptada: /rufi/rufi.js?v=1.0.0&x=y
+✓ URL aceptada: https://referencehome.es/rufi/rufi.js
+✓ URL aceptada: https://referencehome.es:443/rufi/rufi.js
+✓ URL aceptada: https://cdn.referencehome.es/rufi/rufi.js
+✓ URL aceptada: http://localhost:8080/rufi/rufi.js
+✓ atributos escapados («&» → «&amp;»)
+✓ buildTag escapa comillas y < >
+
+# Respuestas que no son HTML
+✓ JSON por tipo: intacto
+✓ XML: intacto
+✓ XHTML: intacto
+✓ format=json: intacto
+✓ format=raw: intacto
+✓ format=feed: intacto
+✓ AJAX (X-Requested-With): intacto
+✓ com_ajax: intacto
+✓ tmpl=component: intacto
+✓ tmpl=raw: intacto
+✓ documento raw: intacto
+✓ documento json: intacto
+✓ página de error (documento): intacto
+✓ página de error 404: intacto
+✓ página de error 500: intacto
+✓ redirección 303: intacto
+✓ cuerpo JSON con text/html: intacto
+✓ cuerpo array JSON: intacto
+✓ cuerpo vacío: intacto
+✓ text/html en mayúsculas y format=html: sí
+✓ sin tipo declarado pero con HTML: sí
+
+# Administración
+✓ cliente 'administrator': nunca inserta
+✓ cliente 'api': nunca inserta
+✓ cliente 'cli': nunca inserta
+✓ cliente 'installation': nunca inserta
+✓ cliente '': nunca inserta
+✓ cliente NULL: nunca inserta
+✓ sin cliente indicado: no inserta (por defecto, seguro)
+✓ aunque se asigne una configuración a /administrator
+
+# Estructura y manifiesto
+✓ rufi.xml es XML bien formado
+✓ raíz <extension>
+✓ type="plugin"
+✓ group="system"
+✓ method="upgrade"
+✓ <name>
+✓ <version> semántica: 0.1.0
+✓ namespace del plugin
+✓ namespace path="src"
+✓ <files> folder «services» existe
+✓ <files> folder «src» existe
+✓ <files> folder «language» existe
+✓ elemento plugin="rufi" en <files> (nombre del plugin)
+✓ <files> incluye services y src
+✓ idioma es-ES: es-ES/plg_system_rufi.ini
+✓ idioma es-ES: es-ES/plg_system_rufi.sys.ini
+✓ idioma en-GB: en-GB/plg_system_rufi.ini
+✓ idioma en-GB: en-GB/plg_system_rufi.sys.ini
+✓ campo enabled
+✓ campo loader_url
+✓ campo allowed_origins
+✓ campo url_map
+✓ campo menu_map
+✓ campo excluded_paths
+✓ campo fallback
+✓ campo note_site
+✓ URL del cargador por defecto /rufi/rufi.js
+✓ interruptor general apagado por defecto
+✓ sin configuración: no insertar (por defecto)
+✓ elemento de menú con el campo menuitem
+
+# Idiomas
+✓ es-ES/plg_system_rufi.ini: se puede leer como INI
+✓ es-ES/plg_system_rufi.ini: formato CLAVE="valor" sin comillas dobles dentro
+✓ es-ES/plg_system_rufi.ini: UTF-8 sin BOM
+✓ es-ES/plg_system_rufi.sys.ini: se puede leer como INI
+✓ es-ES/plg_system_rufi.sys.ini: formato CLAVE="valor" sin comillas dobles dentro
+✓ es-ES/plg_system_rufi.sys.ini: UTF-8 sin BOM
+✓ en-GB/plg_system_rufi.ini: se puede leer como INI
+✓ en-GB/plg_system_rufi.ini: formato CLAVE="valor" sin comillas dobles dentro
+✓ en-GB/plg_system_rufi.ini: UTF-8 sin BOM
+✓ en-GB/plg_system_rufi.sys.ini: se puede leer como INI
+✓ en-GB/plg_system_rufi.sys.ini: formato CLAVE="valor" sin comillas dobles dentro
+✓ en-GB/plg_system_rufi.sys.ini: UTF-8 sin BOM
+✓ las mismas claves en es-ES y en-GB
+✓ clave PLG_SYSTEM_RUFI_XML_DESCRIPTION traducida
+✓ clave PLG_SYSTEM_RUFI_NOTE_SITE_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_NOTE_SITE_DESC traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_ENABLED_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_ENABLED_DESC traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_LOADER_URL_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_LOADER_URL_DESC traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_ALLOWED_ORIGINS_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_ALLOWED_ORIGINS_DESC traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_FALLBACK_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_FALLBACK_DESC traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_FALLBACK_NONE traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_FALLBACK_ROUTES traducida
+✓ clave PLG_SYSTEM_RUFI_FIELDSET_MAPPING traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_URL_MAP_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_URL_MAP_DESC traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_MATCH_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_MATCH_EXACT traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_MATCH_PREFIX traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_PATH_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_CONFIG_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_MENU_MAP_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_MENU_MAP_DESC traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_ITEMID_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_EXCLUDED_LABEL traducida
+✓ clave PLG_SYSTEM_RUFI_FIELD_EXCLUDED_DESC traducida
+✓ PLG_SYSTEM_RUFI en .sys.ini
+✓ PLG_SYSTEM_RUFI_XML_DESCRIPTION en .sys.ini
+
+# PHP
+✓ php -l integrations/joomla/plg_system_rufi/services/provider.php
+✓ php -l integrations/joomla/plg_system_rufi/src/Extension/Rufi.php
+✓ php -l integrations/joomla/plg_system_rufi/src/Helper/Injector.php
+✓ php -l tests/php/harness.test.php
+✓ php -l tests/php/harness/joomla-stubs.php
+✓ php -l tests/php/injector.test.php
+✓ php -l tests/php/run.php
+✓ php -l tests/php/static.test.php
+✓ protección _JEXEC en services/provider.php
+✓ protección _JEXEC en src/Extension/Rufi.php
+✓ protección _JEXEC en src/Helper/Injector.php
+✓ Helper\Injector no depende de Joomla
+✓ Extension\Rufi en el namespace del manifiesto
+✓ se suscribe a onAfterRender
+✓ sin API heredada (JFactory, JPlugin, $app->input, Factory en la clase)
+
+# Simulación del evento (clases falsas de Joomla, no es un Joomla real)
+✓ provider.php registra Extension\Rufi como PluginInterface
+✓ getSubscribedEvents()
+✓ sitio, URL asignada: inserta una línea ante el </body> real
+✓ setBody() una vez
+✓ segunda vez: no toca nada (idempotente)
+✓ elemento de menú (subformulario guardado como objeto)
+✓ administración: ni siquiera lee la respuesta
+✓ API (cliente api): intacto
+✓ format=json: intacto
+✓ AJAX: intacto
+✓ tmpl=component: intacto
+✓ documento JSON: intacto
+✓ página de error (tipo): intacto
+✓ cabecera Status 404: intacto
+✓ Content-Type JSON: intacto
+✓ ruta excluida: intacto
+✓ sin asignación: intacto
+✓ interruptor general en No: intacto
+✓ recién instalado (sin ajustes guardados): no inserta
+✓ una excepción interna no rompe la página
+✓ usa el nonce de CSP de la aplicación si existe
+✓ Joomla en subcarpeta: /web/administrator excluida aunque el cliente dijera site
+
+256/256 superadas
