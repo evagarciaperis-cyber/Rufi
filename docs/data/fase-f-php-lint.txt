@@ -1,0 +1,8 @@
+No syntax errors detected in integrations/joomla/plg_system_rufi/services/provider.php
+No syntax errors detected in integrations/joomla/plg_system_rufi/src/Extension/Rufi.php
+No syntax errors detected in integrations/joomla/plg_system_rufi/src/Helper/Injector.php
+No syntax errors detected in tests/php/harness.test.php
+No syntax errors detected in tests/php/harness/joomla-stubs.php
+No syntax errors detected in tests/php/injector.test.php
+No syntax errors detected in tests/php/run.php
+No syntax errors detected in tests/php/static.test.php
