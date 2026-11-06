@@ -18,6 +18,14 @@
   "chat-rol-system.json": "/messages/0/role: valor no permitido",
   "chat-derivacion-a-otra-web.json": "/handoff/href: formato no válido",
   "error-con-detalle-interno.json": "/error/stack: propiedad desconocida",
-  "ruta-con-datos-extra.json": "/pages: propiedad desconocida",
-  "preview-claims-sin-caducidad.json": "/exp: obligatorio"
+  "preview-claims-sin-caducidad.json": "/exp: obligatorio",
+  "estado-con-paginas.json": "/pages: propiedad desconocida",
+  "estado-disabled-no-existe.json": "/status: valor no permitido",
+  "estado-sin-caducidad.json": "/expiresAt: obligatorio",
+  "estado-caducidad-larga.json": "/expiresAt: como mucho 30 días",
+  "ruta-con-lista.json": "/routes: propiedad desconocida",
+  "ruta-sin-revision.json": "/revision: obligatorio",
+  "source-http.json": "/source/static: formato no válido",
+  "source-otra-cubeta.json": "/source/static: formato no válido",
+  "source-recheck-corto.json": "/source/recheckSeconds: mínimo 60"
 }

@@ -7,7 +7,7 @@
  *
  * Uso: node tools/validate-config.mjs configs/aval-ico-valencia.json [más archivos…]
  *      [--html pagina.html]   comprueba además que los selectores existen en esa página
- *      [--api]                los archivos son sobres de la API (respaldo estático en modo API)
+ *      [--api]                los archivos son archivos públicos de Storage (status.json, pages/*.json, routes/*.json)
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -170,14 +170,8 @@ export const MAX_TTL_DAYS = 30;
 export function validateEnvelope(env, { now, html } = {}) {
   const errors = validateApi(env, 'pageEnvelope');
   const warnings = [];
-  let expired = false;
-  if (typeOf(env) !== 'object') return { errors, warnings, expired };
-  const iss = Date.parse(env.issuedAt), exp = Date.parse(env.expiresAt);
-  if (!Number.isNaN(iss) && !Number.isNaN(exp)) {
-    if (exp <= iss) errors.push('/expiresAt: debe ser posterior a issuedAt');
-    else if (exp - iss > MAX_TTL_DAYS * 864e5) errors.push(`/expiresAt: como mucho ${MAX_TTL_DAYS} días después de issuedAt`);
-    if (now != null && exp <= +new Date(now)) expired = true;
-  }
+  if (typeOf(env) !== 'object') return { errors, warnings, expired: false };
+  const expired = checkDates(env, now, errors);
   if (env.status === 'active') {
     if (!env.config) errors.push('/config: obligatorio con status active');
     if (!env.engine) errors.push('/engine: obligatorio con status active');
@@ -196,6 +190,32 @@ export function validateEnvelope(env, { now, html } = {}) {
   return { errors, warnings, expired };
 }
 
+/** Fechas de un archivo público con caducidad (status, page, route). */
+function checkDates(env, now, errors) {
+  let expired = false;
+  const iss = Date.parse(env.issuedAt), exp = Date.parse(env.expiresAt);
+  if (!Number.isNaN(iss) && !Number.isNaN(exp)) {
+    if (exp <= iss) errors.push('/expiresAt: debe ser posterior a issuedAt');
+    else if (exp - iss > MAX_TTL_DAYS * 864e5) errors.push(`/expiresAt: como mucho ${MAX_TTL_DAYS} días después de issuedAt`);
+    if (now != null && exp <= +new Date(now)) expired = true;
+  }
+  return expired;
+}
+
+/** v1/status.json · estado global. Devuelve { errors, warnings, expired }. */
+export function validateStatus(st, { now } = {}) {
+  const errors = validateApi(st, 'statusFile');
+  const expired = typeOf(st) === 'object' ? checkDates(st, now, errors) : false;
+  return { errors, warnings: [], expired };
+}
+
+/** v1/routes/<hash>.json · ruta → página. */
+export function validateRoute(rt, { now } = {}) {
+  const errors = validateApi(rt, 'routeFile');
+  const expired = typeOf(rt) === 'object' ? checkDates(rt, now, errors) : false;
+  return { errors, warnings: [], expired };
+}
+
 function main() {
   const args = process.argv.slice(2);
   const htmlIdx = args.indexOf('--html');
@@ -206,7 +226,9 @@ function main() {
   let bad = 0;
   for (const f of files) {
     let cfg; try { cfg = JSON.parse(readFileSync(f, 'utf8')); } catch (e) { console.log(`✗ ${f}: JSON no válido (${e.message})`); bad++; continue; }
-    const { errors, warnings, expired } = api ? validateEnvelope(cfg, { html, now: new Date() }) : validateConfig(cfg, { html });
+    const kind = !api ? 'config' : cfg.scope === 'site' ? 'status' : 'status' in cfg ? 'page' : 'route';
+    const now = new Date();
+    const { errors, warnings, expired } = kind === 'config' ? validateConfig(cfg, { html }) : kind === 'status' ? validateStatus(cfg, { now }) : kind === 'page' ? validateEnvelope(cfg, { html, now }) : validateRoute(cfg, { now });
     if (expired) warnings.push('caducado: el cargador no lo usaría (expiresAt ya ha pasado)');
     console.log(`${errors.length ? '✗' : '✓'} ${f}${errors.length ? '' : ' — válida'}`);
     for (const e of errors) console.log(`    ✗ ${e}`);

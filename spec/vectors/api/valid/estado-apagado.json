@@ -1,0 +1,11 @@
+{
+  "def": "statusFile",
+  "value": {
+    "api": "rufi-crm/1",
+    "scope": "site",
+    "status": "killed",
+    "revision": 6,
+    "issuedAt": "2026-11-06T10:00:00Z",
+    "expiresAt": "2026-11-13T10:00:00Z"
+  }
+}

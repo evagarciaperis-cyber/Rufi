@@ -1,0 +1,8 @@
+{
+  "def": "localGlobal",
+  "value": {
+    "source": {
+      "static": "https://abcdefghijklmnopqrst.supabase.co/storage/v1/object/public/informes/v1"
+    }
+  }
+}

@@ -4,8 +4,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { validateSchema, validateConfig, validateApi, validateEnvelope, features11 } from '../tools/validate-config.mjs';
-import { decide } from '../spec/reference/decide.mjs';
+import { validateSchema, validateConfig, validateApi, validateEnvelope, validateStatus, validateRoute, features11 } from '../tools/validate-config.mjs';
+import { decide, decideLive } from '../spec/reference/decide.mjs';
+import { guardPublicObject, planPublish, applyPlan, pagePath, routePath, STATUS_PATH } from '../spec/reference/publish.mjs';
+import { normalizePath, routeObjectName } from '../spec/reference/routes.mjs';
 import { pickLang, resolveTexts, LANGS } from '../spec/reference/i18n.mjs';
 
 const J = (p) => JSON.parse(readFileSync(p, 'utf8'));
@@ -73,10 +75,12 @@ test('traducciones incompletas: aviso con lo que falta', () => {
   assert.ok(validateConfig(c).warnings.some((w) => w.startsWith('/i18n/it') && w.includes('llega-info')));
 });
 
-test('API: sobres y mensajes válidos', () => {
+const byDef = (def, v) => (def === 'pageEnvelope' ? validateEnvelope(v).errors : def === 'statusFile' ? validateStatus(v).errors : def === 'routeFile' ? validateRoute(v).errors : validateApi(v, def));
+
+test('API: archivos públicos y mensajes válidos', () => {
   for (const n of dir(`${V}/api/valid`)) {
     const { def, value } = J(`${V}/api/valid/${n}`);
-    const errs = def === 'pageEnvelope' ? validateEnvelope(value).errors : validateApi(value, def);
+    const errs = byDef(def, value);
     assert.deepEqual(errs, [], n);
   }
 });
@@ -86,7 +90,7 @@ test('API: casos inválidos, cada uno con el error esperado', () => {
   assert.deepEqual(Object.keys(expect).sort(), dir(`${V}/api/invalid`));
   for (const [n, want] of Object.entries(expect)) {
     const { def, value } = J(`${V}/api/invalid/${n}`);
-    const errs = def === 'pageEnvelope' ? validateEnvelope(value).errors : validateApi(value, def);
+    const errs = byDef(def, value);
     assert.ok(errs.some((e) => e.includes(want)), `${n}: se esperaba «${want}», hubo: ${errs.join(' | ') || '(ninguno)'}`);
   }
 });
@@ -97,14 +101,117 @@ test('API: caducidad', () => {
   assert.equal(validateEnvelope(value, { now: '2026-11-13T10:00:00Z' }).expired, true);
 });
 
-test('decisión del cargador en modo API (vectores)', () => {
-  const { envelopes, cases } = J(`${V}/decision.json`);
+const fns = {
+  validPage: (e, now) => { const r = validateEnvelope(e, { now }); return r.errors.length === 0 && !r.expired; },
+  validStatus: (e, now) => { const r = validateStatus(e, { now }); return r.errors.length === 0 && !r.expired; },
+};
+const resolveInput = (input, envelopes) => {
   const ref = (x) => (typeof x === 'string' ? envelopes[x] : x);
-  const isValid = (env, now) => { const r = validateEnvelope(env, { now }); return r.errors.length === 0 && !r.expired; };
+  const res = (x) => (x && x.envelope ? { ...x, envelope: ref(x.envelope) } : x);
+  return { ...input, remote: Object.fromEntries(Object.entries(input.remote || {}).map(([k, v]) => [k, res(v)])), cache: { status: ref(input.cache.status), page: ref(input.cache.page) } };
+};
+
+test('decisión del cargador (vectores): visitantes nuevos y que vuelven', () => {
+  const { envelopes, cases } = J(`${V}/decision.json`);
+  assert.ok(cases.some((c) => c.visitor === 'nuevo') && cases.some((c) => c.visitor === 'vuelve'));
   for (const c of cases) {
-    const i = { ...c.input, cache: ref(c.input.cache), fallback: ref(c.input.fallback), api: c.input.api && c.input.api.envelope ? { ...c.input.api, envelope: ref(c.input.api.envelope) } : c.input.api };
-    const got = decide(i, { isValid });
+    const got = decide(resolveInput(c.input, envelopes), fns);
     for (const [k, v] of Object.entries(c.expect)) assert.deepEqual(got[k], v, `${c.name}: ${k} = ${JSON.stringify(got[k])}, se esperaba ${JSON.stringify(v)}`);
+  }
+});
+
+test('páginas que siguen abiertas (vectores)', () => {
+  const { envelopes, cases } = J(`${V}/live.json`);
+  for (const c of cases) {
+    const got = decideLive(resolveInput(c.input, envelopes), c.current, fns);
+    for (const [k, v] of Object.entries(c.expect)) assert.deepEqual(got[k], v, `${c.name}: ${k} = ${JSON.stringify(got[k])}`);
+  }
+});
+
+test('las marcas de apagado siempre ganan a configuraciones antiguas (exhaustivo)', () => {
+  // Para cualquier combinación de estados/páginas remotos y en caché, si la marca de apagado vista
+  // tiene la revisión más alta, el resultado nunca es «cargar».
+  const { envelopes: E } = J(`${V}/decision.json`);
+  const G = J(`${V}/decision.json`).cases[6].input.localGlobal;
+  const statuses = [null, E.st5, E.st7, E.stKilled6, E.stKilled8];
+  const pages = [null, E.pg9, E.pg10, E.pg12, E.pgDisabled11];
+  const res = (e) => (e ? { kind: 'ok', envelope: e } : { kind: 'timeout' });
+  let n = 0;
+  for (const rs of statuses) for (const cs of statuses) for (const rp of pages) for (const cp of pages) {
+    const d = decide({ query: {}, localGlobal: G, slug: 'demo', now: '2026-11-06T12:00:00Z', remote: { status: res(rs), page: res(rp) }, cache: { status: cs, page: cp } }, fns);
+    const bestS = [rs, cs].filter(Boolean).sort((a, b) => b.revision - a.revision)[0];
+    const bestP = [rp, cp].filter(Boolean).sort((a, b) => b.revision - a.revision)[0];
+    if ((bestS && bestS.status === 'killed') || (bestP && bestP.status !== 'active') || !bestS) assert.notEqual(d.load, true, JSON.stringify({ rs: rs && rs.revision, cs: cs && cs.revision, rp: rp && rp.revision, cp: cp && cp.revision, d }));
+    n++;
+  }
+  assert.equal(n, 625);
+});
+
+const validators = { page: (o, x) => validateEnvelope(o, x), status: (o, x) => validateStatus(o, x), route: (o, x) => validateRoute(o, x) };
+
+test('cubeta pública: solo rutas permitidas (borradores, copias, IA y datos del CRM rechazados)', () => {
+  const { valid, invalid } = J(`${V}/public-paths.json`);
+  const { envelopes: E } = J(`${V}/decision.json`);
+  const bodyFor = (p) => (p === STATUS_PATH ? E.st5 : p.startsWith('v1/pages/') ? { ...E.pg10, slug: p.slice(9, -5), config: { ...E.pg10.config, page: p.slice(9, -5) } } : { api: 'rufi-crm/1', slug: 'demo', revision: 1, issuedAt: E.st5.issuedAt, expiresAt: E.st5.expiresAt });
+  for (const p of valid) assert.ok(guardPublicObject(p, bodyFor(p), validators, { now: '2026-11-06T12:00:00Z' }).ok, p);
+  for (const p of invalid) assert.equal(guardPublicObject(p, E.st5, validators).ok, false, p);
+});
+
+test('cubeta pública: el contenido también se controla (no solo la ruta)', () => {
+  const { envelopes: E } = J(`${V}/decision.json`);
+  const now = '2026-11-06T12:00:00Z';
+  assert.equal(guardPublicObject(pagePath('demo'), E.pgFuga, validators, { now }).ok, false, 'campo con datos del CRM');
+  assert.equal(guardPublicObject(pagePath('demo'), E.pgPreview, validators, { now }).ok, false, 'vista previa');
+  assert.equal(guardPublicObject(pagePath('otra'), E.pg10, validators, { now }).ok, false, 'slug distinto del archivo');
+  assert.equal(guardPublicObject(pagePath('demo'), E.pgCaducada, validators, { now }).ok, false, 'caducado');
+  assert.equal(guardPublicObject(STATUS_PATH, E.pg10, validators, { now }).ok, false, 'una página en status.json');
+  assert.equal(guardPublicObject(pagePath('demo'), { ...E.pg10, config: { ...E.pg10.config, ai: { enabled: false, instructions: 'secreto' } } }, validators, { now }).ok, false, 'instrucciones de IA');
+  assert.equal(guardPublicObject(pagePath('demo'), 'x'.repeat(70000), validators, { now }).ok, false, 'no JSON / tamaño');
+  assert.ok(guardPublicObject(pagePath('demo'), E.pg10, validators, { now }).ok);
+});
+
+test('publicación a medias: cualquier corte deja un estado seguro', () => {
+  const { envelopes: E } = J(`${V}/decision.json`);
+  const G = J(`${V}/decision.json`).cases[6].input.localGlobal;
+  const now = '2026-11-06T12:00:00Z';
+  const H = 'b'.repeat(64), H2 = 'c'.repeat(64);
+  const route = (slug, rev) => ({ api: 'rufi-crm/1', slug, revision: rev, issuedAt: E.st5.issuedAt, expiresAt: E.st5.expiresAt });
+  const look = (store, returning) => decide({ query: {}, localGlobal: G, slug: 'demo', now, remote: { status: store.has(STATUS_PATH) ? { kind: 'ok', envelope: store.get(STATUS_PATH) } : { kind: 'not-found' }, page: store.has(pagePath('demo')) ? { kind: 'ok', envelope: store.get(pagePath('demo')) } : { kind: 'not-found' } }, cache: returning || { status: null, page: null } }, fns);
+  const base = () => new Map([[STATUS_PATH, E.st5], [pagePath('demo'), E.pg10], [routePath(H2), route('demo', 3)]]);
+  const ops = {
+    'apagar sitio': { type: 'kill-site', status: E.stKilled6 },
+    'apagar página': { type: 'disable-page', envelope: E.pgDisabled11, routesRemove: [H2] },
+    'publicar página con ruta nueva': { type: 'publish-page', envelope: E.pg12, routesAdd: [{ hash: H, body: route('demo', 12) }], routesRemove: [H2] },
+  };
+  for (const [name, op] of Object.entries(ops)) {
+    const steps = planPublish(op);
+    for (let k = -1; k < steps.length; k++) {
+      const store = base();
+      const res = applyPlan(store, steps, validators, { failAt: k, now });
+      const d = look(store);
+      if (k === -1) assert.ok(res.complete, name);
+      else assert.ok(!res.complete && res.pending.length > 0, `${name}: el diario marca la operación incompleta`);
+      // Invariantes: nunca se muestra una configuración que no sea la anterior completa o la nueva completa.
+      if (d.load) assert.ok([10, 12].includes(d.revision), `${name} (corte en ${k}): revisión mostrada ${d.revision}`);
+      if (name !== 'publicar página con ruta nueva' && res.complete) assert.equal(d.load, false, `${name}: completo → apagado`);
+      if (name === 'apagar página' && k > 0) assert.equal(d.load, false, 'en cuanto se escribe la página apagada, no se muestra aunque queden rutas');
+    }
+  }
+  // Apagar el sitio es UNA escritura: no hay estado intermedio posible.
+  assert.equal(planPublish(ops['apagar sitio']).length, 1);
+  // Orden de «publicar»: rutas nuevas antes de la página, borrado de rutas viejas al final.
+  assert.deepEqual(planPublish(ops['publicar página con ruta nueva']).map((s) => s.op + ' ' + s.path.split('/')[1]), ['put routes', 'put pages', 'delete routes']);
+  // Una subida rechazada por el control para la operación (no se escribe nada más).
+  const store = base();
+  const r = applyPlan(store, [{ op: 'put', path: 'v1/drafts/demo.json', body: E.pg12 }, { op: 'put', path: pagePath('demo'), body: E.pg12 }], validators, { now });
+  assert.ok(r.rejected && !r.complete); assert.equal(store.get(pagePath('demo')).revision, 10);
+});
+
+test('rutas de Joomla: normalización y nombre con hash (vectores)', async () => {
+  const sha = async (s) => createHash('sha256').update(s).digest('hex');
+  for (const c of J(`${V}/routes.json`).cases) {
+    assert.equal(normalizePath(c.input), c.normalized, JSON.stringify(c.input).slice(0, 60));
+    assert.equal(await routeObjectName(c.input, sha), c.sha256 ? `${c.sha256}.json` : null);
   }
 });
 
@@ -140,4 +247,14 @@ test('huellas del contrato 1.1 al día (spec/contract/1.1.sha256, la copia fijad
   const actual = ['spec/rufi-config.schema.json', 'spec/rufi-crm-api.schema.json', ...walk('spec/reference'), ...walk('spec/vectors')].sort();
   assert.deepEqual(listed, actual, 'archivos del contrato');
   for (const l of lines) { const [h, f] = l.split(/\s+/); assert.equal(createHash('sha256').update(readFileSync(f)).digest('hex'), h, `${f} cambió: regenera spec/contract/1.1.sha256 y avisa al CRM`); }
+});
+
+test('herramienta de medición de propagación (servidor simulado con caché que tarda 7 s)', async () => {
+  const { measure } = await import('../tools/measure-propagation.mjs');
+  let t = 0; const changeVisibleAt = 7000;
+  const fetchImpl = async () => ({ ok: true, status: 200, headers: new Map([['cf-cache-status', t < changeVisibleAt ? 'HIT' : 'MISS']]), json: async () => ({ revision: t < changeVisibleAt ? 127 : 128 }) });
+  const r = await measure({ url: 'https://x', revision: 128, since: 0, every: 2000, timeout: 60000, fetchImpl, now: () => t, sleep: async (ms) => { t += ms; } });
+  assert.ok(r.ok); assert.equal(r.seconds, 8); assert.equal(r.attempts, 5);
+  const never = await measure({ url: 'https://x', revision: 999, since: 0, every: 2000, timeout: 10000, fetchImpl, now: () => t, sleep: async (ms) => { t += ms; } });
+  assert.equal(never.ok, false);
 });

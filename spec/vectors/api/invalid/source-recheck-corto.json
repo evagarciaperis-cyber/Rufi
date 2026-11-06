@@ -1,0 +1,9 @@
+{
+  "def": "localGlobal",
+  "value": {
+    "source": {
+      "static": "https://abcdefghijklmnopqrst.supabase.co/storage/v1/object/public/rufi-public/v1",
+      "recheckSeconds": 5
+    }
+  }
+}

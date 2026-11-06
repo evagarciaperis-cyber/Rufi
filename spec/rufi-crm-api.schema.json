@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://referencehome.es/rufi/schema/1.1/rufi-crm-api.schema.json",
-  "title": "API pública Rufi ↔ CRM (rufi-crm/1)",
-  "description": "Formas exactas de las peticiones y respuestas de la API pública del CRM para Rufi. Ver spec/rufi-crm-api.md. Cualquier campo no listado está prohibido (additionalProperties: false): así la API no puede filtrar datos del CRM por descuido.",
+  "title": "Comunicación Rufi ↔ CRM (rufi-crm/1): archivos públicos en Supabase Storage + API dinámica (vista previa, chat)",
+  "description": "Formas exactas de los archivos públicos que el CRM publica en Supabase Storage (status.json, pages/<slug>.json, routes/<sha256>.json) y de los mensajes de la API dinámica de Vercel (vista previa y chat). Todo con additionalProperties: false: ningún campo no listado puede salir. Ver spec/rufi-crm-api.md.",
   "x-api-version": "rufi-crm/1",
   "$defs": {
     "slug": {
@@ -72,22 +72,6 @@
         "config": {
           "type": "object",
           "description": "Configuración (spec/rufi-config.schema.json). Solo con status active"
-        }
-      }
-    },
-    "routeResponse": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "api",
-        "slug"
-      ],
-      "properties": {
-        "api": {
-          "const": "rufi-crm/1"
-        },
-        "slug": {
-          "$ref": "#/$defs/slug"
         }
       }
     },
@@ -307,33 +291,115 @@
         }
       }
     },
-    "fallbackFile": {
-      "description": "Respaldo estático en /rufi/configs/<slug>.json en modo API: el mismo sobre que devuelve la API (pageEnvelope), exportado desde el CRM",
-      "$ref": "#/$defs/pageEnvelope"
-    },
     "localGlobal": {
       "type": "object",
-      "description": "Ampliación 1.1 de /rufi/configs/_global.json (en Arsys, fuera del CRM)",
+      "description": "Ampliación 1.1 de /rufi/configs/_global.json (Arsys). Sin «source» → comportamiento 1.0. El cargador 1.0.0 publicado ignora «source».",
       "properties": {
         "source": {
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "api"
+            "static"
           ],
           "properties": {
+            "static": {
+              "type": "string",
+              "pattern": "^https://[a-z0-9-]+\\.supabase\\.co/storage/v1/object/public/rufi-public/v1$",
+              "description": "Cubeta pública de Supabase (solo lectura)"
+            },
             "api": {
               "type": "string",
-              "pattern": "^https://[a-z0-9.-]+(:[0-9]+)?/[A-Za-z0-9/_-]*$"
+              "pattern": "^https://[a-z0-9.-]+/api/public/rufi/v1$",
+              "description": "API dinámica del CRM: solo vista previa y chat"
             },
             "timeoutMs": {
               "type": "integer",
               "minimum": 500,
               "maximum": 5000
+            },
+            "recheckSeconds": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 3600,
+              "description": "Páginas abiertas (motor ≥ 1.1.0): cada cuánto vuelve a mirar status.json y su página mientras la pestaña está visible"
             }
           }
         }
       }
+    },
+    "statusFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "api",
+        "scope",
+        "status",
+        "revision",
+        "issuedAt",
+        "expiresAt"
+      ],
+      "description": "v1/status.json · estado GLOBAL del sitio. Un único archivo: apagar todo el sitio es UNA escritura atómica.",
+      "properties": {
+        "api": {
+          "const": "rufi-crm/1"
+        },
+        "scope": {
+          "const": "site"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "killed"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "issuedAt": {
+          "$ref": "#/$defs/iso"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/iso"
+        }
+      }
+    },
+    "routeFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "api",
+        "slug",
+        "revision",
+        "issuedAt",
+        "expiresAt"
+      ],
+      "description": "v1/routes/<sha256 de la ruta normalizada>.json · solo Joomla con fragmento global. El nombre es un hash: no se pueden listar ni adivinar rutas.",
+      "properties": {
+        "api": {
+          "const": "rufi-crm/1"
+        },
+        "slug": {
+          "$ref": "#/$defs/slug"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "issuedAt": {
+          "$ref": "#/$defs/iso"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/iso"
+        }
+      }
+    },
+    "publicObjectPath": {
+      "type": "string",
+      "pattern": "^v1/(status\\.json|pages/[a-z0-9-]{1,64}\\.json|routes/[0-9a-f]{64}\\.json)$",
+      "description": "ÚNICAS rutas que el CRM puede escribir en la cubeta pública rufi-public. Cualquier otra se rechaza antes de subir."
     }
   }
 }

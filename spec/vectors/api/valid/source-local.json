@@ -1,0 +1,13 @@
+{
+  "def": "localGlobal",
+  "value": {
+    "enabled": true,
+    "version": "1.1.0",
+    "source": {
+      "static": "https://abcdefghijklmnopqrst.supabase.co/storage/v1/object/public/rufi-public/v1",
+      "api": "https://crm.referencehome.es/api/public/rufi/v1",
+      "timeoutMs": 2500,
+      "recheckSeconds": 300
+    }
+  }
+}

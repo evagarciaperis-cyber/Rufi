@@ -1,6 +1,8 @@
 # 19 · Respaldo automático y apagado de emergencia (propuesta para aprobar antes de la fase B)
 
-Fecha: 6-nov-2026. Estado: **propuesta, sin implementar**.
+Fecha: 6-nov-2026. **APROBADA la opción A** (Supabase Storage); B queda como mejora futura; aprobados el apagado ordinario y el urgente con Arsys como último recurso. La especificación vigente, con los tiempos corregidos (todos «objetivo, por medir») y los fallos a medias, está en `spec/rufi-crm-api.md`. Este documento se conserva como registro de la decisión.
+
+Estado original: **propuesta, sin implementar**.
 - No se ha creado ninguna conexión entre Vercel y Arsys.
 - No se ha tocado el CRM, no se ha ejecutado SQL y no se ha desplegado nada.
 - Si se aprueba, se ajustan la especificación y los casos de la fase A (`spec/rufi-crm-api.md`,

@@ -6,231 +6,273 @@ TAP version 13
 # Subtest: todas las configuraciones de página son válidas
 ok 1 - todas las configuraciones de página son válidas
   ---
-  duration_ms: 2.746701
+  duration_ms: 2.780051
   type: 'test'
   ...
 # Subtest: la configuración de pruebas solo difiere en lo previsto
 ok 2 - la configuración de pruebas solo difiere en lo previsto
   ---
-  duration_ms: 0.448426
+  duration_ms: 0.507693
   type: 'test'
   ...
 # Subtest: _global.json y _routes.json apuntan a cosas que existen
 ok 3 - _global.json y _routes.json apuntan a cosas que existen
   ---
-  duration_ms: 0.185606
+  duration_ms: 0.191589
   type: 'test'
   ...
 # Subtest: el validador detecta errores típicos
 ok 4 - el validador detecta errores típicos
   ---
-  duration_ms: 2.432245
+  duration_ms: 3.164669
   type: 'test'
   ...
 # Subtest: el esquema 1.0 congelado no ha cambiado (huella)
 ok 5 - el esquema 1.0 congelado no ha cambiado (huella)
   ---
-  duration_ms: 1.75514
+  duration_ms: 1.140159
   type: 'test'
   ...
 # Subtest: 1.1 es una ampliación de 1.0: no falta ninguna propiedad ni definición
 ok 6 - 1.1 es una ampliación de 1.0: no falta ninguna propiedad ni definición
   ---
-  duration_ms: 2.287785
+  duration_ms: 0.820542
   type: 'test'
   ...
 # Subtest: compatibilidad: toda configuración 1.0 del repositorio sigue siendo válida en 1.1
 ok 7 - compatibilidad: toda configuración 1.0 del repositorio sigue siendo válida en 1.1
   ---
-  duration_ms: 3.211632
+  duration_ms: 1.981413
   type: 'test'
   ...
 # Subtest: configuraciones válidas (vectores)
 ok 8 - configuraciones válidas (vectores)
   ---
-  duration_ms: 3.076457
+  duration_ms: 1.901773
   type: 'test'
   ...
 # Subtest: configuraciones inválidas: cada una con el error esperado
 ok 9 - configuraciones inválidas: cada una con el error esperado
   ---
-  duration_ms: 2.947614
+  duration_ms: 1.922082
   type: 'test'
   ...
 # Subtest: enlaces: el esquema 1.0 aceptaba javascript:, el 1.1 no (endurecimiento documentado)
 ok 10 - enlaces: el esquema 1.0 aceptaba javascript:, el 1.1 no (endurecimiento documentado)
   ---
-  duration_ms: 0.604964
+  duration_ms: 0.264726
   type: 'test'
   ...
 # Subtest: configuración 1.1 sin versión de motor: válida con aviso; con motor 1.0.0: error
 ok 11 - configuración 1.1 sin versión de motor: válida con aviso; con motor 1.0.0: error
   ---
-  duration_ms: 0.915631
+  duration_ms: 0.53904
   type: 'test'
   ...
 # Subtest: traducciones incompletas: aviso con lo que falta
 ok 12 - traducciones incompletas: aviso con lo que falta
   ---
-  duration_ms: 0.596874
+  duration_ms: 0.274354
   type: 'test'
   ...
-# Subtest: API: sobres y mensajes válidos
-ok 13 - API: sobres y mensajes válidos
+# Subtest: API: archivos públicos y mensajes válidos
+ok 13 - API: archivos públicos y mensajes válidos
   ---
-  duration_ms: 1.907475
+  duration_ms: 2.017419
   type: 'test'
   ...
 # Subtest: API: casos inválidos, cada uno con el error esperado
 ok 14 - API: casos inválidos, cada uno con el error esperado
   ---
-  duration_ms: 3.831027
+  duration_ms: 3.984913
   type: 'test'
   ...
 # Subtest: API: caducidad
 ok 15 - API: caducidad
   ---
-  duration_ms: 0.543582
+  duration_ms: 0.402098
   type: 'test'
   ...
-# Subtest: decisión del cargador en modo API (vectores)
-ok 16 - decisión del cargador en modo API (vectores)
+# Subtest: decisión del cargador (vectores): visitantes nuevos y que vuelven
+ok 16 - decisión del cargador (vectores): visitantes nuevos y que vuelven
   ---
-  duration_ms: 3.837183
+  duration_ms: 2.549079
+  type: 'test'
+  ...
+# Subtest: páginas que siguen abiertas (vectores)
+ok 17 - páginas que siguen abiertas (vectores)
+  ---
+  duration_ms: 0.841877
+  type: 'test'
+  ...
+# Subtest: las marcas de apagado siempre ganan a configuraciones antiguas (exhaustivo)
+ok 18 - las marcas de apagado siempre ganan a configuraciones antiguas (exhaustivo)
+  ---
+  duration_ms: 22.817869
+  type: 'test'
+  ...
+# Subtest: cubeta pública: solo rutas permitidas (borradores, copias, IA y datos del CRM rechazados)
+ok 19 - cubeta pública: solo rutas permitidas (borradores, copias, IA y datos del CRM rechazados)
+  ---
+  duration_ms: 0.801865
+  type: 'test'
+  ...
+# Subtest: cubeta pública: el contenido también se controla (no solo la ruta)
+ok 20 - cubeta pública: el contenido también se controla (no solo la ruta)
+  ---
+  duration_ms: 0.782211
+  type: 'test'
+  ...
+# Subtest: publicación a medias: cualquier corte deja un estado seguro
+ok 21 - publicación a medias: cualquier corte deja un estado seguro
+  ---
+  duration_ms: 1.742592
+  type: 'test'
+  ...
+# Subtest: rutas de Joomla: normalización y nombre con hash (vectores)
+ok 22 - rutas de Joomla: normalización y nombre con hash (vectores)
+  ---
+  duration_ms: 0.516909
   type: 'test'
   ...
 # Subtest: idioma: elección (vectores)
-ok 17 - idioma: elección (vectores)
+ok 23 - idioma: elección (vectores)
   ---
-  duration_ms: 0.696936
+  duration_ms: 0.457364
   type: 'test'
   ...
 # Subtest: idioma: textos resueltos para los 5 idiomas, válidos y sin i18n
-ok 18 - idioma: textos resueltos para los 5 idiomas, válidos y sin i18n
+ok 24 - idioma: textos resueltos para los 5 idiomas, válidos y sin i18n
   ---
-  duration_ms: 1.388587
+  duration_ms: 0.701577
   type: 'test'
   ...
 # Subtest: huellas del contrato 1.1 al día (spec/contract/1.1.sha256, la copia fijada del CRM)
-ok 19 - huellas del contrato 1.1 al día (spec/contract/1.1.sha256, la copia fijada del CRM)
+ok 25 - huellas del contrato 1.1 al día (spec/contract/1.1.sha256, la copia fijada del CRM)
   ---
-  duration_ms: 1.986659
+  duration_ms: 1.558769
+  type: 'test'
+  ...
+# Subtest: herramienta de medición de propagación (servidor simulado con caché que tarda 7 s)
+ok 26 - herramienta de medición de propagación (servidor simulado con caché que tarda 7 s)
+  ---
+  duration_ms: 1.105806
   type: 'test'
   ...
 # Subtest: el modelo web existe y cumple el presupuesto de la especificación
-ok 20 - el modelo web existe y cumple el presupuesto de la especificación
+ok 27 - el modelo web existe y cumple el presupuesto de la especificación
   ---
-  duration_ms: 8.476724
+  duration_ms: 5.096654
   type: 'test'
   ...
 # Subtest: el modelo web conserva el esqueleto y las 4 animaciones
-ok 21 - el modelo web conserva el esqueleto y las 4 animaciones
+ok 28 - el modelo web conserva el esqueleto y las 4 animaciones
   ---
-  duration_ms: 2.4878
+  duration_ms: 1.907075
   type: 'test'
   ...
 # Subtest: la correspondencia Mixamo → contrato nombra huesos que existen en el modelo
-ok 22 - la correspondencia Mixamo → contrato nombra huesos que existen en el modelo
+ok 29 - la correspondencia Mixamo → contrato nombra huesos que existen en el modelo
   ---
-  duration_ms: 2.188258
+  duration_ms: 1.784752
   type: 'test'
   ...
 # Subtest: imageSize lee WebP con pérdida (VP8)
-ok 23 - imageSize lee WebP con pérdida (VP8)
+ok 30 - imageSize lee WebP con pérdida (VP8)
   ---
-  duration_ms: 0.267321
+  duration_ms: 0.135915
   type: 'test'
   ...
 # Subtest: el original está intacto (si está descargado de Git LFS)
-ok 24 - el original está intacto (si está descargado de Git LFS)
+ok 31 - el original está intacto (si está descargado de Git LFS)
   ---
-  duration_ms: 72.717009
+  duration_ms: 74.740425
   type: 'test'
   ...
 # Subtest: rufi-animado.web.glb: presupuesto web y animaciones idle, wave y curious
-ok 25 - rufi-animado.web.glb: presupuesto web y animaciones idle, wave y curious
+ok 32 - rufi-animado.web.glb: presupuesto web y animaciones idle, wave y curious
   ---
-  duration_ms: 2.154839
+  duration_ms: 1.70151
   type: 'test'
   ...
 # Subtest: rufi-expresivo.web.glb: párpados y sonrisa como morph targets, 5 animaciones, presupuesto web
-ok 26 - rufi-expresivo.web.glb: párpados y sonrisa como morph targets, 5 animaciones, presupuesto web
+ok 33 - rufi-expresivo.web.glb: párpados y sonrisa como morph targets, 5 animaciones, presupuesto web
   ---
-  duration_ms: 4.450606
+  duration_ms: 3.144507
   type: 'test'
   ...
 # Subtest: un GLB que cumple el contrato es válido y sin avisos
-ok 27 - un GLB que cumple el contrato es válido y sin avisos
+ok 34 - un GLB que cumple el contrato es válido y sin avisos
   ---
-  duration_ms: 1.967621
+  duration_ms: 7.444554
   type: 'test'
   ...
 # Subtest: rechaza archivos que no son GLB o con longitud incorrecta
-ok 28 - rechaza archivos que no son GLB o con longitud incorrecta
+ok 35 - rechaza archivos que no son GLB o con longitud incorrecta
   ---
-  duration_ms: 0.262873
+  duration_ms: 0.917884
   type: 'test'
   ...
 # Subtest: detecta huesos, shape keys y clips que faltan
-ok 29 - detecta huesos, shape keys y clips que faltan
+ok 36 - detecta huesos, shape keys y clips que faltan
   ---
-  duration_ms: 0.410643
+  duration_ms: 1.079611
   type: 'test'
   ...
 # Subtest: los nombres del contrato no llevan puntos (three.js los elimina)
-ok 30 - los nombres del contrato no llevan puntos (three.js los elimina)
+ok 37 - los nombres del contrato no llevan puntos (three.js los elimina)
   ---
-  duration_ms: 0.141336
+  duration_ms: 0.463477
   type: 'test'
   ...
 # Subtest: tolera nombres saneados y avisa de huesos con punto
-ok 31 - tolera nombres saneados y avisa de huesos con punto
+ok 38 - tolera nombres saneados y avisa de huesos con punto
   ---
-  duration_ms: 0.797917
+  duration_ms: 1.346986
   type: 'test'
   ...
 # Subtest: bloquea la maqueta PROXY salvo con allowProxy
-ok 32 - bloquea la maqueta PROXY salvo con allowProxy
+ok 39 - bloquea la maqueta PROXY salvo con allowProxy
   ---
-  duration_ms: 0.573028
+  duration_ms: 2.610325
   type: 'test'
   ...
 # Subtest: aplica el presupuesto de triángulos, huesos y extensiones
-ok 33 - aplica el presupuesto de triángulos, huesos y extensiones
+ok 40 - aplica el presupuesto de triángulos, huesos y extensiones
   ---
-  duration_ms: 1.6509
+  duration_ms: 1.4442
   type: 'test'
   ...
 # Subtest: rechaza shape keys con expresiones prohibidas por la marca
-ok 34 - rechaza shape keys con expresiones prohibidas por la marca
+ok 41 - rechaza shape keys con expresiones prohibidas por la marca
   ---
-  duration_ms: 0.227736
+  duration_ms: 0.790288
   type: 'test'
   ...
 # Subtest: mide texturas PNG embebidas y avisa si superan el máximo
-ok 35 - mide texturas PNG embebidas y avisa si superan el máximo
+ok 42 - mide texturas PNG embebidas y avisa si superan el máximo
   ---
-  duration_ms: 0.699169
+  duration_ms: 1.440446
   type: 'test'
   ...
 # Subtest: parseGlb devuelve JSON y BIN
-ok 36 - parseGlb devuelve JSON y BIN
+ok 43 - parseGlb devuelve JSON y BIN
   ---
-  duration_ms: 0.331206
+  duration_ms: 0.931848
   type: 'test'
   ...
 # Subtest: GLB real de la maqueta exportado por Blender (si existe)
-ok 37 - GLB real de la maqueta exportado por Blender (si existe) # SKIP build/rufi_proxy.glb no generado (npm run pipeline:proxy)
+ok 44 - GLB real de la maqueta exportado por Blender (si existe) # SKIP build/rufi_proxy.glb no generado (npm run pipeline:proxy)
   ---
-  duration_ms: 0.122198
+  duration_ms: 0.461328
   type: 'test'
   ...
-1..37
-# tests 37
+1..44
+# tests 44
 # suites 0
-# pass 36
+# pass 43
 # fail 0
 # cancelled 0
 # skipped 1
 # todo 0
-# duration_ms 182.500971
+# duration_ms 168.580841

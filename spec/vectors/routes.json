@@ -1,0 +1,79 @@
+{
+  "cases": [
+    {
+      "input": "/ICO/aval-ico-valencia.html",
+      "normalized": "/ICO/aval-ico-valencia.html",
+      "sha256": "98f4ad2c52c0ef3f0870f511a82a2494c0e2af48c0e2e2784d9d90784eca6dee"
+    },
+    {
+      "input": "/hipotecas/",
+      "normalized": "/hipotecas",
+      "sha256": "b33995db020d3a2335249aa7e4d0cd8dd240c566e5bf152b5815b2bfee7f148a"
+    },
+    {
+      "input": "/",
+      "normalized": "/",
+      "sha256": "8a5edab282632443219e051e4ade2d1d5bbc671c781051bf1437897cbdfea0f1"
+    },
+    {
+      "input": "/a//b/",
+      "normalized": "/a/b",
+      "sha256": "662b7b62a798bb2d53e67cad9778e12e48297c79eae98d3aae7197be825d768f"
+    },
+    {
+      "input": "/a?x=1#y",
+      "normalized": "/a",
+      "sha256": "6a50dc8584134c7de537c0052ff6d236bf874355e050c90523e0c5ff2a543a28"
+    },
+    {
+      "input": "/caf%C3%A9",
+      "normalized": "/café",
+      "sha256": "a434c8fb44ab6b773c8921e9a11683a9139a2572c1cd1b2b65ab4eab3e2ffa5e"
+    },
+    {
+      "input": "https://referencehome.es/a",
+      "normalized": null,
+      "sha256": null
+    },
+    {
+      "input": "//evil.example/a",
+      "normalized": null,
+      "sha256": null
+    },
+    {
+      "input": "/a/../b",
+      "normalized": null,
+      "sha256": null
+    },
+    {
+      "input": "/a/./b",
+      "normalized": null,
+      "sha256": null
+    },
+    {
+      "input": "a/b",
+      "normalized": null,
+      "sha256": null
+    },
+    {
+      "input": "",
+      "normalized": null,
+      "sha256": null
+    },
+    {
+      "input": "/%ZZ",
+      "normalized": null,
+      "sha256": null
+    },
+    {
+      "input": "/a\\b",
+      "normalized": null,
+      "sha256": null
+    },
+    {
+      "input": "/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "normalized": null,
+      "sha256": null
+    }
+  ]
+}

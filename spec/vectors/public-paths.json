@@ -1,0 +1,23 @@
+{
+  "valid": [
+    "v1/status.json",
+    "v1/pages/aval-ico-valencia.json",
+    "v1/routes/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.json"
+  ],
+  "invalid": [
+    "v1/drafts/aval-ico-valencia.json",
+    "v1/pages/aval-ico-valencia.draft.json",
+    "v1/pages/../status.json",
+    "v1/pages/Aval.json",
+    "v2/status.json",
+    "status.json",
+    "v1/ai/settings.json",
+    "v1/backups/2026-11-06.json",
+    "v1/pages/aval-ico-valencia.json.bak",
+    "v1/routes/abc.json",
+    "v1/pages/.json",
+    "/v1/status.json",
+    "v1/status.json?x=1",
+    "private/contactos.csv"
+  ]
+}

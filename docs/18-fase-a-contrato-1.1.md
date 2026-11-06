@@ -1,61 +1,80 @@
 # 18 · Fase A — contrato de configuración 1.1 y especificación Rufi ↔ CRM
 
-Fecha: 6-nov-2026. Rama: `fase-8a-contrato-1.1`. Autorizada **solo** la fase A.
+Fecha: 6-nov-2026. Rama: `fase-8a-contrato-1.1` (PR evagarciaperis-cyber/Rufi#4, que depende
+del #3). Autorizada **solo** la fase A.
 - No se ha tocado el CRM, el motor publicado, los modelos ni las landings.
 - No se ha ejecutado SQL ni desplegado nada.
 
-## Qué se entrega
+**Revisión 2** (tras aprobar la opción A de `docs/19`):
+- la configuración pública sale de **archivos estáticos en Supabase Storage**, no de Vercel;
+- estado global en un solo archivo;
+- orden de publicación seguro ante cortes;
+- control de subida a la cubeta pública;
+- tres tipos de visitante;
+- apagado ordinario y urgente con tiempos «objetivo, por medir»;
+- herramienta de medición.
+
+## Archivos
 
 | Archivo | Qué es |
 |---|---|
-| `spec/rufi-config.schema.json` | Contrato de configuración **1.1**, una ampliación de 1.0: `contract`, `lang`, `i18n` (es, en, fr, it, de) y `ai`, más enlaces seguros |
-| `spec/contract/1.0/rufi-config.schema.json` | Esquema 1.0 **congelado** (huella `fc4de53c…`, comprobada en las pruebas) |
-| `spec/rufi-crm-api.schema.json` | Formas exactas de la API `rufi-crm/1`: sobre de página, ruta, chat, errores, vista previa, respaldo, `_global.json` local |
-| `spec/rufi-crm-api.md` | Especificación: rutas, autorización y abuso, CORS, caché, caducidad, apagado de emergencia, versionado |
-| `spec/reference/decide.mjs` | Referencia de la decisión del cargador en modo API (función pura) |
-| `spec/reference/i18n.mjs` | Referencia de idiomas: elección y textos resueltos (funciones puras) |
-| `spec/vectors/` | Casos compartidos que el CRM (fase B/C) y el cargador/motor (fase D) deben pasar: 5 configuraciones válidas y 24 inválidas; 12 mensajes de API válidos y 21 inválidos; 26 decisiones; 7 elecciones de idioma |
-| `spec/contract/1.1.sha256` | Huellas del contrato, para que el CRM fije la misma copia |
-| `tools/validate-config.mjs` | Validador ampliado (1.1, sobres de la API con `--api`, caducidad). La API anterior se mantiene (`validateSchema`, `validateConfig`) |
-| `tests/contract.test.mjs` | 15 pruebas del contrato |
-| `tests/e2e/compat-1.1.e2e.cjs` | El motor **publicado** 1.0.0 con configuraciones 1.1, en Chromium |
+| `spec/rufi-config.schema.json` | Contrato de configuración **1.1**, una ampliación de 1.0 (`contract`, `lang`, `i18n` es/en/fr/it/de, `ai`, enlaces seguros) |
+| `spec/contract/1.0/rufi-config.schema.json` | 1.0 congelado (huella comprobada en las pruebas) |
+| `spec/rufi-crm-api.schema.json` | `statusFile`, `pageEnvelope`, `routeFile`, `publicObjectPath`, `localGlobal` (`source.static`, `api`, `timeoutMs`, `recheckSeconds`), vista previa, chat, errores |
+| `spec/rufi-crm-api.md` | Especificación completa (§0 hechos comprobados y documentados; §3 fallos a medias; §4 nada privado en público; §5 visitantes; §6 apagado) |
+| `spec/reference/decide.mjs` | `decide()` (al cargar) y `decideLive()` (páginas abiertas) |
+| `spec/reference/publish.mjs` | `guardPublicObject()` (control de subida), `planPublish()` (orden), `applyPlan()` (simulación con cortes) |
+| `spec/reference/routes.mjs` | Normalización de rutas y nombre con SHA-256 |
+| `spec/reference/i18n.mjs` | Elección de idioma y textos resueltos |
+| `spec/vectors/` | Configuraciones (5 válidas, 24 inválidas); API (15 válidos, 29 inválidos); 30 decisiones (visitantes nuevos y que vuelven); 8 de páginas abiertas; 15 rutas; 17 rutas de cubeta (3 permitidas, 14 prohibidas); 7 de idioma |
+| `spec/contract/1.1.sha256` | Huellas para la copia fijada del CRM |
+| `tools/validate-config.mjs` | Validador: configuración, `--api` (status, página y ruta), caducidad |
+| `tools/measure-propagation.mjs` | Mide de verdad cuánto tarda un cambio en verse a través de la CDN (para la fase B) |
+| `tests/contract.test.mjs` | 22 pruebas del contrato |
+| `tests/e2e/compat-1.1.e2e.cjs` | El motor 1.0.0 publicado con configuraciones 1.1 (Chromium) |
 
 ## Resultados
 
+Ver `docs/data/fase-a-*.txt`.
+
 | Prueba | Resultado |
 |---|---|
-| `npm test` | **36 superadas, 0 fallos, 1 omitida** (la omitida es anterior a esta fase: necesita Blender) · `docs/data/fase-a-npm-test.txt` |
-| Compatibilidad 1.1 con el motor 1.0.0 publicado (`npm run test:compat`) | **24/24** · `docs/data/fase-a-compat-1.1.txt` |
-| Cargador (sin cambios) | **53/53** · `docs/data/fase-a-cargador.txt` |
-| `npm run build` | `dist/` **idéntico byte a byte** (`git status dist` vacío) |
-| `git diff fase-7-centralizado -- dist src models assets hosting/rufi configs` | **vacío**: motor, modelos, configuraciones y paquete sin cambios |
-| Comprobación de que las pruebas detectan errores | Al alterar a propósito la regla de revisión o la de `?rufi=off`, fallan las pruebas |
+| `npm test` | **43 superadas, 0 fallos, 1 omitida** (anterior a esta fase: necesita Blender) |
+| Prioridad de los apagados, exhaustiva | **625/625** combinaciones: nunca se muestra a Rufi si lo más reciente es un apagado o no hay estado |
+| Publicación cortada en cada paso posible (apagar sitio, apagar página, publicar con ruta nueva) | Siempre la versión anterior completa, la nueva completa o nada. El diario marca «incompleta» |
+| Control de subida | 14 rutas prohibidas y 7 contenidos inválidos rechazados |
+| Compatibilidad 1.1 con el motor 1.0.0 publicado | **24/24** |
+| Cargador | **53/53** (sin cambios) |
+| `npm run build` | `dist/` **idéntico**. Diff de `dist src models assets hosting/rufi configs` respecto a la fase 7: **vacío** |
+| Prueba de mutación (romper a propósito la regla de apagado, la de revisión o la de rutas permitidas) | Las pruebas fallan (5, 3 y 1 fallos) |
 
-## Comprobaciones pedidas
+## Comprobaciones con fuentes reales (solo lectura)
 
-- **Vercel:** plan **Hobby**, comprobado en la API de Vercel en solo lectura.
-- **Joomla en producción:** **6.2.0**, según su manifiesto público.
-- **Base de datos de desarrollo:** no se asume que exista.
-
-Consecuencias en `spec/rufi-crm-api.md §0`.
+| Qué | Resultado | Grado |
+|---|---|---|
+| Vercel | Plan Hobby | Comprobado (API de Vercel) |
+| Joomla | 6.2.0 | Comprobado (manifiesto público) |
+| Supabase | Plan Pro con *spend cap* | Documentado por el equipo en el CRM (04-11-2026). No lo he podido ver directamente: la herramienta de solo lectura no muestra la facturación y no ejecuto SQL |
+| Caché de Supabase Storage | Smart CDN en Pro; invalidación al sobrescribir de hasta 60 s; los parámetros de consulta no saltan la caché; purga manual; 250 GB + 250 GB de salida | Documentación de Supabase; **no verificado con pruebas** |
 
 ## Riesgos
 
 | Riesgo | Situación |
 |---|---|
-| **Vercel Hobby**: uso no comercial según sus condiciones; al superar límites se corta el servicio | El contrato no depende de la disponibilidad de la API (respaldo, caducidad, apagado local). Recomendación: valorar Pro para el CRM |
-| Apagado durante una caída del CRM | No llega por la API (la CDN puede servir la copia antigua hasta 24 h). Solución: el interruptor local `_global.json` en Arsys, documentado como paso obligatorio del procedimiento |
-| Visitante nuevo, CRM caído y respaldo estático anterior a un apagado | Verá a Rufi hasta que caduque el respaldo. Se mitiga con respaldos de caducidad corta y con el interruptor local |
-| Endurecimiento de enlaces (`href`) | Una configuración 1.0 con `http:` o `javascript:` dejaría de validar. Ninguna del repositorio lo usa (comprobado). Es intencionado |
-| El motor 1.0.0 ignora `i18n` y `ai` | Comprobado que no se rompe y muestra el idioma base. El validador marca error si se fija `version < 1.1.0` y aviso si no se fija |
-| Idioma: Rufi sigue el `<html lang>` de la página | En una página en español, un visitante inglés verá a Rufi en español. Es intencionado, para coincidir con la página. El chat de IA sí responde en el idioma del visitante |
-| Traducciones fr/it/de/en de los casos de prueba | Escritas para las pruebas; **no son textos aprobados** para publicar |
-| Manifiesto de Joomla público (`/administrator/manifests/`) | Revela la versión exacta. Recomendación aparte: bloquearlo en el `.htaccess` de Joomla (no lo he tocado) |
-| Groq | Solo especificado; nada contratado ni activado. Doble llave (CRM + página), aviso de IA obligatorio en los 5 idiomas, sin instrucciones en datos públicos |
+| Tiempos de apagado | **No verificados**: el «≤ 60 s» es lo que documenta Supabase. Se medirán en la fase B con `tools/measure-propagation.mjs` contra una cubeta de pruebas, desde varias redes |
+| Páginas abiertas con el motor 1.0.0 | No se enteran de un apagado hasta recargar. Con el 1.1.0, objetivo ≤ 6 min |
+| Supabase como única fuente | Visitante nuevo con Storage caído: no ve a Rufi (la página bien). Los que vuelven usan su copia. Mejora futura: opción B |
+| *Spend cap* de Supabase Pro | Si se supera la cuota, Supabase puede restringir el servicio (402) → mismo caso que «Storage caído». El consumo estimado de Rufi es muy inferior a la cuota |
+| Copia «activa» en el navegador + Storage caído + apagado | Ese visitante ve a Rufi hasta que caduque su copia (≤ 7 días) o hasta U3 (Arsys) |
+| Listado de la cubeta pública | Depende de no crear la política `select`. Se verifica con pruebas reales en la fase B |
+| Vercel Hobby (uso no comercial) | Ya no afecta a la configuración de Rufi. Sigue recomendado revisar el plan del CRM |
+| Manifiesto de Joomla público | Revela la versión. Recomendación aparte (no lo he tocado) |
+| Traducciones de los casos de prueba | No son textos aprobados |
 
-## Lo que NO incluye esta fase
+## Fuera de esta fase
 
-- CRM: tablas, API, panel. Es la fase B/C.
-- Cargador y motor 1.1.0. Es la fase D.
-- IA. Es la fase E.
-- Plugin de Joomla 6. Es la fase F.
+- CRM (B/C): cubeta, tablas, panel, publicación, auditoría y medición real de tiempos.
+- Cargador y motor 1.1.0 (D): lectura de Storage, `decide`/`decideLive`, revisión de páginas
+  abiertas, idiomas.
+- IA (E).
+- Plugin de Joomla 6 (F).
