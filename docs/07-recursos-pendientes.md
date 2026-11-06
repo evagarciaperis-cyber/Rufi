@@ -52,7 +52,7 @@ Estas vistas debe dibujarlas o renderizarlas **el autor original o un artista ba
 
 ## 5. Pasos operativos pendientes
 
-- [ ] **Crear el repositorio** `evagarciaperis-cyber/referencehome-rufi` (privado) y subir este trabajo. No se pudo crear desde la sesión: requiere un paso manual (ver `README.md`).
+- [x] **Repositorio oficial creado**: [`evagarciaperis-cyber/Rufi`](https://github.com/evagarciaperis-cyber/Rufi), con el trabajo de la fase 1 publicado.
 - [ ] Encargar el modelo, o recuperar el original.
 - [ ] Implementar el componente web (`08-runtime-web-plan.md`) cuando exista un GLB válido, o antes con la maqueta para avanzar en paralelo.
 - [ ] Integración en la landing del Aval ICO: **no iniciada por indicación expresa**.

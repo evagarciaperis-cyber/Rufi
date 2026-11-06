@@ -58,20 +58,13 @@ Visor: `python3 -m http.server` en la raíz y abrir `http://localhost:8000/tools
 
 **Blender como fuente única + GLB en tiempo real con three.js**, cargado de forma diferida después de mostrar la imagen oficial. Motivos y medidas en [`docs/05-evaluacion-blender-gltf-vs-rive.md`](docs/05-evaluacion-blender-gltf-vs-rive.md): conserva el volumen 3D y el fieltro, y su runtime (≈163 KB gzip) pesa menos que el de Rive (≈459 KB – 1 MB gzip, medido).
 
-## Crear el repositorio en GitHub (paso manual)
+## Repositorio
 
-Desde la sesión de Claude no se pudo crear `evagarciaperis-cyber/referencehome-rufi`: no tenía permiso para crear repositorios. Pasos:
-
-1. En GitHub, **New repository** → propietario `evagarciaperis-cyber`, nombre `referencehome-rufi`, **Private**, sin README ni .gitignore (el repositorio debe estar vacío).
-2. Dar acceso a la app de Claude a ese repositorio (GitHub → Settings → Applications → Claude → Repository access).
-3. Desde una copia de este trabajo:
+Repositorio oficial: <https://github.com/evagarciaperis-cyber/Rufi> (privado).
 
 ```bash
-git remote add origin https://github.com/evagarciaperis-cyber/referencehome-rufi.git
-git push -u origin main
+git clone https://github.com/evagarciaperis-cyber/Rufi.git
 ```
-
-O pedir a Claude, en una sesión con acceso al repositorio, que suba el contenido.
 
 ## Reglas
 

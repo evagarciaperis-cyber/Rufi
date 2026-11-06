@@ -1,6 +1,6 @@
 # CLAUDE.md — instrucciones permanentes para trabajar con Rufi
 
-Este repositorio (`evagarciaperis-cyber/referencehome-rufi`) es la **fuente oficial y única** de Rufi, la mascota de Reference Home. Léelo entero antes de tocar nada relacionado con Rufi en cualquier proyecto.
+Este repositorio (`evagarciaperis-cyber/Rufi`, <https://github.com/evagarciaperis-cyber/Rufi>) es la **fuente oficial y única** de Rufi, la mascota de Reference Home. Léelo entero antes de tocar nada relacionado con Rufi en cualquier proyecto.
 
 ## Antes de empezar
 
