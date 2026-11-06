@@ -1,0 +1,22 @@
+{
+  "$schema": "../../spec/rufi-config.schema.json",
+  "enabled": false,
+  "description": "PLANTILLA: copiar como configs/<nombre-de-la-pagina>.json, rellenar y poner enabled:true.",
+  "page": "nombre-de-la-pagina",
+  "welcome": { "text": "¡Holaaa! 👋 Soy Rufi. ¿Te echo una patita? 🏡" },
+  "whatsapp": { "number": "34674612272", "message": "Hola, he visto vuestra página y me gustaría recibir información" },
+  "panel": {
+    "title": "¿En qué te ayudo?",
+    "subtitle": "Soy Rufi, de Reference Home. Elige una opción y te acompaño.",
+    "options": [
+      { "id": "seccion", "label": "Ver la sección principal", "hint": "Descripción corta", "icon": "check", "ref": "RUFI_PLANTILLA_SECCION", "action": { "type": "scroll", "target": "#id-de-la-seccion" } },
+      { "id": "enlace", "label": "Abrir otra página", "hint": "Enlace", "icon": "calculator", "ref": "RUFI_PLANTILLA_ENLACE", "action": { "type": "link", "href": "https://referencehome.es/" } },
+      { "id": "asesor", "label": "Hablar con Reference Home", "hint": "WhatsApp · +34 674 61 22 72", "icon": "whatsapp", "ref": "RUFI_PLANTILLA_ASESOR", "action": { "type": "whatsapp" } }
+    ],
+    "footnote": "Información orientativa."
+  },
+  "triggers": [
+    { "id": "llega-seccion", "on": "visible", "selector": "#id-de-la-seccion", "threshold": 0.35, "dwell": 1400, "state": "curious", "say": "¿Te cuento algo sobre esto?" }
+  ],
+  "automation": { "appendRef": false, "refPrefix": "RUFI_PLANTILLA" }
+}

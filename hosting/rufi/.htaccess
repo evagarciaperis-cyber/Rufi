@@ -1,0 +1,26 @@
+# Rufi · tipos MIME, compresión y caché de /rufi/ (cargador y configuraciones).
+# Cada bloque va protegido con <IfModule>: si el hosting no tiene el módulo, se ignora.
+# Si al subir esta carpeta los archivos de /rufi/ dieran "Error 500", el hosting no permite
+# estas directivas: borra este .htaccess y el de /rufi/v/ (Rufi funciona igual).
+
+<IfModule mod_mime.c>
+  AddType text/javascript .js .mjs
+  AddType application/json .json
+  AddType model/gltf-binary .glb
+  AddType image/webp .webp
+  AddCharset utf-8 .js .json
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/javascript application/javascript application/json model/gltf-binary
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Cargador (rufi.js) y configuraciones: caché corta para que los cambios se vean en minutos.
+  <FilesMatch "\.(js|json)$">
+    Header set Cache-Control "public, max-age=300, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(js|mjs|json|glb|webp)$">
+    Header set X-Robots-Tag "noindex"
+  </FilesMatch>
+</IfModule>

@@ -48,8 +48,14 @@ Este repositorio (`evagarciaperis-cyber/Rufi`, <https://github.com/evagarciaperi
 ## Componente web (fase 5)
 
 - Código en `src/`, publicable en `dist/` (`npm run build`). El componente habla con los estados del contrato; la traducción al modelo real está **solo** en `src/adapter.js`.
-- No editar la landing para instalarlo: dos líneas antes de `</body>` (ver `docs/14-componente-web.md §5`).
+- No editar la landing para instalarlo: una línea antes de `</body>` (fase 7; ver `docs/15-instalacion-centralizada.md`).
 - Pruebas: `npm run build && node tests/e2e/rufi.e2e.cjs --landing build/aval-ico-valencia.html`.
+
+## Instalación centralizada (fase 7)
+
+- Las páginas solo incluyen el **cargador** `/rufi/rufi.js` (`src/loader.js`) con `data-rufi-config="<nombre>"`; el núcleo, el 3D y el GLB viven en `/rufi/v/<versión>/` (`package.json → rufiVersion`). Una carpeta de versión publicada **no se modifica nunca**: versión nueva = carpeta nueva + `configs/_global.json`.
+- Configuración por página: `configs/<nombre>.json`, solo datos, validada con `spec/rufi-config.schema.json` (`npm run validate:configs`; con `--html` comprueba selectores). No meter código en las configuraciones.
+- Pruebas: `npm test`, `node tests/e2e/loader.e2e.cjs`, y para el paquete FTP `node scripts/package-ftp.mjs …` + `node scripts/verify-ftp-package.cjs <origen>`. Guía: `docs/15-instalacion-centralizada.md`.
 
 ## Comprobaciones antes de entregar
 

@@ -1,19 +1,20 @@
 /**
- * Genera assets/web/rufi-poster.webp renderizando el propio motor 3D (dist/rufi-3d.js) en reposo,
+ * Genera assets/web/rufi-poster.webp renderizando el propio motor 3D (dist/v/<versión>/rufi-3d.js) en reposo,
  * con el mismo encuadre que el componente: así el paso del póster al 3D no da saltos.
  * Requiere Playwright (Chromium). Uso: npm run build && node scripts/make-poster.cjs && npm run build
  */
 const { chromium } = require('playwright');
 const http = require('http'); const fs = require('fs'); const path = require('path');
 const root = path.join(__dirname, '..');
+const V = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).rufiVersion;
 const types = { '.js': 'text/javascript', '.glb': 'model/gltf-binary', '.html': 'text/html' };
-const page = `<!doctype html><meta charset="utf-8"><body style="margin:0;background:transparent">
+const page = (`<!doctype html><meta charset="utf-8"><body style="margin:0;background:transparent">
 <div id="c" style="position:relative;width:300px;height:352px"></div>
 <script type="module">
-import { createRufi3D } from '/dist/rufi-3d.js';
-const e = await createRufi3D({ container: document.getElementById('c'), modelUrl: '/dist/rufi-expresivo.web.glb' });
+import { createRufi3D } from '/dist/v/__V__/rufi-3d.js';
+const e = await createRufi3D({ container: document.getElementById('c'), modelUrl: '/dist/v/__V__/rufi-expresivo.web.glb' });
 e.setState('idle'); setTimeout(() => { window.READY = true; }, 900);
-</script>`;
+</script>`).replaceAll('__V__', V);
 const srv = http.createServer((q, r) => { if (q.url === '/') { r.writeHead(200, { 'content-type': 'text/html' }); return r.end(page); }
   const f = path.join(root, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': types[path.extname(f)] || 'application/octet-stream' }); r.end(b); }); })
   .listen(8790, async () => {

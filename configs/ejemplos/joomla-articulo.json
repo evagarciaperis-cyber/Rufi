@@ -1,0 +1,20 @@
+{
+  "$schema": "../../spec/rufi-config.schema.json",
+  "enabled": false,
+  "description": "EJEMPLO para una página Joomla (artículo o menú). Añadir su ruta en configs/_routes.json. Los selectores deben existir en el HTML que genera Joomla.",
+  "page": "joomla-ejemplo",
+  "replaceSelector": null,
+  "welcome": { "text": "¡Hola! 👋 Soy Rufi, de Reference Home. Si necesitas algo, pulsa sobre mí." },
+  "whatsapp": { "number": "34674612272", "message": "Hola, vengo de vuestra web y me gustaría recibir información" },
+  "panel": {
+    "title": "¿En qué te ayudo?",
+    "subtitle": "Elige una opción.",
+    "options": [
+      { "id": "contacto", "label": "Ir al formulario de contacto", "icon": "check", "ref": "RUFI_WEB_CONTACTO", "action": { "type": "scroll", "target": "#contacto" } },
+      { "id": "asesor", "label": "Hablar con Reference Home", "hint": "WhatsApp · +34 674 61 22 72", "icon": "whatsapp", "ref": "RUFI_WEB_ASESOR", "action": { "type": "whatsapp" } }
+    ],
+    "footnote": ""
+  },
+  "triggers": [],
+  "automation": { "appendRef": false, "refPrefix": "RUFI_WEB" }
+}

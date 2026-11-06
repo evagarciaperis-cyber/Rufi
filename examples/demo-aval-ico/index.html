@@ -97,8 +97,8 @@
   document.getElementById('reset').addEventListener('click', () => { window.Rufi.resetSession('aval-ico-valencia'); location.reload(); });
 </script>
 
-<!-- Instalación de Rufi: estas dos líneas son todo lo que se añade a la landing real -->
-<script src="../../dist/config/aval-ico.js"></script>
-<script src="../../dist/rufi.js" defer></script>
+<!-- Instalación de Rufi: esta línea es todo lo que se añade a la landing real
+     (en el servidor: src="/rufi/rufi.js"; la configuración está en /rufi/configs/aval-ico-valencia.json) -->
+<script src="../../dist/rufi.js" data-rufi-config="aval-ico-valencia" defer></script>
 </body>
 </html>
