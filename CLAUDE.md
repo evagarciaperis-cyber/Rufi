@@ -57,6 +57,13 @@ Este repositorio (`evagarciaperis-cyber/Rufi`, <https://github.com/evagarciaperi
 - Configuración por página: `configs/<nombre>.json`, solo datos, validada con `spec/rufi-config.schema.json` (`npm run validate:configs`; con `--html` comprueba selectores). No meter código en las configuraciones.
 - Pruebas: `npm test`, `node tests/e2e/loader.e2e.cjs`, y para el paquete FTP `node scripts/package-ftp.mjs …` + `node scripts/verify-ftp-package.cjs <origen>`. Guía: `docs/15-instalacion-centralizada.md`.
 
+## Contrato 1.1 y API Rufi ↔ CRM (fase A)
+
+- Contrato: `spec/rufi-config.schema.json` (1.1, solo se amplía; 1.0 congelado en `spec/contract/1.0/`) y `spec/rufi-crm-api.schema.json` + `spec/rufi-crm-api.md`. Casos compartidos en `spec/vectors/`, referencia en `spec/reference/`.
+- Si cambia algo del contrato: `npm run contract:hash` y avisar de que el CRM debe actualizar su copia fijada.
+- La configuración pública **nunca** lleva datos del CRM ni instrucciones/conocimiento de la IA. CORS no es autenticación.
+- Rufi Admin vive en el CRM (repositorio aparte). No se modifica el CRM sin autorización de la fase correspondiente.
+
 ## Comprobaciones antes de entregar
 
 ```bash

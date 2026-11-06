@@ -1,0 +1,10 @@
+{
+  "def": "error",
+  "value": {
+    "error": {
+      "code": "unavailable",
+      "message": "x",
+      "stack": "at supabase…"
+    }
+  }
+}

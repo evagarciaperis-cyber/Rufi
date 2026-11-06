@@ -1,0 +1,72 @@
+{
+  "config": "config/valid/v11-cinco-idiomas.json",
+  "cases": [
+    {
+      "name": "html lang manda",
+      "input": {
+        "htmlLang": "fr",
+        "navigatorLangs": [
+          "en-US"
+        ]
+      },
+      "expect": "fr"
+    },
+    {
+      "name": "html lang con región",
+      "input": {
+        "htmlLang": "de-DE",
+        "navigatorLangs": []
+      },
+      "expect": "de"
+    },
+    {
+      "name": "html lang no disponible → navegador",
+      "input": {
+        "htmlLang": "pt-BR",
+        "navigatorLangs": [
+          "it-IT",
+          "en"
+        ]
+      },
+      "expect": "it"
+    },
+    {
+      "name": "nada disponible → base",
+      "input": {
+        "htmlLang": "pt",
+        "navigatorLangs": [
+          "ja"
+        ]
+      },
+      "expect": "es"
+    },
+    {
+      "name": "página en español, visitante inglés → español (Rufi habla el idioma de la página)",
+      "input": {
+        "htmlLang": "es",
+        "navigatorLangs": [
+          "en-GB"
+        ]
+      },
+      "expect": "es"
+    },
+    {
+      "name": "sin lang en la página → navegador",
+      "input": {
+        "htmlLang": "",
+        "navigatorLangs": [
+          "en-GB"
+        ]
+      },
+      "expect": "en"
+    },
+    {
+      "name": "mayúsculas y guion bajo",
+      "input": {
+        "htmlLang": "EN_us",
+        "navigatorLangs": []
+      },
+      "expect": "en"
+    }
+  ]
+}

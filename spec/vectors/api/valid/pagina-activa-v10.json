@@ -1,0 +1,31 @@
+{
+  "def": "pageEnvelope",
+  "value": {
+    "api": "rufi-crm/1",
+    "slug": "demo",
+    "status": "active",
+    "revision": 10,
+    "issuedAt": "2026-11-06T10:00:00Z",
+    "expiresAt": "2026-11-13T10:00:00Z",
+    "engine": "1.0.0",
+    "contract": "1.0",
+    "config": {
+      "page": "demo",
+      "welcome": {
+        "text": "Hola"
+      },
+      "panel": {
+        "title": "Hola",
+        "options": [
+          {
+            "id": "a",
+            "label": "A",
+            "action": {
+              "type": "panel"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

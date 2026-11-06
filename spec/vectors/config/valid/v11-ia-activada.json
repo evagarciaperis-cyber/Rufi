@@ -1,0 +1,168 @@
+{
+  "page": "demo-ia",
+  "contract": "1.1",
+  "version": "1.1.0",
+  "lang": "es",
+  "welcome": {
+    "text": "¡Hola! Soy Rufi, de Reference Home."
+  },
+  "whatsapp": {
+    "number": "34674612272",
+    "message": "Hola, vengo de vuestra web"
+  },
+  "panel": {
+    "title": "¿En qué te ayudo?",
+    "subtitle": "Elige una opción.",
+    "footnote": "Información orientativa.",
+    "options": [
+      {
+        "id": "info",
+        "label": "Ver información",
+        "icon": "check",
+        "action": {
+          "type": "scroll",
+          "target": "#info"
+        }
+      },
+      {
+        "id": "asesor",
+        "label": "Hablar con Reference Home",
+        "icon": "whatsapp",
+        "action": {
+          "type": "whatsapp"
+        }
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "id": "llega-info",
+      "on": "visible",
+      "selector": "#info",
+      "say": "¿Te cuento algo de esta sección?"
+    }
+  ],
+  "i18n": {
+    "en": {
+      "welcome": {
+        "text": "Hi! I'm Rufi, from Reference Home."
+      },
+      "whatsapp": {
+        "message": "Hi, I'm coming from your website"
+      },
+      "panel": {
+        "title": "How can I help?",
+        "subtitle": "Choose an option.",
+        "footnote": "Guidance only.",
+        "options": {
+          "info": {
+            "label": "See information"
+          },
+          "asesor": {
+            "label": "Talk to Reference Home"
+          }
+        }
+      },
+      "triggers": {
+        "llega-info": {
+          "say": "Shall I tell you about this section?"
+        }
+      },
+      "ai": {
+        "notice": "Rufi is an AI assistant. It can make mistakes."
+      }
+    },
+    "fr": {
+      "welcome": {
+        "text": "Bonjour ! Je suis Rufi, de Reference Home."
+      },
+      "whatsapp": {
+        "message": "Bonjour, je viens de votre site"
+      },
+      "panel": {
+        "title": "Comment puis-je vous aider ?",
+        "subtitle": "Choisissez une option.",
+        "footnote": "Information indicative.",
+        "options": {
+          "info": {
+            "label": "Voir les informations"
+          },
+          "asesor": {
+            "label": "Parler à Reference Home"
+          }
+        }
+      },
+      "triggers": {
+        "llega-info": {
+          "say": "Je vous parle de cette section ?"
+        }
+      },
+      "ai": {
+        "notice": "Rufi est un assistant IA. Il peut se tromper."
+      }
+    },
+    "it": {
+      "welcome": {
+        "text": "Ciao! Sono Rufi, di Reference Home."
+      },
+      "whatsapp": {
+        "message": "Ciao, arrivo dal vostro sito"
+      },
+      "panel": {
+        "title": "Come posso aiutarti?",
+        "subtitle": "Scegli un'opzione.",
+        "footnote": "Informazione orientativa.",
+        "options": {
+          "info": {
+            "label": "Vedi informazioni"
+          },
+          "asesor": {
+            "label": "Parla con Reference Home"
+          }
+        }
+      },
+      "triggers": {
+        "llega-info": {
+          "say": "Ti racconto qualcosa di questa sezione?"
+        }
+      },
+      "ai": {
+        "notice": "Rufi è un assistente IA. Può sbagliare."
+      }
+    },
+    "de": {
+      "welcome": {
+        "text": "Hallo! Ich bin Rufi von Reference Home."
+      },
+      "whatsapp": {
+        "message": "Hallo, ich komme von Ihrer Website"
+      },
+      "panel": {
+        "title": "Wie kann ich helfen?",
+        "subtitle": "Wählen Sie eine Option.",
+        "footnote": "Nur zur Orientierung.",
+        "options": {
+          "info": {
+            "label": "Informationen ansehen"
+          },
+          "asesor": {
+            "label": "Mit Reference Home sprechen"
+          }
+        }
+      },
+      "triggers": {
+        "llega-info": {
+          "say": "Soll ich Ihnen etwas zu diesem Abschnitt erzählen?"
+        }
+      },
+      "ai": {
+        "notice": "Rufi ist ein KI-Assistent. Er kann sich irren."
+      }
+    }
+  },
+  "ai": {
+    "enabled": true,
+    "notice": "Rufi es un asistente de IA. Puede equivocarse: para tu caso concreto, habla con el equipo.",
+    "greeting": "¿Qué quieres saber?"
+  }
+}

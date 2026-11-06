@@ -21,7 +21,9 @@
     "test:e2e": "node tests/e2e/rufi.e2e.cjs",
     "validate:configs": "node tools/validate-config.mjs configs/[!_]*.json configs/ejemplos/*.json",
     "test:loader": "node tests/e2e/loader.e2e.cjs",
-    "package:ftp": "node scripts/package-ftp.mjs build/aval-ico-valencia.original.html"
+    "package:ftp": "node scripts/package-ftp.mjs build/aval-ico-valencia.original.html",
+    "test:compat": "node tests/e2e/compat-1.1.e2e.cjs",
+    "contract:hash": "find spec/rufi-config.schema.json spec/rufi-crm-api.schema.json spec/reference spec/vectors -type f | sort | xargs sha256sum > spec/contract/1.1.sha256"
   },
   "devDependencies": {
     "@gltf-transform/core": "4.5.1",

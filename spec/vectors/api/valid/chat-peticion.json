@@ -1,0 +1,14 @@
+{
+  "def": "chatRequest",
+  "value": {
+    "ticket": "v1.x.y",
+    "slug": "demo",
+    "lang": "en",
+    "messages": [
+      {
+        "role": "user",
+        "content": "What do I need for the ICO guarantee?"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "def": "routeFile",
+  "value": {
+    "api": "rufi-crm/1",
+    "slug": "aval-ico-valencia",
+    "revision": 3,
+    "issuedAt": "2026-11-06T10:00:00Z",
+    "expiresAt": "2026-11-13T10:00:00Z"
+  }
+}
