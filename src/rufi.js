@@ -41,6 +41,7 @@
     maxFps: 60,
     maxFpsMobile: 30, // en móvil: menos batería y menos calor; el movimiento de Rufi es suave a 30 fps
     debug: false,
+    test: false, // páginas de prueba: todos los eventos llevan test: true y se registran en la consola
   };
 
   const merge = (a, b) => { const o = { ...a }; for (const k of Object.keys(b || {})) o[k] = b[k] && typeof b[k] === 'object' && !Array.isArray(b[k]) && a[k] && typeof a[k] === 'object' && !Array.isArray(a[k]) ? merge(a[k], b[k]) : b[k]; return o; };
@@ -346,7 +347,11 @@
     }
     isVisible(el, ratio) { const r = el.getBoundingClientRect(); const vis = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0)); return vis / Math.min(r.height || 1, innerHeight) >= ratio * 0.8; }
 
-    emit(name, detail) { try { document.dispatchEvent(new CustomEvent(`rufi:${name}`, { detail: { page: this.cfg.page, ...detail } })); } catch (e) { /* sin eventos */ } }
+    emit(name, detail) {
+      const d = { page: this.cfg.page, ...(this.cfg.test ? { test: true } : {}), ...detail };
+      if (this.cfg.test || this.cfg.debug) try { console.info(`[Rufi${this.cfg.test ? ' PRUEBA' : ''}] ${name}`, d); } catch (e) { /* */ }
+      try { document.dispatchEvent(new CustomEvent(`rufi:${name}`, { detail: d })); } catch (e) { /* sin eventos */ }
+    }
   }
 
   window.Rufi = {
