@@ -1,0 +1,343 @@
+{
+  "fuente": {
+    "url": "https://referencehome.es/images/mascota.png",
+    "archivo": "assets/original/mascota.png",
+    "sha256": "1937f6152d2de22c8ae2f30e7e488045c3414acac15532c0d2d82a95ddd3e2cf",
+    "tamano_px": [
+      1254,
+      1254
+    ]
+  },
+  "bbox_figura_px": [
+    257,
+    11,
+    1070,
+    1242
+  ],
+  "proporciones": {
+    "altura_figura_px": 1232,
+    "anchura_figura_px": 814,
+    "cresta_alto_rel": 0.1989,
+    "cabeza_inicio_y_rel": 0.1607,
+    "panuelo_y_rel": [
+      0.53,
+      0.6948
+    ],
+    "cabeza_anchura_max_rel": 0.5633,
+    "cabeza_anchura_max_en_y_rel": 0.401,
+    "cuerpo_anchura_max_rel": 0.4586,
+    "cuerpo_anchura_max_en_y_rel": 0.7622,
+    "suelas_y_rel": [
+      0.9505,
+      0.9992
+    ],
+    "nota": "Valores relativos a la altura total de la figura (cresta a suela) en ESTA vista. La cabeza está ligeramente girada hacia la derecha del espectador y el brazo IZQUIERDO del personaje (a la derecha del espectador) está levantado, por lo que la anchura total de la figura incluye el brazo. La anchura de la cabeza se mide sin el brazo; la del cuerpo incluye el brazo DERECHO del personaje, pegado al tronco e inseparable por silueta."
+  },
+  "regiones": {
+    "boca": {
+      "pixels": 4674,
+      "area_pct_figura": 0.76,
+      "bbox_px": [
+        598,
+        509,
+        736,
+        590
+      ],
+      "bbox_rel_altura": [
+        0.2768,
+        0.4042,
+        0.3888,
+        0.47
+      ],
+      "color_mediana": "#933628",
+      "color_sombra_p10": "#560C01",
+      "color_luz_p90": "#CF6C5D",
+      "manchas_bbox_px": [
+        [
+          598,
+          509,
+          736,
+          590
+        ]
+      ]
+    },
+    "brillos_ojos": {
+      "pixels": 165,
+      "area_pct_figura": 0.03,
+      "bbox_px": [
+        521,
+        374,
+        779,
+        456
+      ],
+      "bbox_rel_altura": [
+        0.2143,
+        0.2946,
+        0.4237,
+        0.3612
+      ],
+      "color_mediana": "#FBFAFA",
+      "color_sombra_p10": "#FBF8F8",
+      "color_luz_p90": "#FFFFFF",
+      "manchas_bbox_px": [
+        [
+          760,
+          374,
+          779,
+          390
+        ],
+        [
+          521,
+          452,
+          526,
+          456
+        ]
+      ]
+    },
+    "cresta": {
+      "pixels": 41839,
+      "area_pct_figura": 6.84,
+      "bbox_px": [
+        358,
+        12,
+        601,
+        257
+      ],
+      "bbox_rel_altura": [
+        0.082,
+        0.0008,
+        0.2792,
+        0.1997
+      ],
+      "color_mediana": "#962436",
+      "color_sombra_p10": "#66121A",
+      "color_luz_p90": "#AF3448",
+      "manchas_bbox_px": [
+        [
+          358,
+          12,
+          601,
+          257
+        ]
+      ]
+    },
+    "cuerpo": {
+      "pixels": 469713,
+      "area_pct_figura": 76.75,
+      "bbox_px": [
+        257,
+        11,
+        1070,
+        1211
+      ],
+      "bbox_rel_altura": [
+        0.0,
+        0.0,
+        0.6599,
+        0.974
+      ],
+      "color_mediana": "#E5C7AD",
+      "color_sombra_p10": "#DA9E7D",
+      "color_luz_p90": "#F1D8C0",
+      "manchas_bbox_px": [
+        [
+          257,
+          11,
+          1070,
+          1211
+        ]
+      ]
+    },
+    "esclerotica": {
+      "pixels": 5045,
+      "area_pct_figura": 0.82,
+      "bbox_px": [
+        430,
+        354,
+        843,
+        551
+      ],
+      "bbox_rel_altura": [
+        0.1404,
+        0.2784,
+        0.4756,
+        0.4383
+      ],
+      "color_mediana": "#DBCFCC",
+      "color_sombra_p10": "#CABFBB",
+      "color_luz_p90": "#F1E3DF",
+      "manchas_bbox_px": [
+        [
+          751,
+          354,
+          843,
+          461
+        ],
+        [
+          430,
+          449,
+          478,
+          551
+        ]
+      ]
+    },
+    "panuelo": {
+      "pixels": 36146,
+      "area_pct_figura": 5.91,
+      "bbox_px": [
+        458,
+        664,
+        844,
+        867
+      ],
+      "bbox_rel_altura": [
+        0.1631,
+        0.53,
+        0.4765,
+        0.6948
+      ],
+      "color_mediana": "#939364",
+      "color_sombra_p10": "#736A3F",
+      "color_luz_p90": "#ACAA7A",
+      "manchas_bbox_px": [
+        [
+          458,
+          664,
+          844,
+          867
+        ]
+      ]
+    },
+    "rasgos_oscuros": {
+      "pixels": 24259,
+      "area_pct_figura": 3.96,
+      "bbox_px": [
+        388,
+        227,
+        858,
+        549
+      ],
+      "bbox_rel_altura": [
+        0.1063,
+        0.1753,
+        0.4878,
+        0.4367
+      ],
+      "color_mediana": "#3F2115",
+      "color_sombra_p10": "#2A170F",
+      "color_luz_p90": "#683A23",
+      "manchas_bbox_px": [
+        [
+          724,
+          336,
+          858,
+          472
+        ],
+        [
+          453,
+          438,
+          560,
+          549
+        ],
+        [
+          388,
+          425,
+          540,
+          543
+        ],
+        [
+          391,
+          330,
+          479,
+          418
+        ],
+        [
+          705,
+          245,
+          796,
+          285
+        ],
+        [
+          417,
+          227,
+          534,
+          260
+        ]
+      ]
+    },
+    "rubor": {
+      "pixels": 17875,
+      "area_pct_figura": 2.92,
+      "bbox_px": [
+        370,
+        415,
+        940,
+        635
+      ],
+      "bbox_rel_altura": [
+        0.0917,
+        0.3279,
+        0.5544,
+        0.5065
+      ],
+      "color_mediana": "#F1C0A4",
+      "color_sombra_p10": "#E4B193",
+      "color_luz_p90": "#F5D0B9",
+      "manchas_bbox_px": [
+        [
+          803,
+          415,
+          940,
+          545
+        ],
+        [
+          370,
+          557,
+          530,
+          635
+        ]
+      ]
+    },
+    "suelas": {
+      "pixels": 12305,
+      "area_pct_figura": 2.01,
+      "bbox_px": [
+        378,
+        1182,
+        852,
+        1242
+      ],
+      "bbox_rel_altura": [
+        0.0982,
+        0.9505,
+        0.483,
+        0.9992
+      ],
+      "color_mediana": "#731824",
+      "color_sombra_p10": "#5A0F17",
+      "color_luz_p90": "#922835",
+      "manchas_bbox_px": [
+        [
+          634,
+          1182,
+          852,
+          1242
+        ],
+        [
+          378,
+          1183,
+          575,
+          1242
+        ]
+      ]
+    }
+  },
+  "alfa": {
+    "transparentes_0": 940950,
+    "opacos_255": 707,
+    "parciales_1_254": 630859,
+    "valor_mas_frecuente_en_figura": 253,
+    "nota": "La figura tiene alfa ~253 (≈1 % translúcida) y un halo de alfa 1-2 alrededor. Artefacto de exportación: al preparar texturas o carteles conviene forzar alfa 255 dentro de la silueta y limpiar el halo, sin tocar el color."
+  },
+  "advertencia": "Segmentación automática por color. Revisar visualmente con assets/reference/rufi-regions.png."
+}

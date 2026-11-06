@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rufi · Visor GLB</title>
+<!--
+  Visor de control de calidad para el modelador y el animador.
+  Servir el repositorio por HTTP (por ejemplo: python3 -m http.server en la raíz)
+  y abrir /tools/glb-viewer/  ·  ?src=ruta.glb carga un archivo directamente.
+  No es el componente web de Rufi: es una herramienta interna de revisión.
+-->
+<style>
+  :root{--granate:#A11F48;--tinta:#2B2B2B;--gris:#5E5A56;--linea:#D9CEC3;--papel:#FFFDF9;--fondo:#F6ECE2}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--tinta:#EEE;--gris:#B5ADA6;--linea:#4a4440;--papel:#1d1a19;--fondo:#151312}}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tinta);background:var(--fondo);display:grid;grid-template-columns:minmax(0,1fr) 320px;min-height:100vh}
+  @media (max-width:820px){body{grid-template-columns:1fr}}
+  #stage{position:relative;min-height:60vh}
+  #stage canvas{position:absolute;inset:0;width:100%;height:100%}
+  #ref{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;aspect-ratio:1;opacity:.5;pointer-events:none;display:none}
+  #drop{position:absolute;inset:12px;border:2px dashed var(--linea);border-radius:14px;display:grid;place-items:center;color:var(--gris);text-align:center;padding:16px}
+  aside{background:var(--papel);border-left:1px solid var(--linea);padding:14px 16px;overflow:auto;max-height:100vh}
+  h1{font-size:16px;margin:0 0 4px} h2{font-size:13px;margin:16px 0 6px;color:var(--granate);text-transform:uppercase;letter-spacing:.04em}
+  .muted{color:var(--gris);font-size:12px}
+  button,select{font:inherit;border:1px solid var(--linea);background:transparent;color:inherit;border-radius:8px;padding:5px 9px;margin:2px;cursor:pointer}
+  button[aria-pressed="true"]{background:var(--granate);color:#fff;border-color:var(--granate)}
+  label.sk{display:grid;grid-template-columns:120px 1fr;gap:6px;align-items:center;font-size:12px}
+  .bad{color:#c0392b} .ok{color:#2e7d32}
+  pre{white-space:pre-wrap;font-size:12px;margin:0}
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="stage">
+  <img id="ref" alt="" src="../../assets/original/mascota.png">
+  <canvas id="c"></canvas>
+  <div id="drop">Arrastra aquí un .glb de Rufi<br><span class="muted">o usa ?src=ruta.glb</span></div>
+</div>
+<aside>
+  <h1>Rufi · Visor GLB</h1>
+  <p class="muted">Revisión interna de modelo, rig, shape keys y clips contra <code>spec/rufi.character.json</code>.</p>
+  <input type="file" id="file" accept=".glb,model/gltf-binary">
+  <h2>Vista</h2>
+  <button id="btn-compare" aria-pressed="false">Comparar con la imagen oficial</button>
+  <p class="muted">Cámara ortográfica frontal con la misma escala que la imagen (1232 px = 1 m). Combínalo con el clip <code>pose_reference</code>.</p>
+  <h2>Contrato</h2><pre id="report">—</pre>
+  <h2>Clips</h2><div id="clips" class="muted">—</div>
+  <h2>Expresiones (spec)</h2><select id="expr"><option value="">neutral_sonrisa</option></select>
+  <h2>Shape keys</h2><div id="keys" class="muted">—</div>
+</aside>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+const $ = (id) => document.getElementById(id);
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7f78, 2.0));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(-1, 2, 3); scene.add(key);
+const persp = new THREE.PerspectiveCamera(30, 1, 0.01, 20); persp.position.set(0, 0.55, 2.6);
+// Mismo rectángulo del mundo que la imagen oficial (ver tools/analyze_reference.py)
+const ortho = new THREE.OrthographicCamera(-615 / 1232, (1254 - 615) / 1232, 1 + 11 / 1232, 1 - (1254 - 11) / 1232, 0.01, 10);
+ortho.position.set(0, 0, 3);
+let camera = persp;
+const controls = new OrbitControls(persp, canvas); controls.target.set(0, 0.5, 0); controls.update();
+const clock = new THREE.Clock();
+let mixer = null, current = null, root = null, head = null, spec = null;
+
+fetch('../../spec/rufi.character.json').then((r) => r.json()).then((s) => {
+  spec = s;
+  for (const name of Object.keys(s.expresiones)) if (name !== 'neutral_sonrisa') $('expr').add(new Option(name, name));
+}).catch(() => { $('report').textContent = 'No se pudo leer spec/rufi.character.json (¿sirves el repo por HTTP?)'; });
+
+function resize() {
+  const r = canvas.parentElement.getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false);
+  persp.aspect = r.width / r.height; persp.updateProjectionMatrix();
+  // la vista ortográfica se mantiene cuadrada y centrada, como la imagen
+  const s = Math.min(r.width, r.height);
+  renderer.setViewport(camera === ortho ? (r.width - s) / 2 : 0, camera === ortho ? (r.height - s) / 2 : 0, camera === ortho ? s : r.width, camera === ortho ? s : r.height);
+}
+addEventListener('resize', resize);
+
+function load(url) {
+  new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(url, (g) => {
+    if (root) scene.remove(root);
+    root = g.scene; scene.add(root);
+    $('drop').style.display = 'none';
+    mixer = new THREE.AnimationMixer(root); current = null;
+    head = null; let bones = new Set(), tris = 0;
+    root.traverse((o) => {
+      if (o.isMesh) {
+        const geo = o.geometry; tris += (geo.index ? geo.index.count : geo.attributes.position.count) / 3;
+        if (o.morphTargetDictionary && spec && o.morphTargetDictionary[spec.shape_keys.obligatorias[0]] !== undefined) head = o;
+      }
+      if (o.isBone) bones.add(o.name);
+    });
+    report(g, bones, Math.round(tris));
+    buildClips(g.animations);
+    buildKeys();
+    window.RUFI_VIEWER = { clips: g.animations.map((a) => a.name), morphs: head ? Object.keys(head.morphTargetDictionary) : [], bones: bones.size, tris: Math.round(tris) };
+  }, undefined, (e) => { $('report').textContent = 'Error al cargar: ' + e.message; });
+}
+
+function report(g, bones, tris) {
+  if (!spec) return;
+  const lines = [];
+  const norm = (s) => s.replace(/[._]/g, ''); // three.js elimina los puntos de los nombres de nodo
+  const bn = new Set([...bones].map(norm));
+  const missB = spec.rig.huesos.filter((b) => b.deform && !bn.has(norm(b.nombre))).map((b) => b.nombre);
+  const morphs = head ? Object.keys(head.morphTargetDictionary) : [];
+  const missK = spec.shape_keys.obligatorias.filter((k) => !morphs.includes(k));
+  const clips = g.animations.map((a) => a.name);
+  const missC = spec.clips.obligatorios.map((c) => c.nombre).filter((c) => !clips.includes(c));
+  lines.push(`${tris} triángulos · ${bones.size} huesos · ${morphs.length} shape keys · ${clips.length} clips`);
+  lines.push(missB.length ? `✗ Faltan huesos: ${missB.join(', ')}` : '✓ Huesos del contrato');
+  lines.push(missK.length ? `✗ Faltan shape keys: ${missK.join(', ')}` : '✓ Shape keys obligatorias');
+  lines.push(missC.length ? `✗ Faltan clips: ${missC.join(', ')}` : '✓ Clips obligatorios');
+  let proxy = false; root.traverse((o) => { if (o.name.startsWith('PROXY_')) proxy = true; });
+  if (proxy) lines.push('⚠ Es la MAQUETA PROXY, no el modelo de Rufi');
+  lines.push('Validación completa: node tools/validate-glb.mjs archivo.glb');
+  $('report').textContent = lines.join('\n');
+}
+
+function buildClips(anims) {
+  const box = $('clips'); box.textContent = '';
+  for (const clip of anims) {
+    const b = document.createElement('button');
+    b.textContent = `${clip.name} (${clip.duration.toFixed(2)} s)`;
+    b.setAttribute('aria-pressed', 'false');
+    b.onclick = () => {
+      box.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+      if (current) current.stop();
+      current = mixer.clipAction(clip);
+      const info = spec?.clips.obligatorios.concat(spec.clips.recomendados).find((c) => c.nombre === clip.name);
+      current.setLoop(info?.loop ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
+      current.clampWhenFinished = true;
+      current.reset().play();
+      b.setAttribute('aria-pressed', 'true');
+    };
+    box.appendChild(b);
+  }
+}
+
+function buildKeys() {
+  const box = $('keys'); box.textContent = '';
+  if (!head) { box.textContent = 'No se encuentra el mesh con las shape keys del contrato'; return; }
+  for (const [name, idx] of Object.entries(head.morphTargetDictionary)) {
+    const l = document.createElement('label'); l.className = 'sk';
+    const input = Object.assign(document.createElement('input'), { type: 'range', min: 0, max: 1, step: 0.01, value: head.morphTargetInfluences[idx] });
+    input.oninput = () => { head.morphTargetInfluences[idx] = +input.value; };
+    input.dataset.key = name;
+    l.append(name, input); box.appendChild(l);
+  }
+}
+
+$('expr').onchange = (e) => {
+  if (!head || !spec) return;
+  head.morphTargetInfluences.fill(0);
+  const ex = spec.expresiones[e.target.value];
+  for (const [k, v] of Object.entries(ex?.keys || {})) {
+    const i = head.morphTargetDictionary[k];
+    if (i !== undefined && typeof v === 'number') head.morphTargetInfluences[i] = v;
+  }
+  document.querySelectorAll('#keys input').forEach((inp) => { inp.value = head.morphTargetInfluences[head.morphTargetDictionary[inp.dataset.key]]; });
+};
+
+$('btn-compare').onclick = (e) => {
+  const on = e.currentTarget.getAttribute('aria-pressed') !== 'true';
+  e.currentTarget.setAttribute('aria-pressed', String(on));
+  camera = on ? ortho : persp; controls.enabled = !on;
+  $('ref').style.display = on ? 'block' : 'none';
+  resize();
+};
+
+$('file').onchange = (e) => { const f = e.target.files[0]; if (f) load(URL.createObjectURL(f)); };
+addEventListener('dragover', (e) => e.preventDefault());
+addEventListener('drop', (e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) load(URL.createObjectURL(f)); });
+const src = new URLSearchParams(location.search).get('src');
+if (src) load(src);
+
+resize();
+renderer.setAnimationLoop(() => {
+  if (mixer) mixer.update(clock.getDelta());
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

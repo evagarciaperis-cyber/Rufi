@@ -1,0 +1,201 @@
+{
+  "$comment": "Especificación técnica de Rufi PRO. Fuente única para el modelado, el rig, la exportación y la validación. Las posiciones son ESTIMACIONES a partir de una sola vista (ver docs/01-analisis-visual.md) y deben ajustarse al modelo final; los NOMBRES (huesos, shape keys, clips) son contrato y no deben cambiarse sin actualizar este archivo y el runtime.",
+  "version": "0.1.0",
+  "estado": "fase-1-especificacion",
+  "personaje": {
+    "nombre": "Rufi",
+    "empresa": "Reference Home",
+    "referencia_oficial": {
+      "url": "https://referencehome.es/images/mascota.png",
+      "archivo": "assets/original/mascota.png",
+      "sha256": "1937f6152d2de22c8ae2f30e7e488045c3414acac15532c0d2d82a95ddd3e2cf"
+    }
+  },
+  "unidades": {
+    "blender": "metros; Z arriba; el personaje mira hacia -Y (vista frontal de Blender); +X = izquierda DEL PERSONAJE = derecha del espectador",
+    "gltf": "metros; +Y arriba; el personaje mira hacia +Z (conversión automática del exportador de Blender)",
+    "altura_total_m": 1.0,
+    "origen": "suelo, centrado entre los dos pies",
+    "convencion_lados": "Sufijo _L = lado izquierdo del personaje (+X); _R = lado derecho (-X). No usar '.L': el GLTFLoader de three.js elimina los puntos de los nombres de nodo (eye.L → eyeL) y rompería el contrato. Blender reconoce _L/_R para simetría."
+  },
+  "proporciones": {
+    "$comment": "medido = calculado por tools/analyze_reference.py sobre la imagen; estimado = propuesta sin vista que lo confirme.",
+    "cresta_superior_z": { "valor": 1.0, "tipo": "medido" },
+    "cresta_altura": { "valor": 0.2, "tipo": "medido" },
+    "cabeza_superior_z": { "valor": 0.839, "tipo": "medido" },
+    "cabeza_anchura_max": { "valor": 0.563, "tipo": "medido", "nota": "sin brazo, en la vista de referencia (cabeza girada ~15-25°, por lo que la anchura real frontal puede ser algo mayor)" },
+    "cabeza_anchura_max_z": { "valor": 0.599, "tipo": "medido" },
+    "cabeza_profundidad": { "valor": 0.46, "tipo": "estimado", "nota": "≈0,82 × anchura; forma de bollo/huevo achatado. Requiere vista lateral." },
+    "panuelo_z": { "valor": [0.305, 0.47], "tipo": "medido", "nota": "incluye las puntas del nudo" },
+    "cuerpo_anchura_max": { "valor": 0.4, "tipo": "estimado", "nota": "0,459 medido incluye el brazo derecho pegado al tronco" },
+    "cuerpo_anchura_max_z": { "valor": 0.238, "tipo": "medido" },
+    "cuerpo_profundidad": { "valor": 0.34, "tipo": "estimado" },
+    "suelas_z": { "valor": [0.0, 0.05], "tipo": "medido" },
+    "pie_anchura": { "valor": 0.16, "tipo": "medido" },
+    "ojo_anchura": { "valor": 0.14, "tipo": "medido", "nota": "ojo más cercano a cámara (lado -X); el otro aparece escorzado a 0,109" },
+    "ojo_altura": { "valor": 0.1, "tipo": "medido" },
+    "ojos_separacion_centros": { "valor": 0.26, "tipo": "estimado", "nota": "0,257 medido en proyección con giro de cabeza" },
+    "ojos_z_reposo": { "valor": 0.645, "tipo": "estimado", "nota": "media de 0,614 y 0,681; la diferencia se debe a la inclinación de la cabeza" },
+    "boca_anchura": { "valor": 0.112, "tipo": "medido" },
+    "boca_z": { "valor": 0.589, "tipo": "medido" },
+    "relacion_cabeza_cuerpo": "La cabeza (cresta incluida) ocupa ~53 % de la altura y es ~1,4 veces más ancha que el tronco: proporción chibi."
+  },
+  "pose_de_referencia": {
+    "$comment": "La imagen oficial NO es la pose de reposo del rig. Es una pose que el rig debe poder reproducir exactamente (clip 'pose_reference').",
+    "cabeza_inclinacion_roll_grados": { "valor": 15, "tipo": "estimado", "nota": "ojo +X más alto que el ojo -X" },
+    "cabeza_giro_yaw_grados": { "valor": 20, "tipo": "estimado", "rango": [15, 25], "nota": "hacia +X; boca desplazada y ojo +X escorzado" },
+    "brazo_L": "levantado y abierto, mano a la altura de la boca (saludo)",
+    "brazo_R": "relajado, pegado al costado",
+    "mirada": "hacia +X y ligeramente arriba",
+    "expresion": "sonrisa abierta, cejas relajadas, rubor visible"
+  },
+  "paleta_render": {
+    "$comment": "Colores medidos en la imagen RENDERIZADA (incluyen luz y sombra). NO son albedo. El albedo de las texturas se ajusta comparando render vs. referencia (docs/06-pipeline.md).",
+    "cuerpo": { "sombra": "#DA9E7D", "medio": "#E5C7AD", "luz": "#F1D8C0" },
+    "cresta": { "sombra": "#66121A", "medio": "#962436", "luz": "#AF3448" },
+    "suelas": { "sombra": "#5A0F17", "medio": "#731824", "luz": "#922835" },
+    "panuelo": { "sombra": "#736A3F", "medio": "#939364", "luz": "#ACAA7A" },
+    "rasgos_oscuros": { "sombra": "#2A170F", "medio": "#3F2115", "luz": "#683A23" },
+    "esclerotica": { "sombra": "#CABFBB", "medio": "#DBCFCC", "luz": "#F1E3DF" },
+    "rubor": { "sombra": "#E4B193", "medio": "#F1C0A4", "luz": "#F5D0B9" },
+    "boca_interior": { "sombra": "#560C01", "medio": "#933628", "luz": "#CF6C5D" },
+    "brillo_ojo": "#FFFFFF"
+  },
+  "materiales": [
+    { "nombre": "M_Rufi_Fieltro_Cuerpo", "superficie": "fieltro/terciopelo fino, mate, microfibra visible a corta distancia", "gltf": "metallic 0, roughness ~0.85-0.95, KHR_materials_sheen opcional (tier alto)" },
+    { "nombre": "M_Rufi_Fieltro_Cresta", "superficie": "fieltro granate, misma textura que el cuerpo", "gltf": "igual que el cuerpo" },
+    { "nombre": "M_Rufi_Suela", "superficie": "fieltro granate algo más oscuro, banda gruesa que envuelve el borde inferior del pie", "gltf": "igual que el cuerpo" },
+    { "nombre": "M_Rufi_Panuelo", "superficie": "tela verde salvia mate con pliegues suaves; nudo + dos puntas en forma de hoja", "gltf": "metallic 0, roughness ~0.9" },
+    { "nombre": "M_Rufi_Ojo", "superficie": "iris marrón con pupila más oscura, brillo húmedo (barniz)", "gltf": "roughness ~0.15 en iris/esclerótica" },
+    { "nombre": "M_Rufi_Rasgos", "superficie": "cejas y contorno del ojo marrón oscuro, ligeramente en relieve", "gltf": "roughness ~0.7" },
+    { "nombre": "M_Rufi_Boca", "superficie": "cavidad roja oscura y lengua rosa, sin dientes", "gltf": "roughness ~0.6" },
+    { "nombre": "M_Rufi_Brillos", "superficie": "brillos blancos de los ojos como geometría propia", "gltf": "KHR_materials_unlit; emparentados al hueso de la cabeza, NO al globo ocular, para que el brillo se quede quieto cuando el ojo mira a otro lado" },
+    { "nombre": "M_Rufi_Rubor", "superficie": "degradado rosa suave sobre las mejillas", "gltf": "decal transparente; su intensidad la controla el runtime (no animación glTF)" }
+  ],
+  "rig": {
+    "$comment": "Solo se exportan los huesos de deformación (use_deform). Controles CTRL_* y mecanismos MCH_* quedan en el .blend. Posiciones en coordenadas Blender [x, y, z] (m), pose de reposo neutra y simétrica (A-pose).",
+    "armature": "RIG_Rufi",
+    "huesos": [
+      { "nombre": "root", "padre": null, "cabeza": [0, 0, 0], "cola": [0, 0.1, 0], "deform": false, "funcion": "raíz, desplazamientos globales" },
+      { "nombre": "pelvis", "padre": "root", "cabeza": [0, 0, 0.17], "cola": [0, 0, 0.28], "deform": true, "funcion": "centro de gravedad; saltos, aplastar/estirar" },
+      { "nombre": "spine", "padre": "pelvis", "cabeza": [0, 0, 0.28], "cola": [0, 0, 0.38], "deform": true, "funcion": "barriga, respiración" },
+      { "nombre": "chest", "padre": "spine", "cabeza": [0, 0, 0.38], "cola": [0, 0, 0.45], "deform": true, "funcion": "pecho, base de brazos y pañuelo" },
+      { "nombre": "neck", "padre": "chest", "cabeza": [0, 0, 0.45], "cola": [0, 0, 0.49], "deform": true, "funcion": "unión oculta bajo el pañuelo" },
+      { "nombre": "head", "padre": "neck", "cabeza": [0, 0, 0.49], "cola": [0, 0, 0.84], "deform": true, "funcion": "giro, inclinación y asentimiento de la cabeza" },
+      { "nombre": "crest_base", "padre": "head", "cabeza": [-0.02, 0, 0.82], "cola": [-0.02, 0, 0.9], "deform": true, "funcion": "base de la cresta (casi centrada en reposo; su desplazamiento en la imagen se debe a la inclinación de la cabeza)" },
+      { "nombre": "crest_lobe_big", "padre": "crest_base", "cabeza": [-0.02, 0, 0.9], "cola": [0.01, 0, 0.99], "deform": true, "funcion": "lóbulo grande; movimiento secundario" },
+      { "nombre": "crest_lobe_small", "padre": "crest_base", "cabeza": [-0.04, 0, 0.88], "cola": [-0.13, 0, 0.86], "deform": true, "funcion": "lóbulo pequeño; movimiento secundario" },
+      { "nombre": "eye_L", "padre": "head", "cabeza": [0.13, -0.17, 0.645], "cola": [0.13, -0.22, 0.645], "deform": true, "funcion": "globo ocular izquierdo; mirada" },
+      { "nombre": "eye_R", "padre": "head", "cabeza": [-0.13, -0.17, 0.645], "cola": [-0.13, -0.22, 0.645], "deform": true, "funcion": "globo ocular derecho; mirada" },
+      { "nombre": "brow_L", "padre": "head", "cabeza": [0.13, -0.21, 0.73], "cola": [0.13, -0.24, 0.73], "deform": true, "funcion": "ceja izquierda (además de shape keys)" },
+      { "nombre": "brow_R", "padre": "head", "cabeza": [-0.13, -0.21, 0.73], "cola": [-0.13, -0.24, 0.73], "deform": true, "funcion": "ceja derecha (además de shape keys)" },
+      { "nombre": "scarf_knot", "padre": "chest", "cabeza": [0.1, -0.17, 0.44], "cola": [0.1, -0.21, 0.42], "deform": true, "funcion": "nudo del pañuelo (lado izquierdo del personaje)" },
+      { "nombre": "scarf_tail_a", "padre": "scarf_knot", "cabeza": [0.09, -0.2, 0.42], "cola": [0.07, -0.21, 0.32], "deform": true, "funcion": "punta del pañuelo; secundario" },
+      { "nombre": "scarf_tail_b", "padre": "scarf_knot", "cabeza": [0.12, -0.2, 0.42], "cola": [0.16, -0.2, 0.33], "deform": true, "funcion": "punta del pañuelo; secundario" },
+      { "nombre": "upper_arm_L", "padre": "chest", "cabeza": [0.18, 0, 0.42], "cola": [0.25, 0, 0.35], "deform": true, "funcion": "brazo izquierdo (el que saluda en la referencia)" },
+      { "nombre": "forearm_L", "padre": "upper_arm_L", "cabeza": [0.25, 0, 0.35], "cola": [0.3, 0, 0.29], "deform": true, "funcion": "curvatura del brazo" },
+      { "nombre": "hand_L", "padre": "forearm_L", "cabeza": [0.3, 0, 0.29], "cola": [0.33, 0, 0.25], "deform": true, "funcion": "manopla, sin dedos" },
+      { "nombre": "upper_arm_R", "padre": "chest", "cabeza": [-0.18, 0, 0.42], "cola": [-0.25, 0, 0.35], "deform": true, "funcion": "brazo derecho" },
+      { "nombre": "forearm_R", "padre": "upper_arm_R", "cabeza": [-0.25, 0, 0.35], "cola": [-0.3, 0, 0.29], "deform": true, "funcion": "curvatura del brazo" },
+      { "nombre": "hand_R", "padre": "forearm_R", "cabeza": [-0.3, 0, 0.29], "cola": [-0.33, 0, 0.25], "deform": true, "funcion": "manopla, sin dedos" },
+      { "nombre": "leg_L", "padre": "pelvis", "cabeza": [0.1, 0, 0.16], "cola": [0.1, 0, 0.06], "deform": true, "funcion": "pierna corta" },
+      { "nombre": "foot_L", "padre": "leg_L", "cabeza": [0.1, 0, 0.06], "cola": [0.1, -0.09, 0.03], "deform": true, "funcion": "pie y suela" },
+      { "nombre": "leg_R", "padre": "pelvis", "cabeza": [-0.1, 0, 0.16], "cola": [-0.1, 0, 0.06], "deform": true, "funcion": "pierna corta" },
+      { "nombre": "foot_R", "padre": "leg_R", "cabeza": [-0.1, 0, 0.06], "cola": [-0.1, -0.09, 0.03], "deform": true, "funcion": "pie y suela" }
+    ],
+    "controles_recomendados_solo_blend": [
+      "CTRL_look_target (objetivo de mirada con restricción Damped Track en eye_L/eye_R)",
+      "CTRL_head (FK con límites: yaw ±35°, pitch ±20°, roll ±20°)",
+      "CTRL_hand_L / CTRL_hand_R (IK de 2 huesos)",
+      "CTRL_foot_L / CTRL_foot_R (IK, pies pegados al suelo en saltos)",
+      "CTRL_body (aplastar/estirar con conservación de volumen)"
+    ]
+  },
+  "shape_keys": {
+    "$comment": "Morph targets del mesh de la cabeza (RUFI_Head). En glTF el exportador de Blender guarda los nombres en mesh.extras.targetNames. 'Basis' = la expresión de la imagen oficial con la boca en sonrisa abierta.",
+    "mesh": "RUFI_Head",
+    "obligatorias": [
+      "blink_L", "blink_R",
+      "eye_happy_L", "eye_happy_R",
+      "eye_wide_L", "eye_wide_R",
+      "brow_up_L", "brow_up_R",
+      "brow_down_L", "brow_down_R",
+      "brow_worry_L", "brow_worry_R",
+      "mouth_closed_smile",
+      "mouth_open",
+      "mouth_o",
+      "mouth_wide",
+      "mouth_small",
+      "cheek_puff"
+    ],
+    "opcionales": ["eye_squint_L", "eye_squint_R", "mouth_side_L", "mouth_side_R", "body_squash", "body_stretch"],
+    "prohibidas_por_marca": ["enfado", "llanto", "miedo intenso", "burla", "guiño insinuante"]
+  },
+  "expresiones": {
+    "$comment": "Combinaciones de shape keys (0..1) + pose de huesos. El runtime las mezcla; no son clips.",
+    "neutral_sonrisa": { "keys": {}, "nota": "Basis: igual que la imagen oficial" },
+    "feliz": { "keys": { "eye_happy_L": 0.8, "eye_happy_R": 0.8, "mouth_wide": 0.7, "cheek_puff": 0.3 } },
+    "curioso": { "keys": { "brow_up_L": 0.7, "mouth_small": 0.5, "eye_wide_L": 0.3, "eye_wide_R": 0.3 }, "pose": "cabeza inclinada 10-12°" },
+    "sorprendido": { "keys": { "brow_up_L": 0.9, "brow_up_R": 0.9, "eye_wide_L": 0.8, "eye_wide_R": 0.8, "mouth_o": 0.8 } },
+    "idea": { "keys": { "brow_up_L": 0.6, "brow_up_R": 0.6, "mouth_closed_smile": 0.6 }, "pose": "mirada arriba, mano levantada" },
+    "hablando": { "keys": { "mouth_open": "animado 0..0.7" } },
+    "atento_serio": { "keys": { "mouth_closed_smile": 0.8, "brow_worry_L": 0.15, "brow_worry_R": 0.15 }, "nota": "para hipotecas, requisitos y temas legales: calmado y cercano, nunca triste ni alarmado" },
+    "timido": { "keys": { "mouth_small": 0.6, "eye_happy_L": 0.3, "eye_happy_R": 0.3 }, "pose": "mirada abajo, rubor +40 %" },
+    "adormilado": { "keys": { "blink_L": 0.55, "blink_R": 0.55, "mouth_small": 0.4 } },
+    "dormido": { "keys": { "blink_L": 1, "blink_R": 1, "mouth_small": 0.6 } }
+  },
+  "clips": {
+    "$comment": "Acciones de Blender exportadas como animaciones glTF. Nombres = contrato con el runtime. Duraciones a 30 fps orientativas.",
+    "obligatorios": [
+      { "nombre": "idle_breathe", "loop": true, "duracion_s": 4.0, "estado_web": "idle" },
+      { "nombre": "blink", "loop": false, "duracion_s": 0.2, "estado_web": "(aditivo, aleatorio cada 3-6 s)" },
+      { "nombre": "peek_in", "loop": false, "duracion_s": 1.2, "estado_web": "peek" },
+      { "nombre": "peek_hold", "loop": true, "duracion_s": 3.0, "estado_web": "peek" },
+      { "nombre": "enter", "loop": false, "duracion_s": 1.0, "estado_web": "enter" },
+      { "nombre": "greet_wave", "loop": false, "duracion_s": 1.6, "estado_web": "greet" },
+      { "nombre": "curious_tilt", "loop": false, "duracion_s": 0.8, "estado_web": "curious" },
+      { "nombre": "happy_jump", "loop": false, "duracion_s": 0.9, "estado_web": "happy" },
+      { "nombre": "talk_loop", "loop": true, "duracion_s": 0.6, "estado_web": "talking" },
+      { "nombre": "sleep_in", "loop": false, "duracion_s": 1.2, "estado_web": "sleep" },
+      { "nombre": "sleep_loop", "loop": true, "duracion_s": 4.0, "estado_web": "sleep" },
+      { "nombre": "wake_up", "loop": false, "duracion_s": 1.0, "estado_web": "sleep → idle" },
+      { "nombre": "exit", "loop": false, "duracion_s": 0.8, "estado_web": "exit" },
+      { "nombre": "pose_reference", "loop": false, "duracion_s": 0.04, "estado_web": "(control de calidad: debe coincidir con la imagen oficial)" }
+    ],
+    "recomendados": [
+      { "nombre": "idea_point", "loop": false, "duracion_s": 1.2, "uso": "«¡Tengo una idea!»" },
+      { "nombre": "point_side", "loop": false, "duracion_s": 1.0, "uso": "señalar hacia el contenido (test, simulador)" },
+      { "nombre": "celebrate", "loop": false, "duracion_s": 1.4, "uso": "fin de un proceso" },
+      { "nombre": "nod_yes", "loop": false, "duracion_s": 0.8, "uso": "confirmar" },
+      { "nombre": "boop", "loop": false, "duracion_s": 0.4, "uso": "reacción al pulsar sobre Rufi" },
+      { "nombre": "look_around", "loop": false, "duracion_s": 3.0, "uso": "variación del idle" }
+    ],
+    "procedural_en_runtime": [
+      "mirada hacia el puntero o el elemento activo (eye_L/eye_R/head con límites)",
+      "parpadeo aleatorio",
+      "intensidad del rubor",
+      "movimiento secundario de cresta y puntas del pañuelo (muelle amortiguado)"
+    ]
+  },
+  "presupuesto_web": {
+    "triangulos_objetivo": 15000,
+    "triangulos_max": 30000,
+    "huesos_deform_max": 40,
+    "shape_keys_max": 32,
+    "texturas_max_px": 1024,
+    "texturas_formato_recomendado": "WebP (EXT_texture_webp). KTX2/Basis solo si hubiera muchas texturas: su transcodificador añade ~254 KB gzip (medido, three 0.187).",
+    "glb_objetivo_kb": 800,
+    "glb_max_kb": 1500,
+    "extensiones_permitidas": [
+      "EXT_texture_webp",
+      "KHR_materials_sheen",
+      "KHR_materials_unlit",
+      "KHR_materials_emissive_strength",
+      "KHR_texture_transform",
+      "KHR_texture_basisu",
+      "KHR_mesh_quantization",
+      "EXT_meshopt_compression",
+      "KHR_draco_mesh_compression"
+    ]
+  }
+}
