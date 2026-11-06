@@ -6,6 +6,10 @@ Repositorio fuente de **Rufi**: identidad, especificación técnica, pipeline 3D
 
 ## Estado
 
+**Fase 7 — instalación centralizada (rama `fase-7-centralizado`).** Rufi se instala una vez en `/rufi/` y cada página añade **una línea** (`<script src="/rufi/rufi.js" data-rufi-config="<página>" defer></script>`) o, en Joomla, un fragmento global + `configs/_routes.json`. Cargador de 1 KB gzip; motor y modelo únicos en `/rufi/v/<versión>/` (caché de un año, vuelta atrás cambiando `_global.json`); configuraciones JSON por página validadas con `spec/rufi-config.schema.json`; interruptor general, `disabledPages`, `?rufi=off|on|debug`; códigos `ref` y evento `rufi:action` para WhatsApp/ManyChat. Pruebas: cargador 53/53, componente 148/148, paquete FTP en Apache 48/48 (con y sin `.htaccess`). Ver [`docs/15-instalacion-centralizada.md`](docs/15-instalacion-centralizada.md) y `hosting/LEEME-INSTALACION.md`.
+
+**Fase 6 — prueba real (rama `fase-6-prueba-real`).** Paquete FTP con la copia noindex `/ICO/aval-ico-valencia-rufi-test.html`; sustituido por el de la fase 7.
+
 **Fase 5 — componente web (rama `fase-5-web`).** `dist/rufi.js` (6,3 KB gzip) + `dist/rufi-3d.js` (165,8 KB gzip, diferido) con las animaciones reales del GLB, Shadow DOM, bienvenida una vez por sesión, panel con tres acciones y reacciones al contexto de la landing del Aval ICO. 148/148 pruebas de extremo a extremo (escritorio, móvil emulado, movimiento reducido y landing real). **Pendiente: pruebas en dispositivos reales.** Ver [`docs/14-componente-web.md`](docs/14-componente-web.md) y `examples/demo-aval-ico/`.
 
 **Fase 4 — expresiones faciales (rama `fase-4-expresiones`).** `models/rufi-expresivo.web.glb` (**593,7 KB**): párpados de geometría real (`blink`) y sonrisa (`smile`) como morph targets, integrados en `idle`, `wave` y `curious`. Con los ojos abiertos la cara es idéntica al original (0 píxeles distintos). Pendiente en Blender: correctiva de la axila. Ver [`docs/13-expresiones-fase-4.md`](docs/13-expresiones-fase-4.md) y `examples/visor-expresiones/`.

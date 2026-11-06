@@ -52,6 +52,8 @@
   const reducedMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hasWebGL = () => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } };
   const waUrl = (number, message) => `https://wa.me/${String(number).replace(/\D/g, '')}${message ? `?text=${encodeURIComponent(message)}` : ''}`;
+  /** Mensaje de WhatsApp con código de referencia opcional (para disparadores de ManyChat u otras automatizaciones). */
+  const waMessage = (cfg, message, ref) => (cfg.automation && cfg.automation.appendRef && ref ? `${message} [${ref}]` : message);
 
   const ICONS = {
     check: '<path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
@@ -164,7 +166,7 @@
         const li = document.createElement('li');
         const a = document.createElement(o.action.type === 'whatsapp' || o.action.type === 'link' ? 'a' : 'button');
         a.className = `opt${o.action.type === 'whatsapp' ? ' wa' : ''}`;
-        if (a.tagName === 'A') { a.href = o.action.type === 'whatsapp' ? waUrl(o.action.number || this.cfg.whatsapp.number, o.action.message || this.cfg.whatsapp.message) : o.action.href; a.target = '_blank'; a.rel = 'noopener'; }
+        if (a.tagName === 'A') { a.href = o.action.type === 'whatsapp' ? waUrl(o.action.number || this.cfg.whatsapp.number, waMessage(this.cfg, o.action.message || this.cfg.whatsapp.message, o.ref || o.action.ref)) : o.action.href; a.target = '_blank'; a.rel = 'noopener'; }
         else a.type = 'button';
         a.innerHTML = `<span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24">${ICONS[o.icon] || ICONS.check}</svg></span><span><strong></strong><small></small></span><span class="ar" aria-hidden="true">→</span>`;
         a.querySelector('strong').textContent = o.label; a.querySelector('small').textContent = o.hint || '';
@@ -299,7 +301,7 @@
 
     runAction(o, ev) {
       const a = o.action;
-      this.emit('action', { id: o.id, type: a.type });
+      this.emit('action', { id: o.id, type: a.type, ref: o.ref || a.ref || null });
       if (a.type === 'scroll') {
         if (ev) ev.preventDefault();
         const el = document.querySelector(a.target);
@@ -315,7 +317,14 @@
         }
         this.react('smile');
       } else if (a.type === 'whatsapp' || a.type === 'link') {
-        this.closePanel(false); // el enlace abre WhatsApp en una pestaña nueva
+        // Desde el panel es un enlace <a> real; desde una burbuja se abre aquí.
+        if (!ev || !ev.currentTarget || ev.currentTarget.tagName !== 'A') {
+          const url = a.type === 'whatsapp' ? waUrl(a.number || this.cfg.whatsapp.number, waMessage(this.cfg, a.message || this.cfg.whatsapp.message, a.ref)) : a.href;
+          const w = window.open(url, '_blank', 'noopener'); if (!w) location.href = url;
+        }
+        this.closePanel(false);
+      } else if (a.type === 'event') {
+        if (ev) ev.preventDefault(); this.closePanel(false); // solo emite rufi:action (para automatizaciones)
       } else if (a.type === 'panel') {
         if (ev) ev.preventDefault(); this.openPanel();
       }

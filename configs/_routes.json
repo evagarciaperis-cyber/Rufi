@@ -1,0 +1,7 @@
+{
+  "$comment": "Solo para instalaciones con un único fragmento global (por ejemplo, en la plantilla de Joomla): ruta de la página → configuración. Una página que no aparece aquí no activa Rufi. Las páginas con data-rufi-config no usan este archivo.",
+  "routes": [
+    { "path": "/ICO/aval-ico-valencia.html", "config": "aval-ico-valencia" },
+    { "path": "/ICO/aval-ico-valencia-rufi-test.html", "config": "aval-ico-valencia-test" }
+  ]
+}

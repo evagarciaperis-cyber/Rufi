@@ -1,5 +1,5 @@
 /**
- * Verifica el paquete FTP como si ya estuviera subido a referencehome.es.
+ * Verifica el paquete FTP (instalación centralizada) como si ya estuviera subido a referencehome.es.
  *
  * El navegador abre https://referencehome.es/ICO/aval-ico-valencia-rufi-test.html. Las peticiones
  * a esa página y a /rufi/ se sirven desde ORIGEN (un Apache local con el ZIP descomprimido, con
@@ -27,8 +27,8 @@ async function run(browser, name, ctxOpts) {
   await page.route('https://referencehome.es/**', async (route) => {
     const u = new URL(route.request().url());
     if (u.pathname.startsWith('/rufi/') || u.pathname === '/ICO/aval-ico-valencia-rufi-test.html') {
-      const resp = await route.fetch({ url: ORIGIN + u.pathname });
-      served[u.pathname] = [resp.status(), resp.headers()['content-type']];
+      const resp = await route.fetch({ url: ORIGIN + u.pathname + u.search });
+      served[u.pathname] = [resp.status(), resp.headers()['content-type'], resp.headers()['cache-control'] || '(sin cabecera)'];
       return route.fulfill({ response: resp });
     }
     return route.continue();
@@ -57,9 +57,12 @@ async function run(browser, name, ctxOpts) {
   ok(`${tag} «Comprobar requisitos» lleva al test real`, Math.abs(await page.evaluate(() => document.getElementById('test').getBoundingClientRect().top)) < 80);
   await page.waitForFunction(() => window.__ev.some(([n, d]) => n === 'bubble' && d.id === 'llega-test'), null, { timeout: 30000 }).then(() => ok(`${tag} reacciona al test real`, true)).catch(() => ok(`${tag} reacciona al test real`, false));
   // Rutas servidas desde el paquete
-  for (const p of ['/ICO/aval-ico-valencia-rufi-test.html', '/rufi/config/aval-ico-test.js', '/rufi/rufi.js', '/rufi/rufi-3d.js', '/rufi/rufi-expresivo.web.glb', '/rufi/rufi-poster.webp']) {
-    ok(`${tag} ${p} servido por el paquete`, served[p] && served[p][0] === 200, served[p] ? `${served[p][0]} ${served[p][1]}` : 'no pedido');
+  const V = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8')).rufiVersion;
+  for (const p of ['/ICO/aval-ico-valencia-rufi-test.html', '/rufi/rufi.js', '/rufi/configs/_global.json', '/rufi/configs/aval-ico-valencia-test.json', `/rufi/v/${V}/rufi-core.js`, `/rufi/v/${V}/rufi-3d.js`, `/rufi/v/${V}/rufi-expresivo.web.glb`, `/rufi/v/${V}/rufi-poster.webp`]) {
+    ok(`${tag} ${p} servido por el paquete`, served[p] && served[p][0] === 200, served[p] ? served[p].join(' · ') : 'no pedido');
   }
+  ok(`${tag} no consulta _routes.json (la página usa data-rufi-config)`, !served['/rufi/configs/_routes.json']);
+  ok(`${tag} no pide la configuración de producción`, !served['/rufi/configs/aval-ico-valencia.json']);
   const external = [...new Set(requests.map((u) => new URL(u)).filter((u) => !['data:', 'blob:'].includes(u.protocol) && u.hostname !== 'referencehome.es').map((u) => u.hostname))];
   ok(`${tag} sin peticiones a otros dominios (analítica, CDNs…)`, external.length === 0, external.join(', ') || `${requests.length} peticiones, todas a referencehome.es`);
   ok(`${tag} sin errores en consola`, errors.length === 0, errors.slice(0, 3).join(' | '));

@@ -4,7 +4,8 @@
  * Uso: npm run build && node tests/e2e/rufi.e2e.cjs [--landing ruta/aval-ico-valencia.html] [--shots carpeta]
  *
  * Para no esperar 20 s entre burbujas, la prueba sirve la configuración real con minGap = 2,5 s
- * y sleepAfter = 6 s; el resto de la configuración es la de dist/config/aval-ico.js.
+ * y sleepAfter = 6 s; el resto de la configuración es la de dist/configs/aval-ico-valencia.json,
+ * cargada por el cargador central (dist/rufi.js → dist/v/<versión>/rufi-core.js).
  */
 const { chromium, devices } = require('playwright');
 const http = require('http'); const fs = require('fs'); const path = require('path');
@@ -14,7 +15,7 @@ const args = process.argv.slice(2);
 const landing = args.includes('--landing') ? path.resolve(args[args.indexOf('--landing') + 1]) : null;
 const shots = args.includes('--shots') ? path.resolve(args[args.indexOf('--shots') + 1]) : null;
 if (shots) fs.mkdirSync(shots, { recursive: true });
-const TYPES = { '.js': 'text/javascript', '.glb': 'model/gltf-binary', '.html': 'text/html; charset=utf-8', '.webp': 'image/webp', '.css': 'text/css' };
+const TYPES = { '.json': 'application/json', '.js': 'text/javascript', '.glb': 'model/gltf-binary', '.html': 'text/html; charset=utf-8', '.webp': 'image/webp', '.css': 'text/css' };
 
 const results = []; let failures = 0;
 const ok = (name, cond, extra = '') => { results.push(`${cond ? '✓' : '✗'} ${name}${extra ? ` — ${extra}` : ''}`); if (!cond) failures++; };
@@ -25,14 +26,14 @@ function serve() {
       let p = decodeURIComponent(q.url.split('?')[0]);
       if (p === '/landing-real/') return fs.readFile(landing, 'utf8', (e, html) => {
         // Copia local de la landing real + las dos líneas de instalación (solo en la prueba)
-        const inject = '<script src="/dist/config/aval-ico.js"></script>\n<script src="/dist/rufi.js" defer></script>\n</body>';
+        const inject = '<script src="/dist/rufi.js" data-rufi-config="aval-ico-valencia" defer></script>\n</body>';
         r.writeHead(200, { 'content-type': TYPES['.html'] }); r.end(html.replace(/<\/body>/i, inject));
       });
       if (p.endsWith('/')) p += 'index.html';
       const f = path.join(ROOT, p);
       fs.readFile(f, (e, b) => {
         if (e) { r.writeHead(404); return r.end(); }
-        if (p === '/dist/config/aval-ico.js') b = Buffer.from(b.toString().replace("page: 'aval-ico-valencia',", "page: 'aval-ico-valencia', bubbles: { minGap: 2500, autoHide: 9000, maxPerPage: 6, typingPause: 2000 }, sleepAfter: 6000,"));
+        if (p === '/dist/configs/aval-ico-valencia.json') { const c = JSON.parse(b); c.bubbles = { minGap: 2500, autoHide: 9000, maxPerPage: 6, typingPause: 2000 }; c.sleepAfter = 6000; b = Buffer.from(JSON.stringify(c)); }
         r.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' }); r.end(b);
       });
     }).listen(0, () => res(srv));

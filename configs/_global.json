@@ -1,0 +1,7 @@
+{
+  "$comment": "Control central de Rufi. enabled:false lo apaga en TODAS las páginas (se puede forzar con ?rufi=on para probar). version: versión del motor en /rufi/v/<versión>/ que usan las páginas sin versión propia. configVersion: cámbialo para que los navegadores descarguen de nuevo las configuraciones. disabledPages: configuraciones apagadas sin borrarlas.",
+  "enabled": true,
+  "version": "1.0.0",
+  "configVersion": "2026-11-06",
+  "disabledPages": []
+}

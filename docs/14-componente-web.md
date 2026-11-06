@@ -2,6 +2,8 @@
 
 Fecha: 6-nov-2026. Rama: `fase-5-web` (sale de `fase-4-expresiones`).
 
+> **Actualizado en la fase 7:** la instalación ya es centralizada. `dist/rufi.js` es ahora el **cargador**; el núcleo está en `dist/v/<versión>/rufi-core.js` y la configuración en `configs/<página>.json` (antes `src/config/aval-ico.js`, eliminado). Las secciones 1, 4 y 5 describen la fase 5; lo vigente está en [`15-instalacion-centralizada.md`](15-instalacion-centralizada.md).
+
 ## 1. Qué hay
 
 | Archivo | Qué es | Peso |
@@ -62,7 +64,7 @@ Los movimientos se encadenan con **fundido cruzado de 0,35 s**. `blink` y `smile
 
 ## 4. Configuración para nuevas landings
 
-Copiar `src/config/aval-ico.js` y cambiar:
+(Fase 7: ahora es un JSON en `configs/`, mismos campos; ver `15-instalacion-centralizada.md` §4.) En la fase 5 se copiaba `src/config/aval-ico.js` y se cambiaba:
 
 ```js
 window.RufiConfig = {
@@ -86,6 +88,8 @@ window.RufiConfig = {
 Eventos para analítica o automatizaciones (por ejemplo ManyChat): `rufi:ready`, `rufi:state`, `rufi:bubble`, `rufi:bubble-dismiss`, `rufi:open`, `rufi:close` y `rufi:action` en `document`, con `detail.page`. El componente **no envía datos a ningún servicio**.
 
 ## 5. Instalación en aval-ico-valencia.html (paso posterior, no aplicado)
+
+(Fase 7: sustituido por una sola línea, `<script src="/rufi/rufi.js" data-rufi-config="aval-ico-valencia" defer></script>`; ver `15-instalacion-centralizada.md`.)
 
 Solo hay que **subir archivos** y **añadir dos líneas** antes de `</body>`. No se toca ningún texto, sección, calculadora, estilo ni metadato SEO.
 

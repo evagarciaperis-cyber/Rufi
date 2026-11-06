@@ -1,0 +1,10 @@
+# Rufi · versiones publicadas (/rufi/v/<versión>/). Un archivo de una versión NUNCA se cambia:
+# para actualizar se sube una carpeta nueva (por ejemplo, /rufi/v/1.1.0/) y se cambia la
+# versión en /rufi/configs/_global.json. Por eso aquí la caché puede ser de un año.
+# Si da "Error 500", borra este archivo (Rufi funciona igual, con la caché por defecto).
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|mjs|glb|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>

@@ -1,0 +1,50 @@
+✓ [escritorio] meta robots noindex
+✓ [escritorio] canonical sigue apuntando a la página original
+✓ [escritorio] Rufi se monta (Shadow DOM)
+✓ [escritorio] motor 3D cargado desde /rufi/
+✓ [escritorio] asoma, saluda y da la bienvenida
+✓ [escritorio] mascota anterior oculta en la copia
+✓ [escritorio] eventos marcados como prueba (test: true, page aval-ico-valencia-test)
+✓ [escritorio] registro en consola «[Rufi PRUEBA]» — 6 mensajes
+✓ [escritorio] WhatsApp de Rufi con «[PRUEBA RUFI]» al +34 674 61 22 72
+✓ [escritorio] pie del panel indica «Página de pruebas»
+✓ [escritorio] «Comprobar requisitos» lleva al test real
+✓ [escritorio] reacciona al test real
+✓ [escritorio] /ICO/aval-ico-valencia-rufi-test.html servido por el paquete — 200 · text/html · (sin cabecera)
+✓ [escritorio] /rufi/rufi.js servido por el paquete — 200 · text/javascript · (sin cabecera)
+✓ [escritorio] /rufi/configs/_global.json servido por el paquete — 200 · application/json · (sin cabecera)
+✓ [escritorio] /rufi/configs/aval-ico-valencia-test.json servido por el paquete — 200 · application/json · (sin cabecera)
+✓ [escritorio] /rufi/v/1.0.0/rufi-core.js servido por el paquete — 200 · text/javascript · (sin cabecera)
+✓ [escritorio] /rufi/v/1.0.0/rufi-3d.js servido por el paquete — 200 · text/javascript · (sin cabecera)
+✓ [escritorio] /rufi/v/1.0.0/rufi-expresivo.web.glb servido por el paquete — 200 · model/gltf-binary · (sin cabecera)
+✓ [escritorio] /rufi/v/1.0.0/rufi-poster.webp servido por el paquete — 200 · image/webp · (sin cabecera)
+✓ [escritorio] no consulta _routes.json (la página usa data-rufi-config)
+✓ [escritorio] no pide la configuración de producción
+✓ [escritorio] sin peticiones a otros dominios (analítica, CDNs…) — 8 peticiones, todas a referencehome.es
+✓ [escritorio] sin errores en consola
+✓ [iphone13] meta robots noindex
+✓ [iphone13] canonical sigue apuntando a la página original
+✓ [iphone13] Rufi se monta (Shadow DOM)
+✓ [iphone13] motor 3D cargado desde /rufi/
+✓ [iphone13] asoma, saluda y da la bienvenida
+✓ [iphone13] mascota anterior oculta en la copia
+✓ [iphone13] eventos marcados como prueba (test: true, page aval-ico-valencia-test)
+✓ [iphone13] registro en consola «[Rufi PRUEBA]» — 6 mensajes
+✓ [iphone13] WhatsApp de Rufi con «[PRUEBA RUFI]» al +34 674 61 22 72
+✓ [iphone13] pie del panel indica «Página de pruebas»
+✓ [iphone13] «Comprobar requisitos» lleva al test real
+✓ [iphone13] reacciona al test real
+✓ [iphone13] /ICO/aval-ico-valencia-rufi-test.html servido por el paquete — 200 · text/html · (sin cabecera)
+✓ [iphone13] /rufi/rufi.js servido por el paquete — 200 · text/javascript · (sin cabecera)
+✓ [iphone13] /rufi/configs/_global.json servido por el paquete — 200 · application/json · (sin cabecera)
+✓ [iphone13] /rufi/configs/aval-ico-valencia-test.json servido por el paquete — 200 · application/json · (sin cabecera)
+✓ [iphone13] /rufi/v/1.0.0/rufi-core.js servido por el paquete — 200 · text/javascript · (sin cabecera)
+✓ [iphone13] /rufi/v/1.0.0/rufi-3d.js servido por el paquete — 200 · text/javascript · (sin cabecera)
+✓ [iphone13] /rufi/v/1.0.0/rufi-expresivo.web.glb servido por el paquete — 200 · model/gltf-binary · (sin cabecera)
+✓ [iphone13] /rufi/v/1.0.0/rufi-poster.webp servido por el paquete — 200 · image/webp · (sin cabecera)
+✓ [iphone13] no consulta _routes.json (la página usa data-rufi-config)
+✓ [iphone13] no pide la configuración de producción
+✓ [iphone13] sin peticiones a otros dominios (analítica, CDNs…) — 8 peticiones, todas a referencehome.es
+✓ [iphone13] sin errores en consola
+
+48/48 comprobaciones superadas
