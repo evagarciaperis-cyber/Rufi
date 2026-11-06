@@ -1,0 +1,10 @@
+
+> rufi@0.1.0 validate:configs
+> node tools/validate-config.mjs configs/[!_]*.json configs/ejemplos/*.json
+
+✓ configs/aval-ico-valencia-test.json — válida
+✓ configs/aval-ico-valencia.json — válida
+✓ configs/ejemplos/joomla-articulo.json — válida
+    ! enabled: false → Rufi no se cargará en esta página
+✓ configs/ejemplos/plantilla-landing.json — válida
+    ! enabled: false → Rufi no se cargará en esta página

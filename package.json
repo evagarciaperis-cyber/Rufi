@@ -1,7 +1,7 @@
 {
   "name": "rufi",
   "version": "0.1.0",
-  "rufiVersion": "1.0.0",
+  "rufiVersion": "1.1.0",
   "private": true,
   "description": "Rufi, la mascota digital oficial de Reference Home: especificación, pipeline 3D y herramientas.",
   "type": "module",
@@ -23,6 +23,7 @@
     "test:loader": "node tests/e2e/loader.e2e.cjs",
     "package:ftp": "node scripts/package-ftp.mjs build/aval-ico-valencia.original.html",
     "test:compat": "node tests/e2e/compat-1.1.e2e.cjs",
+    "test:storage": "node tests/e2e/storage-1.1.e2e.cjs",
     "contract:hash": "find spec/rufi-config.schema.json spec/rufi-crm-api.schema.json spec/reference spec/vectors -type f | sort | xargs sha256sum > spec/contract/1.1.sha256"
   },
   "devDependencies": {

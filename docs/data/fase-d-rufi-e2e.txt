@@ -1,0 +1,96 @@
+✓ [escritorio] el componente se monta en Shadow DOM
+✓ [escritorio] la mascota anterior #masc queda oculta
+✓ [escritorio] motor 3D cargado con las animaciones reales — 686 ms
+✓ [escritorio] secuencia de entrada hidden→peek→enter→greet→idle — peek→enter→greet→idle
+✓ [escritorio] bienvenida con el texto configurado
+✓ [escritorio] estilos de la página intactos
+✓ [escritorio] sin desplazamiento horizontal
+✓ [escritorio] Rufi en la esquina inferior derecha — 1110,608 150×176
+✓ [escritorio] no tapa el botón de WhatsApp de la página — wa 837–1090, rufi 1110
+✓ [escritorio] fotogramas por segundo con Rufi animado (render por software SwiftShader) — 31 fps
+✓ [escritorio] el panel se abre al pulsar a Rufi
+✓ [escritorio] tres acciones en el panel
+✓ [escritorio] WhatsApp al +34 674 61 22 72 — https://wa.me/34674612272?text=Hola%2C%20he%20vi…
+✓ [escritorio] el foco pasa a la primera opción
+✓ [escritorio] Esc cierra el panel y el foco vuelve a Rufi
+✓ [escritorio] «Comprobar requisitos» lleva al test — top 0 px
+✓ [escritorio] reacciona al llegar al test
+✓ [escritorio] estado curioso al llegar al test
+✓ [escritorio] reacciona al terminar el test
+✓ [escritorio] se alegra (happy → smile)
+✓ [escritorio] reacciona al llegar al simulador
+✓ [escritorio] reacciona al resultado del simulador
+✓ [escritorio] no interrumpe mientras se escribe (espera ≥ 2 s tras la última tecla) — 2530 ms tras la última tecla
+✓ [escritorio] tras cerrar una burbuja no vuelve a hablar por iniciativa propia
+✓ [escritorio] se duerme tras un rato sin actividad
+✓ [escritorio] despierta con la actividad — idle→sleep→idle
+✓ [escritorio] la bienvenida no se repite en la misma sesión
+✓ [escritorio] CLS = 0 — 0
+✓ [escritorio] sin errores en consola
+✓ [iphone13] el componente se monta en Shadow DOM
+✓ [iphone13] la mascota anterior #masc queda oculta
+✓ [iphone13] motor 3D cargado con las animaciones reales — 213 ms
+✓ [iphone13] secuencia de entrada hidden→peek→enter→greet→idle — peek→enter→greet→idle
+✓ [iphone13] bienvenida con el texto configurado
+✓ [iphone13] estilos de la página intactos
+✓ [iphone13] sin desplazamiento horizontal
+✓ [iphone13] Rufi en la esquina inferior derecha — 284,542 104×122
+✓ [iphone13] no tapa el botón de WhatsApp de la página — wa 14–284, rufi 284
+✓ [iphone13] fotogramas por segundo con Rufi animado (render por software SwiftShader, informativo: no es un móvil real) — 60 fps
+✓ [iphone13] el panel se abre al pulsar a Rufi
+✓ [iphone13] tres acciones en el panel
+✓ [iphone13] WhatsApp al +34 674 61 22 72 — https://wa.me/34674612272?text=Hola%2C%20he%20vi…
+✓ [iphone13] el foco pasa a la primera opción
+✓ [iphone13] Esc cierra el panel y el foco vuelve a Rufi
+✓ [iphone13] «Comprobar requisitos» lleva al test — top 0 px
+✓ [iphone13] reacciona al llegar al test
+✓ [iphone13] estado curioso al llegar al test
+✓ [iphone13] reacciona al terminar el test
+✓ [iphone13] se alegra (happy → smile)
+✓ [iphone13] reacciona al llegar al simulador
+✓ [iphone13] reacciona al resultado del simulador
+✓ [iphone13] no interrumpe mientras se escribe (espera ≥ 2 s tras la última tecla) — 2514 ms tras la última tecla
+✓ [iphone13] tras cerrar una burbuja no vuelve a hablar por iniciativa propia
+✓ [iphone13] se duerme tras un rato sin actividad
+✓ [iphone13] despierta con la actividad — idle→sleep→idle
+✓ [iphone13] la bienvenida no se repite en la misma sesión
+✓ [iphone13] CLS = 0 — 0
+✓ [iphone13] sin errores en consola
+✓ [pixel7] el componente se monta en Shadow DOM
+✓ [pixel7] la mascota anterior #masc queda oculta
+✓ [pixel7] motor 3D cargado con las animaciones reales — 294 ms
+✓ [pixel7] secuencia de entrada hidden→peek→enter→greet→idle — peek→enter→greet→idle
+✓ [pixel7] bienvenida con el texto configurado
+✓ [pixel7] estilos de la página intactos
+✓ [pixel7] sin desplazamiento horizontal
+✓ [pixel7] Rufi en la esquina inferior derecha — 306,717 104×122
+✓ [pixel7] no tapa el botón de WhatsApp de la página — wa 14–306, rufi 306
+✓ [pixel7] fotogramas por segundo con Rufi animado (render por software SwiftShader, informativo: no es un móvil real) — 58 fps
+✓ [pixel7] el panel se abre al pulsar a Rufi
+✓ [pixel7] tres acciones en el panel
+✓ [pixel7] WhatsApp al +34 674 61 22 72 — https://wa.me/34674612272?text=Hola%2C%20he%20vi…
+✓ [pixel7] el foco pasa a la primera opción
+✓ [pixel7] Esc cierra el panel y el foco vuelve a Rufi
+✓ [pixel7] «Comprobar requisitos» lleva al test — top 0 px
+✓ [pixel7] reacciona al llegar al test
+✓ [pixel7] estado curioso al llegar al test
+✓ [pixel7] reacciona al terminar el test
+✓ [pixel7] se alegra (happy → smile)
+✓ [pixel7] reacciona al llegar al simulador
+✓ [pixel7] reacciona al resultado del simulador
+✓ [pixel7] no interrumpe mientras se escribe (espera ≥ 2 s tras la última tecla) — 2529 ms tras la última tecla
+✓ [pixel7] tras cerrar una burbuja no vuelve a hablar por iniciativa propia
+✓ [pixel7] se duerme tras un rato sin actividad
+✓ [pixel7] despierta con la actividad — idle→sleep→idle
+✓ [pixel7] la bienvenida no se repite en la misma sesión
+✓ [pixel7] CLS = 0 — 0
+✓ [pixel7] sin errores en consola
+✓ [movimiento-reducido] el componente se monta en Shadow DOM
+✓ [movimiento-reducido] la mascota anterior #masc queda oculta
+✓ [movimiento-reducido] movimiento reducido: no carga el 3D
+✓ [movimiento-reducido] movimiento reducido: póster visible
+✓ [movimiento-reducido] movimiento reducido: bienvenida mostrada
+✓ [movimiento-reducido] movimiento reducido: el panel funciona
+✓ [movimiento-reducido] sin errores en consola
+
+94/94 comprobaciones superadas

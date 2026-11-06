@@ -1,0 +1,26 @@
+✓ [1.1 cinco idiomas, página es] motor publicado 1.0.0
+✓ [1.1 cinco idiomas, página es] se monta
+✓ [1.1 cinco idiomas, página es] bienvenida con el texto base (español) — ¡Hola! Soy Rufi, de Reference Home.
+✓ [1.1 cinco idiomas, página es] botones con los textos base — Ver información · Hablar con Reference Home
+✓ [1.1 cinco idiomas, página es] no muestra textos de i18n ni el chat de IA
+✓ [1.1 cinco idiomas, página es] sin errores en consola
+✓ [1.1 cinco idiomas, página en] motor publicado 1.0.0
+✓ [1.1 cinco idiomas, página en] se monta
+✓ [1.1 cinco idiomas, página en] bienvenida con el texto base (español) — ¡Hola! Soy Rufi, de Reference Home.
+✓ [1.1 cinco idiomas, página en] botones con los textos base — Ver información · Hablar con Reference Home
+✓ [1.1 cinco idiomas, página en] no muestra textos de i18n ni el chat de IA
+✓ [1.1 cinco idiomas, página en] sin errores en consola
+✓ [1.1 con IA activada] motor publicado 1.0.0
+✓ [1.1 con IA activada] se monta
+✓ [1.1 con IA activada] bienvenida con el texto base (español) — ¡Hola! Soy Rufi, de Reference Home.
+✓ [1.1 con IA activada] botones con los textos base — Ver información · Hablar con Reference Home
+✓ [1.1 con IA activada] no muestra textos de i18n ni el chat de IA
+✓ [1.1 con IA activada] sin errores en consola
+✓ [1.1 enlaces seguros] motor publicado 1.0.0
+✓ [1.1 enlaces seguros] se monta
+✓ [1.1 enlaces seguros] bienvenida con el texto base (español) — ¡Hola! Soy Rufi, de Reference Home.
+✓ [1.1 enlaces seguros] botones con los textos base — Contacto · Hablar con Reference Home · Web · Ir
+✓ [1.1 enlaces seguros] no muestra textos de i18n ni el chat de IA
+✓ [1.1 enlaces seguros] sin errores en consola
+
+24/24 comprobaciones superadas
